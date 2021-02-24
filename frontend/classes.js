@@ -1,7 +1,7 @@
 "use strict"
 // A class for building player objects
 class Player {
-	constructor(cards, points, numberOf) {
+	constructor(cards, points, numberOfCards) {
 		this.cards = cards;
 		this.points = points;
 		this.numberOfCards = numberOfCards;
@@ -104,3 +104,4 @@ class PileDeck extends Deck {
 		super();
 	}
 }
+
