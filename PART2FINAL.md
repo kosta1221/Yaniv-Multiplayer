@@ -28,12 +28,18 @@ You will continue your Yaniv game
 
 # Grading policy
 
-- Your project will be graded by the doing all requirments
-- Extra freestyle features - Please add an explanation about the bonus features you added to the readme.md
-- Code quality and style: indentation, Meaningful and non-disambiguate variable names, Comments documentation
-- Visual creativity, use css to make this app look awesome 💅🏿
-- Division to reusable functions, no code duplication
-- Git usage: meaningful commit messages, small commits, folder and file structures
+
+# Grading policy
+
+- Doing task's requirments
+- Bonuses
+- How the project looks
+- Correct usage of NODE + EXPRESS
+- Correct code structure and seperation to files and functions.
+- Correct code styling (indentation, spacing)
+- Correct naming
+- Correct git usage
+
 
 # Submitting
 
