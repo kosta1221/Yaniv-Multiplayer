@@ -15,8 +15,8 @@ You will create online Yaniv Game. Playing Yaniv Instrctions [video](https://www
  - Use SASS
  - Use Class name 'Card' and classes that inherit the card named 'SpadesCard', 'HeartsCard',  'DiamondsCard' & 'ClubsCard'.
  - Create more classes
- - Create 5 Tests
  - 
+
 ## Bonus
 
 - Make the game online by using the JSOBBIN like service you built.
