@@ -52,10 +52,9 @@ A player may discard any of the following sets of cards:
 - Create Yaniv game with up to 4 players that can play on the same window (and see each others cards).
 - Cards could be showed as a string like '9 Hearts' or to make it look like a real card.
 - Use SASS
-- Use Class name 'Card' with propertys 'suit': (Spade, Heart, Club, Diamond), 'rank'(A, 1-10, J, Q, K), 'isJocker'(true, false).
+- Use Class name 'Card' with properties 'suit': (Spade, Heart, Club, Diamond), 'rank'(A, 1-10, J, Q, K), 'isJocker'(true, false).
 - Use Class name 'Deck', and classes 'PlayerDeck', 'TableDeck', and 'PileDeck' which inherit from 'Deck'.
 - Create more classes
--
 
 # Bonus
 
