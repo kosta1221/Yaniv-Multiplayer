@@ -10,7 +10,7 @@ function onLoad() {
         
     }
     
-    function updateGameState() {//runs every x seconds and asks for data relevant to player   
+    function updateGameState() {//runs every x seconds and asks for data relevant to player
         
     }
 
