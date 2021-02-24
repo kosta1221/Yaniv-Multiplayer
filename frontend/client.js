@@ -7,7 +7,7 @@ function onLoad() {
     let opponents = {};
     let activePlayer;
     let matchNumber;
-    const allPlayers = document.querySelectorAll(".player")
+    let activeCards;
     
     updateGameState();
     renderAll();
@@ -15,12 +15,12 @@ function onLoad() {
     function renderAll() {
         //RENDER PLAYER
         const playerElement = document.querySelector(".active-player");
-        for(const card of player.cards) {
+        for (const card of player.cards) {
             const cardElement = document.createElement("img");
             const src = `./images/cards-svg/${getImageName(card)}.svg`;
             cardElement.setAttribute("src", src);
             cardElement.classList.add("card");
-            playerElement.appendChild(cardElement)  
+            playerElement.appendChild(cardElement);
         }
         //RENDER OPPONENTS
         const opponentsElements = document.querySelectorAll(".player");
@@ -35,8 +35,8 @@ function onLoad() {
     function updateGameState() {//runs every x seconds and asks for data relevant to player
         const state = netUtils.getState(myName);
         player = new Player(state.cards, state.playersPoints[myName], state.playersCardNumbers[myName]);
-        for(const playerName of state.playerNames){
-            if(playerName === myName) continue;
+        for (const playerName of state.playerNames) {
+            if (playerName === myName) continue;
             const points = state.playersPoints[playerName];
             const numberOfCards = state.playersCardNumbers[playerName];
             opponents[playerName] = new Player(null, state.playersPoints[playerName], numberOfCards);
@@ -44,7 +44,10 @@ function onLoad() {
     }
 
     function executeMove() {//looks at move player is trying to make and asks gameManager to perform
-
+        /*{
+            move: //"place" | "yaniv" | "assaf",
+            cards: //activeCards | null
+        }*/
     }
 
     function switchPlayer() {
@@ -73,17 +76,17 @@ function onLoad() {
         }  
         switch (card.suit) {
             case "hearts":
-            imgName += "H"
-            break;
+                imgName += "H"
+                break;
             case "clubs":
-            imgName += "C"
-            break;
+                imgName += "C"
+                break;
             case "diamonds":
-            imgName += "D"
-            break;
+                imgName += "D"
+                break;
             case "spades":
-            imgName += "S"
-            break;
+                imgName += "S"
+                break;
         }
         return imgName;
     }
