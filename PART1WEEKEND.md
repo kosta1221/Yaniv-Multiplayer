@@ -58,7 +58,7 @@ A player may discard any of the following sets of cards:
 
 # Bonus
 
-- Make the game online by using the JSOBBIN like service you built.
+- Make the game online by using the JSONBIN like service you built.
 - Make the cards look like a real cards.
 - Make animations when moving cards.
 - Any Feature you wish.
