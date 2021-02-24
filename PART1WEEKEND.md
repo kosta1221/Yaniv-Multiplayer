@@ -1,48 +1,29 @@
 
-# ![Scale-Up Velocity](./readme-files/logo-main.png) Node Express Exercise 📋
+# ![Scale-Up Velocity](./readme-files/logo-main.png) Yaniv Full Stack Exercise 📋
 
-Creating JSONBIN like Backend Rest API for [To Do list task](https://github.com/listguy/pre-course-2021-final-boilerplate)
-
+You will create online Yaniv Game. Playing Yaniv Instrctions [video](https://www.youtube.com/watch?v=8kaDw6lIwek&ab_channel=%D7%9B%D7%90%D7%9F) [text](https://www.bekaloot.co.il/%D7%9E%D7%93%D7%A8%D7%99%D7%9A-1274-%D7%90%D7%99%D7%9A%20%D7%9E%D7%A9%D7%97%D7%A7%D7%99%D7%9D%20%D7%99%D7%A0%D7%99%D7%91%20(%D7%9E%D7%A9%D7%97%D7%A7%20%D7%A7%D7%9C%D7%A4%D7%99%D7%9D).aspx)
 ## Instructions
 
-- Create new folder called 'backend' inside your Todo App<!-- - [Create new branch](https://docs.github.com/en/desktop/contributing-and-collaborating-using-github-desktop/managing-branches) -->
+- Create new Github Repository with 2 folders called 'Frontend' & 'Backend'.
 - Make changes to the code to meet project's requirements 📝
 - [Commit Early, Push Often](https://www.worklytics.co/commit-early-push-often/) - your work will be evaluated by your push history 📖
 - Good Luck! 🤘
 
-## Guidelines
-
-
-Create JSONBIN like Restful API using NodeJS + ExpressJS for to do list app with 5 entry points:
-Each object like task will be saved as a Json file and each new collection has its own folder.
-
--   a GET request to /b returns a list of objects
-
--   a GET request to /b/{id} returns the details of the object 123
-
--   a POST request to /b create new object and return the new  object (should include unique id)
-
--   a PUT request to /b/{id} get in the body params updated object and return the updated object
-
--   a DELETE request to /b/{id} delete a object
-
-make changes to your client:
-- have delete and update functionallity
-- load data from your new rest api
-- save your changes to the rest api whenever you make changes like adding, deleting and updating tasks.
-
+## Requirments
+ - Create Yaniv game with for multiple players that can play on the same window (and see each others cards).
+ - Cards could be showed as a string like '9 Hearts' or to make it look like a real card.
+ - Use SASS
+ - Use Class name 'Card' and classes that inherit the card named 'SpadesCard', 'HeartsCard',  'DiamondsCard' & 'ClubsCard'.
+ - Create more classes
+ - Create 5 Tests
+ - 
 ## Bonus
 
-- jsonbin.io - see explanation above
-- Freestyle - add any feature you desire. Some ideas:
-  - [drag n' drop functionality](https://htmldom.dev/drag-and-drop-element-in-a-list)
-  - Delete + Edit a todo
-  - Undo action
-  - Search and highlight results
-  - Loading spinner for network request
-  - Mark/Unmark todo as done
-  - Something awesome we didn't think of...
-- For added value, you can add jest/puppeteer test to test any bonus feature you implemented
+- Make the game online by using the JSOBBIN like service you built.
+- Make the cards look like a real cards.
+- Make animations when moving cards.
+- Any Feature you wish.
+
 
 **Add an explanation in `README.md` for each bonus feature you add and a link to any resoure you used**
 
@@ -57,9 +38,8 @@ make changes to your client:
 
 ## Submitting
 
-- Submit your solution repo to the CRM system
-- Submit beckend by thursday 9 am
-- Submit beckend + changes on client by Sunday
+- Submit your solution repository to the CRM system
+- Submit beckend by Sunday 9 am
 
 
 GOOD LUCK!
