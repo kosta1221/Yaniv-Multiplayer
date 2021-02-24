@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", onLoad);
 function onLoad() {
 
     
-
+    
 
     function startGame() {//request for creation of a new game
         
