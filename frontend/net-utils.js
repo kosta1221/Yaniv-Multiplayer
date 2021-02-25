@@ -9,7 +9,7 @@ const netUtils = {
     joinGame() {
 
     },
-    getState(playerIdentity) {
+    getGameStateForPlayer(playerIdentity) {
         //fetch()
         const state = {
             playersPoints: {
@@ -23,8 +23,8 @@ const netUtils = {
                 "dvir": 2
             },
             cards: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
-            openCard: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
-            activePlayer: "alon",
+            openCards: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
+            playerInTurn: "alon",
             playerNames: ["alon", "koren", "kosta", "dvir"]
         }
         return state;

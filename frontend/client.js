@@ -7,90 +7,94 @@ function onLoad() {
   let opponents = {};
   let activePlayer;
   let matchNumber;
+  let pileDeck;
   let activePlayerMove = {
     "selected-cards": [{}],
   };
   const playerElement = document.querySelector(".active-player");
 
 
-  updateGameState();
+  setInterval(updateGameState, 5000);
   renderAll();
 
-  function renderAll() {
-    //RENDER PLAYER
-    for (const card of player.cards) {
-      const cardElement = document.createElement("img");
-      const src = `./images/cards-svg/${getImageName(card)}.svg`;
-      cardElement.setAttribute("src", src);
-      cardElement.setAttribute("suit", `${card.suit}`);
-      cardElement.setAttribute("rank", `${card.rank}`);
-      cardElement.classList.add("card");
-      playerElement.appendChild(cardElement);
-    }
-    //RENDER OPPONENTS
-    const opponentsElements = document.querySelectorAll(".opponent");
-    let j = 0;
-    for (const opponentName in opponents) {
-      const opponentElement = opponentsElements.item(j);
-      j++;
-      const opponent = opponents[opponentName];
-      for(let i = 0; i < opponent.numberOfCards; i++) {
-        const cardElement = document.createElement("img");
-        const src = `./images/cards-svg/Card_back.svg`;
-        cardElement.setAttribute("src", src);
-        cardElement.classList.add("card");
-        opponentElement.appendChild(cardElement);
-      }
-    }
-    //RENDER PILE
-  }
-
+  
   function startGame() {
     //request for creation of a new game
   }
-
+  
   function updateGameState() {
     //runs every x seconds and asks for data relevant to player
-    const state = netUtils.getState(myName);
+    const state = netUtils.getGameStateForPlayer(myName);
     player = new Player(
       state.cards,
       state.playersPoints[myName],
       state.playersCardNumbers[myName]
-    );
-    for (const playerName of state.playerNames) {
-      if (playerName === myName) continue;
-      const points = state.playersPoints[playerName];
-      const numberOfCards = state.playersCardNumbers[playerName];
-      opponents[playerName] = new Player(null, points, numberOfCards);
+      );
+      for (const playerName of state.playerNames) {
+        if (playerName === myName) continue;
+        const points = state.playersPoints[playerName];
+        const numberOfCards = state.playersCardNumbers[playerName];
+        opponents[playerName] = new Player(null, points, numberOfCards);
+      }
     }
+
+    function renderAll() {
+      //RENDER PLAYER
+      for (const card of player.cards) {
+        const cardElement = document.createElement("img");
+        const src = `./images/cards-svg/${getImageName(card)}.svg`;
+        cardElement.setAttribute("src", src);
+        cardElement.setAttribute("suit", `${card.suit}`);
+        cardElement.setAttribute("rank", `${card.rank}`);
+        cardElement.setAttribute("is-joker", `${card.isJoker}`);
+        cardElement.classList.add("card");
+        playerElement.appendChild(cardElement);
+      }
+      //RENDER OPPONENTS
+      const opponentsElements = document.querySelectorAll(".opponent");
+      let j = 0;
+      for (const opponentName in opponents) {
+        const opponentElement = opponentsElements.item(j);
+        j++;
+        const opponent = opponents[opponentName];
+        for(let i = 0; i < opponent.numberOfCards; i++) {
+          const cardElement = document.createElement("img");
+          const src = `./images/cards-svg/Card_back.svg`;
+          cardElement.setAttribute("src", src);
+          cardElement.classList.add("card");
+          opponentElement.appendChild(cardElement);
+        }
+      }
+      //RENDER PILE
+
+    }
+
+  function collectMoveData(e) {
+    const cardName = card.getAttribute("suit")
+    const cardSuit = card.getAttribute("rank")
+    const cardSuit = card.getAttribute("rank")
+    activePlayerMove["selected-cards"].push({name: cardName, suit: cardSuit})
   }
 
+  playerElement.addEventListener("click",(e) => {
+    let clickedCard = e.target
+    collectMoveData(clickedCard)
+    verifyMoveEligibility(clickedCard)
+  })
 
-  // function collectMoveData(e) {
-  //   let clickedCard = e.target
-    
-  // }
-
-
-
-  // playerElement.addEventListener("click",(e) => {
-  //   collectMoveData(e)
-  // })
-  
-
-
-  // function verifyMoveEligibility() {
-  //   const state = netUtils.getState(myName);
-  //   const currentPileTop = state.openCard[openCard.length-1]
-  //   const selectedCards = activePlayerMove["selected-cards"] //object of active cards [{}]
-    
-  //   if (activeCards.length > 1) {
+  function verifyMoveEligibility(card) {//takes a card from player hand and checks if is selectable by comparison to selected cards
+    const state = netUtils.getGameStateForPlayer(myName);
+    const currentPileTop = state.openCard[openCard.length-1]
+    const selectedCard = activePlayerMove["selected-cards"] //object array of active cards [{}]
+    if(selectedCard[0].name && selectedCard[0].suit === currentPileTop[0].name && currentPileTop[0].suit) {
       
-  //   }
-  //   else {
+    }
+    if (selectedCard.length > 1) {
+    }
+    else {
 
-  //   }
-  // }
+    }
+  }
 
   function executeMove() {
 
@@ -102,7 +106,7 @@ function onLoad() {
   }
 
   function switchPlayer() {
-    //myName = state.activePlayer;
+    //myName = state.playerInturn;
   }
 
   function getImageName(card) {
