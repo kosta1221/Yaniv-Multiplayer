@@ -49,17 +49,13 @@ A player may discard any of the following sets of cards:
 
 # Requirments
 
-- Create Yaniv game with for multiple players that can play on the same window (and see each others cards).
-- Cards could be showed as a string like '9 Hearts' or to make it look like a real card.
-- Use SASS
-- Use Class name 'Card' and classes that inherit the card named 'SpadesCard', 'HeartsCard', 'DiamondsCard' & 'ClubsCard'.
-- Create more classes
--
+
 
 # Bonus
 
-- Make the game online by using the JSOBBIN like service you built.
+- Make the game online by using the JSONBIN like service you built.
 - Make the cards look like a real cards.
+- make the cards drag and drop
 - Make animations when moving cards.
 - Any Feature you wish.
 
@@ -67,12 +63,15 @@ A player may discard any of the following sets of cards:
 
 # Grading policy
 
-- Your project will be graded by the doing all requirments
-- Extra freestyle features - Please add an explanation about the bonus features you added to the readme.md
-- Code quality and style: indentation, Meaningful and non-disambiguate variable names, Comments documentation
-- Visual creativity, use css to make this app look awesome 💅🏿
-- Division to reusable functions, no code duplication
-- Git usage: meaningful commit messages, small commits, folder and file structures
+- Doing task's requirments
+- Bonuses
+- How the project looks
+- Correct usage of NODE + EXPRESS
+- Correct code structure and seperation to files and functions.
+- Correct code styling (indentation, spacing)
+- Correct naming
+- Correct git usage
+
 
 # Submitting
 
