@@ -1,9 +1,16 @@
 "use strict"
-const netUtils = { 
-    login() {
+const netUtils = {
+    getWaitingGames() {
+
+    },
+    createGame() {
+
+    },
+    joinGame() {
 
     },
     getState(playerIdentity) {
+        //fetch()
         const state = {
             playersPoints: {
                 "alon": 30,
@@ -14,13 +21,8 @@ const netUtils = {
                 "koren": 3
             },
             cards: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
-            openCard: {
-                suit: "spade",
-                rank: "A",
-                isJocker: false
-            },
+            openCard: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
             activePlayer: "alon",
-            numberOfPlayers: 2,
             playerNames: ["alon", "koren"]
         }
         return state;
