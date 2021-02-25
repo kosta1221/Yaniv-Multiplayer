@@ -1,4 +1,6 @@
 const utils = {
+    suits: ["clubs", "diamonds", "hearts", "spades"],
+    ranks: ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"],
     createCardElement(card, upSideDown = false) {
         const cardElement = document.createElement("img");
         let src;

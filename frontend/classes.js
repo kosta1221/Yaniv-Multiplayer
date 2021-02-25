@@ -31,6 +31,9 @@ class Card {
 		return this.#isJoker;
 	}
 
+	equals(card) {
+		return (this.#suit === card.suit && this.#rank === card.rank && this.#isJoker === card.isJoker); 
+	}
 	// set suit(suit) {
 	// 	this.#suit = suit;
 	// }
@@ -72,6 +75,19 @@ class Deck {
 	}
 	getFirstCard(deck) {
 		return deck.cards[0];
+	}
+	removeCard(cardToRemove) {
+		let indexToRemove = -1;
+		const cards = this.cards;
+		this.cards.forEach( (card,index) => {
+			if ( card.equals(cardToRemove) ) {
+				indexToRemove = index;
+			}
+		});
+		if (indexToRemove > -1) this.cards.splice(indexToRemove, 1);  
+	}
+	addCard(card) {
+		this.cards.push(card);
 	}
 }
 

@@ -32,7 +32,7 @@ body {
 
 .game-field {
   border-radius: 15%;
-  background-image: url(/frontend/images/table-background.jpg);
+  background-image: url("../images/table-background.jpg");
 }
 
 .player {
@@ -55,6 +55,10 @@ h1 {
 
 .card {
   width: 120px;
+}
+
+.card .unselectable {
+  opacity: 0.5;
 }
 
 .stack {
