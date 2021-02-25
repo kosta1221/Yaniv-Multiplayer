@@ -38,9 +38,17 @@ h1 {
 
 .card {
 	width: 120px;
-	.unselectable {
-		opacity: 0.5;
-	}
+	position: relative;
+	top: 0;
+	transition-duration: 200ms;
+}
+.unselectable {
+	filter: brightness(50%);
+}
+.selected {
+	position: relative;
+	top: -20%;
+	transition-duration: 200ms;
 }
 
 .stack {

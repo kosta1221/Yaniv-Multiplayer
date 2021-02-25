@@ -92,7 +92,7 @@ function onLoad() {
 
     const allPlayerCards = document.querySelectorAll("#active-player > .card");
     for (const cardElement of allPlayerCards) {
-      if (cardElement === clickedCard) continue;
+      if ( cardElement.classList.contains("selected") ) continue;
       const suit = cardElement.getAttribute("suit");
       const rank = cardElement.getAttribute("rank");
       const isJoker = cardElement.getAttribute("is-joker");
