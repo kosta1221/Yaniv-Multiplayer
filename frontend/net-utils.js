@@ -11,6 +11,8 @@ const netUtils = {
     },
     getGameStateForPlayer(playerIdentity) {
         //fetch()
+        const pd = new PileDeck();
+        pd.createNewFullDeck();
         const state = {
             playersPoints: {
                 "alon": 30,
@@ -23,7 +25,7 @@ const netUtils = {
                 "dvir": 2
             },
             cards: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
-            openCards: [new Card("hearts", "jack", false), new Card("clubs", "king", false)],
+            pileDeck: pd,
             playerInTurn: "alon",
             playerNames: ["alon", "koren", "kosta", "dvir"]
         }

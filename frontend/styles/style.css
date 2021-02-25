@@ -17,6 +17,15 @@ body {
 }
 
 .box {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
   background-color: #d9d9d9;
   background-color: transparent;
 }
@@ -46,5 +55,21 @@ h1 {
 
 .card {
   width: 120px;
+}
+
+.stack {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  list-style: none;
+  width: 120px;
+  height: calc(120px * 1.4);
+}
+
+.stack li {
+  width: 0.2px;
 }
 /*# sourceMappingURL=style.css.map */

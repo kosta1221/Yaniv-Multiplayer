@@ -5,8 +5,9 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="stylesheet" href="./styles/style.css" />
-		<script src="./net-utils.js"></script>
 		<script src="./classes.js"></script>
+		<script src="./net-utils.js"></script>
+		<script src="./utils.js"></script>
 		<script src="./client.js"></script>
 		<title>Yaniv</title>
 	</head>
@@ -14,16 +15,19 @@
 		<div class="game-board">
 			<div class="box">
 				<input type="text" id="login" placeholder="Enter name">
-				<button id = "start-button">Start Game</button>
+				<button id = "start-button">Join Game</button>
 			</div>
-			<div class="box player opponent"><h1>Player 3</h1></div>
+			<div class="box player opponent"></div>
 			<div class="box"></div>
-			<div class="box player opponent"><h1>Player 2</h1></div>
-			<div class="box game-field"></div>
-			<div class="box player opponent"><h1>Player 4</h1></div>
+			<div class="box player opponent"></div>
+			<div class="box game-field">
+				<ol id = "table-deck" class = "stack"></ol>
+				<ol id = "pile-deck" class = "stack"></ol>
+			</div>
+			<div class="box player opponent"></div>
 
 			<div class="box"></div>
-			<div class="box player active-player"><h1>Active Player</h1></div>
+			<div class="box player active-player"></div>
 			<div class="box"></div>
 		</div>
 		<!-- <script src="./game-manager.js"></script> -->

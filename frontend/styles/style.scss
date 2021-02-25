@@ -11,6 +11,9 @@ body {
 }
 
 .box {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: #d9d9d9;
 
 	background-color: transparent;
@@ -35,4 +38,18 @@ h1 {
 
 .card {
 	width: 120px;
+}
+
+.stack {
+	display: flex;
+	justify-content: left;
+	list-style: none;
+	width: 120px;
+	height: calc(120px * 1.4);
+	li {
+		width: 0.2px;
+	}
+	.card {
+		
+	}
 }

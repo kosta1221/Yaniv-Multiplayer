@@ -46,15 +46,15 @@ class Card {
 
 // A class for building objects of decks of cards
 class Deck {
-	constructor() {
-		this.cards = [];
+	constructor(cards = []) {
+		this.cards = cards;
 	}
 
 	createNewFullDeck() {
 		let suits = ["clubs", "diamonds", "hearts", "spades"];
 		let ranks = ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"];
 		for (let i = 0; i < suits.length; i++) {
-			for (let j = 0; j < ranks.length; j++) {s
+			for (let j = 0; j < ranks.length; j++) {
 				this.cards.push(new Card(suits[i], ranks[j], false));
 			}
 		}
@@ -100,8 +100,8 @@ class TableDeck extends Deck {
 }
 
 class PileDeck extends Deck {
-	constructor() {
-		super();
+	constructor(cards = []) {
+		super(cards);
 	}
 }
 

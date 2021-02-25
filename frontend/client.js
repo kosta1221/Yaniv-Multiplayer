@@ -14,8 +14,8 @@ function onLoad() {
   const playerElement = document.querySelector(".active-player");
 
   setInterval(updateGameState, 5000);
-  // updateGameState();
-  // renderAll();
+  updateGameState();
+  renderAll();
 
   function startGame() {
     //request for creation of a new game
@@ -35,18 +35,13 @@ function onLoad() {
       const numberOfCards = state.playersCardNumbers[playerName];
       opponents[playerName] = new Player(null, points, numberOfCards);
     }
+    pileDeck = state.pileDeck;
   }
 
   function renderAll() {
     //RENDER PLAYER
     for (const card of player.cards) {
-      const cardElement = document.createElement("img");
-      const src = `./images/cards-svg/${getImageName(card)}.svg`;
-      cardElement.setAttribute("src", src);
-      cardElement.setAttribute("suit", `${card.suit}`);
-      cardElement.setAttribute("rank", `${card.rank}`);
-      cardElement.setAttribute("is-joker", `${card.isJoker}`);
-      cardElement.classList.add("card");
+      const cardElement = utils.createCardElement(card);
       playerElement.appendChild(cardElement);
     }
     //RENDER OPPONENTS
@@ -57,14 +52,20 @@ function onLoad() {
       j++;
       const opponent = opponents[opponentName];
       for (let i = 0; i < opponent.numberOfCards; i++) {
-        const cardElement = document.createElement("img");
-        const src = `./images/cards-svg/Card_back.svg`;
-        cardElement.setAttribute("src", src);
-        cardElement.classList.add("card");
+        const cardElement = utils.createCardElement(null, true);
         opponentElement.appendChild(cardElement);
       }
     }
     //RENDER PILE
+    const pileDeckElement = document.querySelector("#pile-deck");
+    for (const card of pileDeck.cards) {
+      const li = document.createElement("li");
+      const cardElement = utils.createCardElement(card);
+      li.appendChild(cardElement);
+      pileDeckElement.appendChild(li);
+    }
+
+    
   }
 
   function collectMoveData(card) {
@@ -142,40 +143,5 @@ function onLoad() {
     //myName = state.playerInturn;
   }
 
-  function getImageName(card) {
-    let imgName = "";
-    if (card.isJoker) return "Black_joker";
-    switch (card.rank) {
-      case "ace":
-        imgName += "A";
-        break;
-      case "jack":
-        imgName += "J";
-        break;
-      case "queen":
-        imgName += "Q";
-        break;
-      case "king":
-        imgName += "K";
-        break;
-      default:
-        imgName += card.rank;
-        break;
-    }
-    switch (card.suit) {
-      case "hearts":
-        imgName += "H";
-        break;
-      case "clubs":
-        imgName += "C";
-        break;
-      case "diamonds":
-        imgName += "D";
-        break;
-      case "spades":
-        imgName += "S";
-        break;
-    }
-    return imgName;
-  }
+  
 }
