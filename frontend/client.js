@@ -12,6 +12,7 @@ function onLoad() {
     "selected-cards": [],
   };
   const playerElement = document.querySelector(".active-player");
+  const unavailableCards = [];
 
   setInterval(updateGameState, 5000);
   updateGameState();
@@ -64,33 +65,56 @@ function onLoad() {
       li.appendChild(cardElement);
       pileDeckElement.appendChild(li);
     }
-
-    
   }
 
-  function collectMoveData(card) {
+  function collectMoveData(clickedCard) {
+    //mark all cards as pickable
+    //LOOP <
+    //click card
+    //add card to selected-cards
+    //go through all other cards and check if valid
+    //mark all unvalid as unpickable
+    //>
+
     //block unplayable cards
-    const cardRank = card.getAttribute("rank");
-    const cardSuit = card.getAttribute("suit");
-    const is_Joker = card.getAttribute("is-joker");
-    const unavailableCards = [];
-    activePlayerMove["selected-cards"].push({
-      rank: cardRank,
-      suit: cardSuit,
-      isJoker: is_Joker,
-    });
-    player.activeCards = activePlayerMove["selected-cards"];
-    for (const card of player.cards) {
-      if (card.suit !== player.activeCards[0].suit) {
-        unavailableCards.push(card);
+    const cardRank = clickedCard.getAttribute("rank");
+    const cardSuit = clickedCard.getAttribute("suit");
+    const is_Joker = clickedCard.getAttribute("is-joker");
+    const card = new Card(cardSuit, cardRank, is_Joker);
+    activePlayerMove["selected-cards"].push(card);
+    const allPlayerCards = document.querySelectorAll("#active-player > .card");
+    //player.activeCards = activePlayerMove["selected-cards"];
+    for (const cardElement of allPlayerCards) {
+      if (cardElement === clickedCard) continue;
+      const suit = clickedCard.getAttribute("suit");
+      const rank = clickedCard.getAttribute("rank");
+      const isJoker = clickedCard.getAttribute("is-joker");
+      const card = new Card(suit, rank, isJoker);
+      if (!verifyMoveEligibility(card)) {
+        cardElement.classList.replace("selectable", "unselectable");
+      } else {
       }
     }
-    console.log(unavailableCards);
-    // for (let i = 2; i < unavailableCards.length; i++) {
-    //   const unavailableCard = unavailableCards[i];
-    //   document.querySelector(
-    //     `body > div > div.box.player.active-player > img:nth-child(${i})`
-    //   );
+    //   if (
+    //     card.suit !== player.activeCards[0].suit ||
+    //     card.rank !== player.activeCards[0].rank
+    //   ) {
+    //     if (!unavailableCards.includes(card)) {
+    //       unavailableCards.push(card);
+    //     }
+    //   }
+    // }
+    // console.log(unavailableCards);
+    // console.log(allPlayerCards);
+    // for (let j = 0; j < allPlayerCards.length; j++) {
+    //   for (let i = 1; i < unavailableCards.length; i++) {
+    //     if (
+    //       unavailableCards[i].suit !== allPlayerCards[j].attributes[1] &&
+    //       unavailableCards[i].rank !== allPlayerCards[j].attributes[2]
+    //     ) {
+    //       allPlayerCards[j].style.width = "20vw";
+    //     }
+    //   }
     // }
     // if (!player.activeCards) {
 
@@ -111,8 +135,8 @@ function onLoad() {
 
   playerElement.addEventListener("click", (e) => {
     let clickedCard = e.target;
-    collectMoveData(clickedCard);
-    // verifyMoveEligibility(clickedCard);
+    if (clickedCard.classList.includes("selectable"))
+      collectMoveData(clickedCard);
   });
 
   function verifyMoveEligibility(card) {
@@ -142,6 +166,4 @@ function onLoad() {
   function switchPlayer() {
     //myName = state.playerInturn;
   }
-
-  
 }
