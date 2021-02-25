@@ -18,17 +18,26 @@ class Player {
 	}
 
 	giveCardFromTopOfDeck(deck) {
-		this.playerDeck.cards.push(Deck.getFirstCard(deck));
+		this.playerDeck.cards.push(deck.getFirstCard());
 		this.numberOfCards++;
 		deck.cards.shift();
 	}
 
 	giveFiveCardsFromTopOfDeck(deck) {
 		for (let i = 0; i < 5; i++) {
-			this.playerDeck.cards.push(Deck.getFirstCard(deck));
+			this.playerDeck.cards.push(deck.getFirstCard());
 			this.numberOfCards++;
 			deck.cards.shift();
 		}
+	}
+
+	// Needs to be tested
+	moveCardsFromPlayerDeckToOpenCards(cardsToMove, game) {
+		for (const card of cardsToMove) {
+			game.openCardDeck.cards.push(card);
+			this.numberOfCards--;
+		}
+		this.playerDeck.removeCards(cardsToMove);
 	}
 }
 
@@ -152,8 +161,28 @@ class Deck {
 		}
 	}
 
-	static getFirstCard(deck) {
-		return deck.cards[0];
+	getFirstCard() {
+		return this.cards[0];
+	}
+
+	getFirstCards(numberOfCardsToGet) {
+		const cardsToGet = [];
+		for (let i = 0; i < numberOfCardsToGet; i++) {
+			cardsToGet.push(this.cards[i]);
+		}
+	}
+
+	// Not sure if works
+	removeCards(cardsToRemove) {
+		console.log(cardsToRemove);
+		this.cards = this.cards.filter((card) => {
+			for (const cardToRemove of cardsToRemove) {
+				console.log(card);
+				console.log(cardToRemove);
+				console.log(card != cardToRemove);
+				return card != cardToRemove;
+			}
+		});
 	}
 }
 
