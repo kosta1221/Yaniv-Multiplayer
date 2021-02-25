@@ -2,7 +2,10 @@
 const netUtils = {
   getWaitingGames() {},
   createGame() {},
-  joinGame() {},
+  joinGame(userName) {
+    //add player to que
+    //show ready btn and other play ready status
+  },
   getGameStateForPlayer(playerIdentity) {
     //fetch()
     const pd = new PileDeck();

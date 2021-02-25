@@ -12,14 +12,30 @@ function onLoad() {
     "selected-cards": new Deck()
   };
   const playerElement = document.querySelector(".active-player");
-
+  
   
   updateGameState();
   renderAll();
   updateGameState();
 
-  function startGame() {
-    //request for creation of a new game
+  const joinButton = document.querySelector("#join-button");
+  joinButton.addEventListener("click", () => {
+    const input = document.querySelector("#login");
+    const userName = input.value;
+    if(userName === "") return;
+    myName = userName;
+    joinGame();
+    joinButton.hidden = true;
+    input.hidden = true;
+  });
+  
+  playerElement.addEventListener("click", (e) => {
+    let clickedCard = e.target;
+    collectMoveData(clickedCard);
+  });
+
+  function joinGame() {
+    netUtils.joinGame(myName);
   }
 
   function updateGameState() {
@@ -107,10 +123,6 @@ function onLoad() {
     }
   }
 
-  playerElement.addEventListener("click", (e) => {
-    let clickedCard = e.target;
-    collectMoveData(clickedCard);
-  });
 
   function verifyMoveEligibility(card) {
     //takes a card from player hand and checks if is selectable by comparison to selected cards
