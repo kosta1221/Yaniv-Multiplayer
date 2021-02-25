@@ -17,7 +17,6 @@ body {
 }
 
 .game-field {
-	border: 2px solid black;
 	border-radius: 15%;
 	background-image: url(/frontend/images/table-background.jpg);
 }
@@ -32,4 +31,8 @@ body {
 
 h1 {
 	font-size: 2rem;
+}
+
+.card {
+	width: 120px;
 }

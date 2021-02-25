@@ -7,25 +7,42 @@ function onLoad() {
   let opponents = {};
   let activePlayer;
   let matchNumber;
-  let activeCards;
+  let activePlayerMove = {
+    "selected-cards": [{}],
+  };
+  const playerElement = document.querySelector(".active-player");
+
 
   updateGameState();
   renderAll();
 
   function renderAll() {
     //RENDER PLAYER
-    const playerElement = document.querySelector(".active-player");
     for (const card of player.cards) {
       const cardElement = document.createElement("img");
       const src = `./images/cards-svg/${getImageName(card)}.svg`;
       cardElement.setAttribute("src", src);
+      cardElement.setAttribute("suit", `${card.suit}`);
+      cardElement.setAttribute("rank", `${card.rank}`);
       cardElement.classList.add("card");
       playerElement.appendChild(cardElement);
     }
     //RENDER OPPONENTS
-    const opponentsElements = document.querySelectorAll(".player");
-    for (const [index, opponent] of opponents) {
+    const opponentsElements = document.querySelectorAll(".opponent");
+    let j = 0;
+    for (const opponentName in opponents) {
+      const opponentElement = opponentsElements.item(j);
+      j++;
+      const opponent = opponents[opponentName];
+      for(let i = 0; i < opponent.numberOfCards; i++) {
+        const cardElement = document.createElement("img");
+        const src = `./images/cards-svg/Card_back.svg`;
+        cardElement.setAttribute("src", src);
+        cardElement.classList.add("card");
+        opponentElement.appendChild(cardElement);
+      }
     }
+    //RENDER PILE
   }
 
   function startGame() {
@@ -48,7 +65,35 @@ function onLoad() {
     }
   }
 
+
+  // function collectMoveData(e) {
+  //   let clickedCard = e.target
+    
+  // }
+
+
+
+  // playerElement.addEventListener("click",(e) => {
+  //   collectMoveData(e)
+  // })
+  
+
+
+  // function verifyMoveEligibility() {
+  //   const state = netUtils.getState(myName);
+  //   const currentPileTop = state.openCard[openCard.length-1]
+  //   const selectedCards = activePlayerMove["selected-cards"] //object of active cards [{}]
+    
+  //   if (activeCards.length > 1) {
+      
+  //   }
+  //   else {
+
+  //   }
+  // }
+
   function executeMove() {
+
     //looks at move player is trying to make and asks gameManager to perform
     /*{
             move: //"place" | "yaniv" | "assaf",
