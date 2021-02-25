@@ -74,11 +74,14 @@ function onLoad() {
   }
   
   function collectMoveData(clickedCard) {
+    //if card is not selectable stop operation
     if ( !clickedCard.classList.contains("selectable") ) return;
+    //make Card of clicked card element
     const suit = clickedCard.getAttribute("suit");
     const rank = clickedCard.getAttribute("rank");
     const isJoker = clickedCard.getAttribute("is-joker");
     const card = new Card(suit, rank, isJoker);
+
     if ( clickedCard.classList.contains("selected") ) {
       clickedCard.classList.remove("selected");
       activePlayerMove["selected-cards"].removeCard(card);
@@ -86,6 +89,7 @@ function onLoad() {
       clickedCard.classList.add("selected");
       activePlayerMove["selected-cards"].addCard(card);
     }
+
     const allPlayerCards = document.querySelectorAll("#active-player > .card");
     for (const cardElement of allPlayerCards) {
       if (cardElement === clickedCard) continue;
@@ -111,18 +115,25 @@ function onLoad() {
   function verifyMoveEligibility(card) {
     //takes a card from player hand and checks if is selectable by comparison to selected cards
     const selectedCards = activePlayerMove["selected-cards"].cards; //object array of active cards [{}]
+    //no cards selected => true
     if (selectedCards.length === 0) return true;
-    const isSameRank = selectedCards[0].rank === card.rank;
-    if (isSameRank) return true;
-    //let isAllSelectedCardsSameSuit = true;
+    //same rank cards => true
+    let isAllSelectedCardsSameRank = true;
     for (let i = 0; i < selectedCards.length -1; i++) {
-      if ( selectedCards[i] !== selectedCards[i + 1]) return false;
+      if ( selectedCards[i].rank !== selectedCards[i + 1].rank) isAllSelectedCardsSameRank = false;
     }
-    const isSameSuit = selectedCards[0].suit === card.suit;
+    if(isAllSelectedCardsSameRank && card.rank === selectedCards[0].rank) return true
+    //same suit series => true
+    let isAllSelectedCardsSameSuit = true;
+    for (let i = 0; i < selectedCards.length -1; i++) {
+      if ( selectedCards[i].suit !== selectedCards[i + 1].suit) isAllSelectedCardsSameSuit = false;
+    }
     const rankPlace = utils.ranks.indexOf(card.rank);
     const lowSelectedCard = utils.ranks.indexOf(selectedCards[0].rank);  
-    const highSelectedCard = utils.ranks.indexOf(selectedCards[selectedCards.length - 1].rank);  
-    if (lowSelectedCard - 1 === rankPlace || highSelectedCard + 1 === rankPlace) return true;
+    const highSelectedCard = utils.ranks.indexOf(selectedCards[selectedCards.length - 1].rank); 
+    const isOneAboveOrBelow = (lowSelectedCard - 1 === rankPlace || highSelectedCard + 1 === rankPlace);  
+    if (isAllSelectedCardsSameSuit && isOneAboveOrBelow && card.suit === selectedCards[0].suit) return true;
+    //non of the above => false
     return false;
   }
 
