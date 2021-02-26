@@ -210,18 +210,28 @@ function onLoad() {
             toast: true,
           });
         } else {
+          activePlayerMove.move = move;
+          netUtils.play(activePlayerMove);
           // for (let i = 0; i < selectedPlayerCards.length; i++) {
           //   pile_Deck.addCard(selectedPlayerCards[i]);
           // }
           // selectedPlayerCards.length = 0;
-          updateGameObj.move = "Place";
-          updateGameObj.push(...selectedPlayerCards);
-          onPut({ updateGameObj });
+          // updateGameObj.move = "Place";
+          // updateGameObj.push(...selectedPlayerCards);
+          // onPut({ updateGameObj });
         }
       }
       case "Yaniv!": {
+        netUtils.play({
+          move: "yaniv",
+          "selected-cards": null
+        });
       }
       case "Assaf!": {
+        netUtils.play({
+          move: "assaf",
+          "selected-cards": null
+        });
       }
     }
   }
