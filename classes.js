@@ -15,6 +15,27 @@ class Player {
 			this.playerDeck = new PlayerDeck();
 			this.numberOfCards = 0;
 		}
+		this.didLose = false;
+	}
+
+	calculateRoundPointsBasedOnRank() {
+		let sum = 0;
+		for (const playerCard of this.playerDeck.cards) {
+			switch (playerCard.rank) {
+				case "ace":
+					sum += 1;
+					break;
+				case "jack":
+				case "queen":
+				case "king":
+					sum += 10;
+					break;
+				default:
+					sum += +playerCard.rank;
+					break;
+			}
+		}
+		return sum;
 	}
 
 	giveFirstCardFromDeck(deck) {
@@ -110,6 +131,9 @@ class Game {
 		// give openCardDeck the first card from gameDeck
 		this.gameDeck.putFirstCardFromOneDeckToAnother(this.openCardDeck);
 		this.gameDeck.cards.shift();
+
+		this.turnsSinceStart = 0;
+		this.pointsToLose = 100;
 
 		this.getGameState = function () {
 			const gameState = {};
