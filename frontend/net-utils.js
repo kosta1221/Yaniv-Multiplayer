@@ -39,10 +39,10 @@ const netUtils = {
   createGame() {},
   joinGame(userName) {
     mock.players.push(userName);
-    playersReady[userName] = false;
+    mock.playersReady[userName] = false;
   },
   ready(playerIdentity) {
-    playersReady[playerIdentity] = false;
+    mock.playersReady[playerIdentity] = true;
   },
   getPlayersStatus() {
     return mock.playersReady;

@@ -26,7 +26,7 @@ function onLoad() {
     const readyButton = document.querySelector("#ready-button");
     readyButton.hidden = false;
     readyButton.addEventListener("click", () => {
-      netUtils.ready = true;
+      netUtils.ready(myName);
       updateGameState();
       renderAll();
     });
