@@ -53,7 +53,7 @@ const netUtils = {
     return mocks.playersReady();
   },
   getGameStateForPlayer(playerIdentity) {
-    return mock.state(playerIdentity);
+    return mocks.state(playerIdentity);
   },
   play(move) {
     mocks.executeMove(move);
