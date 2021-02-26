@@ -5,16 +5,22 @@ const mockPlayerNames = ["alon", "koren", "kosta", "dvir"];
 const mockGame = new Game(mockPlayerNames);
 
 const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
-console.log(mockCardsToDiscard);
+// console.log("The cards I want to discard from alon");
+// console.log(mockCardsToDiscard);
 
-console.log(mockGame);
-console.log(mockGame.getGameState());
+// console.log("game upon creation");
+// console.log(mockGame);
+// console.log(mockGame.getGameState());
 
-console.log(makeTurn(mockGame, false, mockCardsToDiscard));
+makeTurn(mockGame, false, true, mockCardsToDiscard);
+// console.log("Game after turn");
+// console.log(mockGame);
+// console.log(mockGame.getGameState());
 
-function makeTurn(game, callYaniv, cardsToDiscard) {
+function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 	const playerInTurn = game.playerInTurn;
 	const gameDeck = game.gameDeck;
+	const openCardDeck = game.openCardDeck;
 
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
@@ -23,9 +29,18 @@ function makeTurn(game, callYaniv, cardsToDiscard) {
 
 		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
 		console.log(playerInTurn.numberOfCards);
+		console.log(gameDeck);
+		console.log(openCardDeck);
+		if (isCardToGetFromGameDeck) {
+			// Draw a card from the draw pile (game deck)
+			playerInTurn.giveFirstCardFromDeck(gameDeck);
+		} else {
+			// Draw a card from the open cards deck instead
+			playerInTurn.giveLastCardFromDeck(openCardDeck);
+		}
+		console.log(gameDeck);
+		console.log(openCardDeck);
 
-		// Draw a card from the draw pile (game deck)
-		playerInTurn.giveCardFromTopOfDeck(gameDeck);
 		console.log(playerInTurn);
 		console.log(playerInTurn.numberOfCards);
 
