@@ -25,6 +25,18 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, c
 	const openCardDeck = game.openCardDeck;
 	const players = game.players;
 
+	// rules for cardsToDiscard
+
+	//player can discard a single card
+	if (cardsToDiscard.length === 1) {
+		const cardToDiscard = cardsToDiscard[0];
+		// the discarded card has to be from player's cards.
+		if (!playerInTurn.playerDeck.cards.includes(cardToDiscard)) {
+			throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
+		}
+	} else if (cardsToDiscard.length > 1) {
+	}
+
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
 		let winningPlayer;
