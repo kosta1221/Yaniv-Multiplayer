@@ -12,9 +12,9 @@ const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
 // console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-makeTurn(mockGame, false, true, mockCardsToDiscard);
+// makeTurn(mockGame, false, true, mockCardsToDiscard);
 // console.log("Game after turn");
-// console.log(mockGame);
+console.log(mockGame);
 // console.log(mockGame.getGameState());
 
 function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
@@ -25,27 +25,38 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
 	} else {
-		// When playing cards, the player may discard a single card or a single set of cards, placing them into the discard pile. The player must then draw a card from the draw pile.
+		// When playing cards, the player may discard a single card or a single set of cards, placing them into the discard pile. The player must then draw a card from the open cards or draw pile.
 
 		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
-		console.log(playerInTurn.numberOfCards);
-		console.log(gameDeck);
-		console.log(openCardDeck);
+		// console.log(playerInTurn.numberOfCards);
+		// console.log(gameDeck);
+		// console.log(openCardDeck);
 		if (isCardToGetFromGameDeck) {
 			// Draw a card from the draw pile (game deck)
 			playerInTurn.giveFirstCardFromDeck(gameDeck);
+
+			/* for (let i = 0; i < 34; i++) {
+				playerInTurn.giveFirstCardFromDeck(gameDeck);
+			} */
+
+			// If the drawing deck is empty and no one has yet called "Yaniv!", then all cards of the free stack, excluding the last player's drop, are shuffled and placed face down as a new deck.
+			if (gameDeck.cards.length === 0) {
+				// moving all cards from openCardDeck to gameDeck
+				gameDeck.cards = [...openCardDeck.cards];
+				// removing all cards from openCardDeck
+				openCardDeck.cards.splice(0, openCardDeck.cards.length);
+				gameDeck.putLastCardFromOneDeckToAnother(openCardDeck);
+				gameDeck.cards.pop();
+				gameDeck.shuffleDeck();
+			}
 		} else {
 			// Draw a card from the open cards deck instead
 			playerInTurn.giveLastCardFromDeck(openCardDeck);
 		}
-		console.log(gameDeck);
-		console.log(openCardDeck);
+		// console.log(gameDeck);
+		// console.log(openCardDeck);
 
-		console.log(playerInTurn);
+		// console.log(playerInTurn);
 		console.log(playerInTurn.numberOfCards);
-
-		//Alternatively, the player may choose to take the card played by the previous player from the discard pile. However, if the previous player played a multi-card set, only the first or the last card in the set may be chosen. Note that the two jokers in the deck are taken into consideration.
-
-		// If the drawing deck is empty and no one has yet called "Yaniv!", then all cards of the free stack, excluding the last player's drop, are shuffled and placed face down as a new deck.
 	}
 }
