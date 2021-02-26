@@ -19,10 +19,13 @@ body {
   align-items: center;
   user-select: none;
 }
-
+.game-field{
+  flex-direction: row;
+}
 .player {
   margin: 2vmax 2vmax;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
 }
@@ -42,6 +45,7 @@ $card-width: 100px;
     width: 0.2px;
   }
 }
+
 .card {
   width: $card-width;
   height: calc($card-width * 1.4);
@@ -49,7 +53,18 @@ $card-width: 100px;
   top: 0;
   transition-duration: 200ms;
 }
-@media screen and (max-width: 600px) {
+
+.flip {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flip > .card {
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 900px) {
   $card-width: 60px;
   .card {
     width: $card-width;
@@ -66,15 +81,7 @@ $card-width: 100px;
   transition-duration: 200ms;
 }
 
-.flip {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
 
-.flip > .card {
-  transform: rotate(90deg);
-}
 
 //BUTTONS
 #player-buttons-div {
