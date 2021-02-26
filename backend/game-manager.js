@@ -12,23 +12,25 @@ const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
 // console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-makeTurn(mockGame, false, true, mockCardsToDiscard);
+makeTurn(mockGame, false, true, null, mockCardsToDiscard);
 
 // console.log("Game after turn");
 console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
+function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, cardsToDiscard) {
+	// shortening obvious variables for better readability
 	const playerInTurn = game.playerInTurn;
 	const gameDeck = game.gameDeck;
 	const openCardDeck = game.openCardDeck;
+	const players = game.players;
 
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
 		let winningPlayer;
 		let playersRoundPointSum = [];
-		const indexOfPlayerInTurn = game.players.indexOf(playerInTurn);
-		for (const player of game.players) {
+		const indexOfPlayerInTurn = players.indexOf(playerInTurn);
+		for (const player of players) {
 			let playerRoundPointSum = player.calculateRoundPointsBasedOnRank();
 			playersRoundPointSum.push(playerRoundPointSum);
 		}
@@ -38,22 +40,22 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 
 		// Assaf
 		if (indexOfPlayerWithLowestSum !== indexOfPlayerInTurn) {
-			winningPlayer = game.players[indexOfPlayerWithLowestSum];
+			winningPlayer = players[indexOfPlayerWithLowestSum];
 			for (let i = 0; i < playersRoundPointSum.length; i++) {
 				if (i === indexOfPlayerInTurn) {
-					game.players[i].points += 30 + playersRoundPointSum[i];
+					players[i].points += 30 + playersRoundPointSum[i];
 				} else if (i !== indexOfPlayerWithLowestSum) {
-					game.players[i].points += playersRoundPointSum[i];
+					players[i].points += playersRoundPointSum[i];
 				}
 
 				// if a player reaches pointsToLose exactly his points are set back to 0
-				if (game.players[i].points === game.pointsToLose) {
-					game.players[i].points = 0;
+				if (players[i].points === game.pointsToLose) {
+					players[i].points = 0;
 				}
 
 				// if a player's score goes above game.pointsToLose he loses
-				if (game.players[i].points > game.pointsToLose) {
-					game.players[i].didLose = true;
+				if (players[i].points > game.pointsToLose) {
+					players[i].didLose = true;
 				}
 			}
 		}
@@ -61,17 +63,17 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 		else {
 			for (let i = 0; i < playersRoundPointSum.length; i++) {
 				if (i !== indexOfPlayerInTurn) {
-					game.players[i].points += playersRoundPointSum[i];
+					players[i].points += playersRoundPointSum[i];
 				}
 
 				// if a player reaches pointsToLose exactly his points are set back to 0
-				if (game.players[i].points === game.pointsToLose) {
-					game.players[i].points = 0;
+				if (players[i].points === game.pointsToLose) {
+					players[i].points = 0;
 				}
 
 				// if a player's score goes above game.pointsToLose he loses
-				if (game.players[i].points > game.pointsToLose) {
-					game.players[i].didLose = true;
+				if (players[i].points > game.pointsToLose) {
+					players[i].didLose = true;
 				}
 			}
 		}
@@ -112,5 +114,5 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 	}
 
 	game.turnsSinceStart++;
-	game.playerInTurn = game.players[(game.players.indexOf(game.playerInTurn) + 1) % 4];
+	game.playerInTurn = players[(players.indexOf(game.playerInTurn) + 1) % game.numberOfPlayers];
 }

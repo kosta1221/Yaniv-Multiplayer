@@ -132,6 +132,7 @@ class Game {
 		this.gameDeck.putFirstCardFromOneDeckToAnother(this.openCardDeck);
 		this.gameDeck.cards.shift();
 
+		this.numberOfPlayers = playerNames.length;
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
 
