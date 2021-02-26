@@ -12,7 +12,8 @@ const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
 // console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-// makeTurn(mockGame, false, true, mockCardsToDiscard);
+makeTurn(mockGame, false, true, mockCardsToDiscard);
+
 // console.log("Game after turn");
 console.log(mockGame);
 // console.log(mockGame.getGameState());
@@ -24,6 +25,56 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
+		let winningPlayer;
+		let playersRoundPointSum = [];
+		const indexOfPlayerInTurn = game.players.indexOf(playerInTurn);
+		for (const player of game.players) {
+			let playerRoundPointSum = player.calculateRoundPointsBasedOnRank();
+			playersRoundPointSum.push(playerRoundPointSum);
+		}
+		const indexOfPlayerWithLowestSum = playersRoundPointSum.indexOf(
+			Math.min(...playersRoundPointSum)
+		);
+
+		// Assaf
+		if (indexOfPlayerWithLowestSum !== indexOfPlayerInTurn) {
+			winningPlayer = game.players[indexOfPlayerWithLowestSum];
+			for (let i = 0; i < playersRoundPointSum.length; i++) {
+				if (i === indexOfPlayerInTurn) {
+					game.players[i].points += 30 + playersRoundPointSum[i];
+				} else if (i !== indexOfPlayerWithLowestSum) {
+					game.players[i].points += playersRoundPointSum[i];
+				}
+
+				// if a player reaches pointsToLose exactly his points are set back to 0
+				if (game.players[i].points === game.pointsToLose) {
+					game.players[i].points = 0;
+				}
+
+				// if a player's score goes above game.pointsToLose he loses
+				if (game.players[i].points > game.pointsToLose) {
+					game.players[i].didLose = true;
+				}
+			}
+		}
+		// Yaniv successful
+		else {
+			for (let i = 0; i < playersRoundPointSum.length; i++) {
+				if (i !== indexOfPlayerInTurn) {
+					game.players[i].points += playersRoundPointSum[i];
+				}
+
+				// if a player reaches pointsToLose exactly his points are set back to 0
+				if (game.players[i].points === game.pointsToLose) {
+					game.players[i].points = 0;
+				}
+
+				// if a player's score goes above game.pointsToLose he loses
+				if (game.players[i].points > game.pointsToLose) {
+					game.players[i].didLose = true;
+				}
+			}
+		}
 	} else {
 		// When playing cards, the player may discard a single card or a single set of cards, placing them into the discard pile. The player must then draw a card from the open cards or draw pile.
 
@@ -59,4 +110,7 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardsToDiscard) {
 		// console.log(playerInTurn);
 		console.log(playerInTurn.numberOfCards);
 	}
+
+	game.turnsSinceStart++;
+	game.playerInTurn = game.players[(game.players.indexOf(game.playerInTurn) + 1) % 4];
 }
