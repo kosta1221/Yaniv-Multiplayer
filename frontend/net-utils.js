@@ -1,10 +1,10 @@
 "use strict";
 const mock = {
-  players:["koren", "kosta", "dvir"],
+  players: ["koren", "kosta", "dvir"],
   playersReady: {
     koren: true,
     kosta: true,
-    dvir: true
+    dvir: true,
   },
   state(name) {
     const pd = new PileDeck();
@@ -12,6 +12,8 @@ const mock = {
     const state = {
       playersPoints: {
         koren: 15,
+        kosta: 12,
+        dvir: 21,
       },
       playersCardNumbers: {
         koren: 3,
@@ -27,12 +29,12 @@ const mock = {
       ],
       pileDeck: pd,
       playerInTurn: name,
-      playerNames: this.players
+      playerNames: this.players,
     };
     state.playersCardNumbers[name] = 5;
     return state;
-  }
-}
+  },
+};
 
 const netUtils = {
   getWaitingGames() {},

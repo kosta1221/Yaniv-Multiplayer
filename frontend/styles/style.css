@@ -88,4 +88,128 @@ h1 {
 .stack li {
   width: 0.2px;
 }
+
+.flip {
+  -webkit-transform: rotate(90deg);
+          transform: rotate(90deg);
+}
+
+#player-buttons-div {
+  border-radius: 50%;
+  position: relative;
+  width: 10px;
+  height: 200px;
+}
+
+#player-buttons-div .place-button {
+  position: absolute;
+  top: 0;
+  right: 20px;
+  background-color: #118c32;
+  border-radius: 28px;
+  border: 1px solid #18ab29;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Times New Roman;
+  font-size: 16px;
+  padding: 10px 3px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #b1c2ae;
+}
+
+#player-buttons-div .place-button:hover {
+  background-color: #5cbf2a;
+}
+
+#player-buttons-div .place-button:active {
+  top: 1px;
+}
+
+#player-buttons-div .place-button:focus {
+  outline: none;
+}
+
+#player-buttons-div .yaniv-button {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
+          box-shadow: 0px 1px 0px 0px #fff6af;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffec64), to(#ffab23));
+  background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+  background-color: #ffec64;
+  border: 1px solid #ffaa22;
+  color: #333333;
+  font-family: Verdana;
+  font-weight: bold;
+  text-shadow: 0px 1px 0px #ffee66;
+  position: absolute;
+  right: -12px;
+  border-radius: 28px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 10px 3px;
+  text-decoration: none;
+}
+
+#player-buttons-div .yaniv-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffab23), to(#ffec64));
+  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+  background-color: #ffab23;
+}
+
+#player-buttons-div .yaniv-button:active {
+  top: 36px;
+}
+
+#player-buttons-div .yaniv-button:focus {
+  outline: none;
+}
+
+#player-buttons-div .assaf-button {
+  background-color: #d35603;
+  border: 1px solid #b45b08;
+  color: #ffffff;
+  text-shadow: 0px 1px 0px #850d0d;
+  position: absolute;
+  right: -25px;
+  top: 75px;
+  font-family: Verdana;
+  font-weight: bold;
+  position: absolute;
+  border-radius: 28px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 10px;
+  padding: 10px 3px;
+  text-decoration: none;
+}
+
+#player-buttons-div .assaf-button:hover {
+  background-color: #e67845;
+}
+
+#player-buttons-div .assaf-button:active {
+  top: 76px;
+}
+
+#player-buttons-div .assaf-button:focus {
+  outline: none;
+}
+
+@media screen and (max-width: 1400px) {
+  #player-buttons-div {
+    width: 1px;
+    left: 156px;
+  }
+  #player-buttons-div .place-button {
+    right: 6px;
+    top: -8px;
+  }
+  #player-buttons-div .place-button:active {
+    top: -9px;
+  }
+}
 /*# sourceMappingURL=style.css.map */

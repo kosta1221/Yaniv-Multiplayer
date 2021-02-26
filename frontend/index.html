@@ -1,36 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="./styles/style.css" />
-		<script src="./classes.js"></script>
-		<script src="./net-utils.js"></script>
-		<script src="./utils.js"></script>
-		<script src="./client.js"></script>
-		<title>Yaniv</title>
-	</head>
-	<body>
-		<div class="game-board">
-			<div class="box">
-				<input type="text" id="login" placeholder="Enter name">
-				<button id = "join-button">Join Game</button>
-				<button id = "ready-button" hidden = true>Ready</button>
-			</div>
-			<div class="box player opponent"></div>
-			<div class="box"></div>
-			<div class="box player opponent"></div>
-			<div class="box game-field">
-				<ol id = "table-deck" class = "stack"></ol>
-				<ol id = "pile-deck" class = "stack"></ol>
-			</div>
-			<div class="box player opponent"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/style.css" />
+    <script src="./classes.js"></script>
+    <script src="./net-utils.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./client.js"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <title>Yaniv</title>
+  </head>
+  <body>
+    <div class="game-board">
+      <div class="box">
+        <input type="text" id="login" placeholder="Enter name" />
+        <button id="join-button">Join Game</button>
+        <button id="ready-button" hidden="true">Ready</button>
+      </div>
+      <div class="box player opponent"></div>
+      <div class="box"></div>
+      <div class="box player opponent"></div>
+      <div class="box game-field">
+        <ol id="table-deck" class="stack"></ol>
+        <ol id="pile-deck" class="stack"></ol>
+      </div>
+      <div class="box player opponent"></div>
 
-			<div class="box"></div>
-			<div class="box player active-player" id="active-player"></div>
-			<div class="box"></div>
-		</div>
-		<!-- <script src="./game-manager.js"></script> -->
-	</body>
+      <div class="box"></div>
+      <div class="box player active-player" id="active-player"></div>
+      <div class="box" id="player-buttons-div">
+        <button class="place-button">Place</button>
+        <button class="yaniv-button">Yaniv!</button>
+        <button class="assaf-button">Assaf!</button>
+      </div>
+    </div>
+
+    <!-- <script src="./game-manager.js"></script> -->
+  </body>
 </html>

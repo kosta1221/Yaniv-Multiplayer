@@ -1,63 +1,174 @@
 body {
-	overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 .game-board {
-	display: grid;
-	grid-template-columns: 24vw 50vw 24vw;
-	grid-template-rows: 20vh 58vh 20vh;
-	justify-content: center;
-	background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
+  display: grid;
+  grid-template-columns: 24vw 50vw 24vw;
+  grid-template-rows: 20vh 58vh 20vh;
+  justify-content: center;
+  background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
 }
 
 .box {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	background-color: #d9d9d9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d9d9d9;
 
-	background-color: transparent;
+  background-color: transparent;
 }
 
 .game-field {
-	border-radius: 15%;
-	background-image: url("../images/table-background.jpg");
+  border-radius: 15%;
+  background-image: url("../images/table-background.jpg");
 }
 
 .player {
-	margin: 2vmax 2vmax;
-	border: 2px solid black;
-	display: flex;
-	align-items: center;
-	justify-content: center;
+  margin: 2vmax 2vmax;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
-	font-size: 2rem;
+  font-size: 2rem;
 }
 
 .card {
-	width: 120px;
-	position: relative;
-	top: 0;
-	transition-duration: 200ms;
+  width: 120px;
+  position: relative;
+  top: 0;
+  transition-duration: 200ms;
 }
 .unselectable {
-	filter: brightness(50%);
+  filter: brightness(50%);
 }
 .selected {
-	position: relative;
-	top: -20%;
-	transition-duration: 200ms;
+  position: relative;
+  top: -20%;
+  transition-duration: 200ms;
 }
 
 .stack {
-	display: flex;
-	justify-content: left;
-	list-style: none;
-	width: 120px;
-	height: calc(120px * 1.4);
-	li {
-		width: 0.2px;
-	}
+  display: flex;
+  justify-content: left;
+  list-style: none;
+  width: 120px;
+  height: calc(120px * 1.4);
+  li {
+    width: 0.2px;
+  }
+}
+
+.flip {
+  transform: rotate(90deg);
+}
+
+//BUTTONS
+#player-buttons-div {
+  border-radius: 50%;
+  position: relative;
+  width: 10px;
+  height: 200px;
+  .place-button {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    background-color: #118c32;
+    border-radius: 28px;
+    border: 1px solid #18ab29;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Times New Roman;
+    font-size: 16px;
+    padding: 10px 3px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #b1c2ae;
+  }
+  .place-button:hover {
+    background-color: #5cbf2a;
+  }
+  .place-button:active {
+    top: 1px;
+  }
+  .place-button:focus {
+    outline: none;
+  }
+
+  .yaniv-button {
+    position: absolute;
+    right: 0;
+    top: 35px;
+    box-shadow: 0px 1px 0px 0px #fff6af;
+    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+    background-color: #ffec64;
+    border: 1px solid #ffaa22;
+    color: #333333;
+    font-family: Verdana;
+    font-weight: bold;
+    text-shadow: 0px 1px 0px #ffee66;
+    position: absolute;
+    right: -12px;
+    border-radius: 28px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 10px 3px;
+    text-decoration: none;
+  }
+  .yaniv-button:hover {
+    background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+    background-color: #ffab23;
+  }
+  .yaniv-button:active {
+    top: 36px;
+  }
+  .yaniv-button:focus {
+    outline: none;
+  }
+
+  .assaf-button {
+    background-color: #d35603;
+    border: 1px solid #b45b08;
+    color: #ffffff;
+    text-shadow: 0px 1px 0px #850d0d;
+    position: absolute;
+    right: -25px;
+    top: 75px;
+    font-family: Verdana;
+    font-weight: bold;
+    position: absolute;
+    border-radius: 28px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 10px 3px;
+    text-decoration: none;
+    &:hover {
+      background-color: #e67845;
+    }
+    &:active {
+      top: 76px;
+    }
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+@media screen and (max-width: 1400px) {
+  #player-buttons-div {
+    width: 1px;
+    left: 156px;
+    .place-button {
+      right: 6px;
+      top: -8px;
+    }
+    .place-button:active {
+      top: -9px;
+    }
+  }
 }
