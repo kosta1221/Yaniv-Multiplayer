@@ -69,6 +69,11 @@ function onLoad() {
   }
 
   function renderAll() {
+    const playersElements = Array.from( document.querySelectorAll(".player") );
+    playersElements.forEach(elem => elem.innerHTML = "");
+    const stacks = Array.from( document.querySelectorAll(".stack") );
+    stacks.forEach(elem => elem.innerHTML = "");
+
     const playersStatus = netUtils.getPlayersStatus();
     let isAllReady = true;
     for (const name in playersStatus) {
