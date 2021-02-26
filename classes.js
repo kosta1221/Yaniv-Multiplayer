@@ -107,6 +107,10 @@ class Game {
 
 		this.openCardDeck = new Deck();
 
+		// give openCardDeck the first card from gameDeck
+		this.gameDeck.putFirstCardFromOneDeckToAnother(this.openCardDeck);
+		this.gameDeck.cards.shift();
+
 		this.getGameState = function () {
 			const gameState = {};
 			gameState.allPlayersPoints = {};
@@ -179,6 +183,16 @@ class Deck {
 		for (let i = 0; i < numberOfCardsToGet; i++) {
 			cardsToGet.push(this.cards[i]);
 		}
+	}
+
+	// put first card from one deck to the other
+	putFirstCardFromOneDeckToAnother(secondDeck) {
+		secondDeck.cards.push(this.cards[0]);
+	}
+
+	// put last card from one deck to the other
+	putLastCardFromOneDeckToAnother(secondDeck) {
+		secondDeck.cards.push(this.cards[this.cards.length - 1]);
 	}
 
 	// works
