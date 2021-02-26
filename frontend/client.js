@@ -23,23 +23,27 @@ function onLoad() {
   joinButton.addEventListener("click", () => {
     const input = document.querySelector("#login");
     const userName = input.value;
-    // if (!userName) return;
+    if (!userName) return;
     myName = userName;
     joinGame();
     joinButton.hidden = true;
     input.hidden = true;
-    readyButton.hidden = false;
+    readyButton.hidden = false; console.log("show ready button");
     readyButton.addEventListener("click", () => {
       netUtils.ready(myName);
       updateGameState();
       renderAll();
+      readyButton.hidden = true;
     });
-
-    updateGameState();
-    renderAll();
   });
-  joinButton.click();
-  readyButton.click();
+
+
+  const STARTFAST = true;//change to false for full join sequence
+  if(STARTFAST) {
+    document.querySelector("#login").value = "fast-name";
+    joinButton.click();
+    readyButton.click();
+  }
   playerElement.addEventListener("click", (e) => {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
@@ -210,30 +214,28 @@ function onLoad() {
             toast: true,
           });
         } else {
-          activePlayerMove.move = move;
-          netUtils.play(activePlayerMove);
-          // for (let i = 0; i < selectedPlayerCards.length; i++) {
-          //   pile_Deck.addCard(selectedPlayerCards[i]);
-          // }
-          // selectedPlayerCards.length = 0;
-          // updateGameObj.move = "Place";
-          // updateGameObj.push(...selectedPlayerCards);
-          // onPut({ updateGameObj });
+          netUtils.play({
+            move: "place",
+            cards: activePlayerMove["selected-cards"]
+          });
         }
       }
       case "Yaniv!": {
         netUtils.play({
           move: "yaniv",
-          "selected-cards": null
+          cards: null
         });
       }
       case "Assaf!": {
         netUtils.play({
           move: "assaf",
-          "selected-cards": null
+          cards: null
         });
       }
     }
+    activePlayerMove["selected-cards"].cards = [];
+    updateGameState();
+    renderAll();
   }
 
   function switchPlayer() {
