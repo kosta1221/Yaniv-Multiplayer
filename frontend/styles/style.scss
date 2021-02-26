@@ -1,32 +1,27 @@
 body {
   overflow-y: hidden;
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
 }
 
 .game-board {
   display: grid;
-  grid-template-columns: 24vw 50vw 24vw;
-  grid-template-rows: 20vh 58vh 20vh;
+  margin: 0;
+  grid-template-columns: 24vw 52vw 24vw;
+  grid-template-rows: 20vh 46vh 20vh;
   justify-content: center;
-  background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
 }
 
 .box {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #d9d9d9;
-
-  background-color: transparent;
-}
-
-.game-field {
-  border-radius: 15%;
-  background-image: url("../images/table-background.jpg");
+  user-select: none;
 }
 
 .player {
   margin: 2vmax 2vmax;
-  border: 2px solid black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -36,12 +31,32 @@ h1 {
   font-size: 2rem;
 }
 
+$card-width: 100px;
+.stack {
+  display: flex;
+  justify-content: left;
+  list-style: none;
+  width: $card-width;
+  height: calc($card-width * 1.4);
+  li {
+    width: 0.2px;
+  }
+}
 .card {
-  width: 120px;
+  width: $card-width;
+  height: calc($card-width * 1.4);
   position: relative;
   top: 0;
   transition-duration: 200ms;
 }
+@media screen and (max-width: 600px) {
+  $card-width: 60px;
+  .card {
+    width: $card-width;
+    height: calc($card-width * 1.4);
+  }
+}
+
 .unselectable {
   filter: brightness(50%);
 }
@@ -51,18 +66,13 @@ h1 {
   transition-duration: 200ms;
 }
 
-.stack {
-  display: flex;
-  justify-content: left;
-  list-style: none;
-  width: 120px;
-  height: calc(120px * 1.4);
-  li {
-    width: 0.2px;
-  }
+.flip {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-.flip {
+.flip > .card {
   transform: rotate(90deg);
 }
 
@@ -158,17 +168,102 @@ h1 {
     }
   }
 }
-
+#player-buttons-mobile {
+  display: none;
+}
 @media screen and (max-width: 1400px) {
   #player-buttons-div {
-    width: 1px;
-    left: 156px;
+    display: none;
+  }
+  //MOBILE BUTTONS
+  #player-buttons-mobile {
+    display: flex;
+    justify-content: space-between;
+    margin: auto;
+    width: 46vw;
+    padding-top: 1%;
     .place-button {
-      right: 6px;
-      top: -8px;
+      position: relative;
+      top: unset;
+      right: unset;
+      background-color: #118c32;
+      border-radius: 28px;
+      border: 1px solid #18ab29;
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Times New Roman;
+      font-size: 16px;
+      padding: 10px 3px;
+      text-decoration: none;
+      text-shadow: 0px 1px 0px #b1c2ae;
+    }
+    .place-button:hover {
+      background-color: #5cbf2a;
     }
     .place-button:active {
-      top: -9px;
+      top: 1px;
+    }
+    .place-button:focus {
+      outline: none;
+    }
+
+    .yaniv-button {
+      position: relative;
+      right: unset;
+      top: unset;
+      box-shadow: 0px 1px 0px 0px #fff6af;
+      background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+      background-color: #ffec64;
+      border: 1px solid #ffaa22;
+      color: #333333;
+      font-family: Verdana;
+      font-weight: bold;
+      text-shadow: 0px 1px 0px #ffee66;
+      right: unset;
+      border-radius: 28px;
+      display: inline-block;
+      cursor: pointer;
+      font-size: 10px;
+      padding: 10px 3px;
+      text-decoration: none;
+    }
+    .yaniv-button:hover {
+      background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+      background-color: #ffab23;
+    }
+    .yaniv-button:active {
+      top: 36px;
+    }
+    .yaniv-button:focus {
+      outline: none;
+    }
+
+    .assaf-button {
+      background-color: #d35603;
+      border: 1px solid #b45b08;
+      color: #ffffff;
+      text-shadow: 0px 1px 0px #850d0d;
+      position: relative;
+      right: unset;
+      top: unset;
+      font-family: Verdana;
+      font-weight: bold;
+      border-radius: 28px;
+      display: inline-block;
+      cursor: pointer;
+      font-size: 10px;
+      padding: 10px 3px;
+      text-decoration: none;
+      &:hover {
+        background-color: #e67845;
+      }
+      &:active {
+        top: 76px;
+      }
+      &:focus {
+        outline: none;
+      }
     }
   }
 }

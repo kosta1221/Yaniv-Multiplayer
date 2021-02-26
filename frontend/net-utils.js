@@ -8,7 +8,11 @@ const mock = {
   },
   state(name) {
     const pd = new PileDeck();
-    pd.createNewFullDeck();
+    // pd.createNewFullDeck()
+    pd.cards.push(
+      new Card("spades", "10", false),
+      new Card("clubs", "king", false)
+    );
     const state = {
       playersPoints: {
         koren: 15,
@@ -54,3 +58,40 @@ const netUtils = {
   },
   play() {},
 };
+
+// joinRequest = {
+//     URL: "/join",
+//     method: "PUT",
+//     headers: {
+//         "user-name": "Name"
+//     }
+// }
+// readyRequest = {
+//     URL: "/ready",
+//     method: "PUT",
+//     headers: {
+//         "ready": true
+//     }
+// }
+// playersStatusRequest = {
+//     URL: "/status",
+//     method: "GET"
+// }
+// gameStateRequest = {
+//     URL: "/game/state",
+//     method: "GET",
+//     headers: {
+//         "player-id": "idString"
+//     }
+// }
+// playRequest = {
+//     URL: "/game/play",
+//     method: "PUT",
+//     headers: {
+//         "player-id": "idString"
+//     },
+//     body: {
+//         move: "place",
+//         cards: ["card", "card", "card"]
+//     }
+// }

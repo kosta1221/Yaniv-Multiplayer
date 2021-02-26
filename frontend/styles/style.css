@@ -1,19 +1,22 @@
 body {
   overflow-y: hidden;
+  margin: 0;
+  height: 100vh;
+  background: -webkit-gradient(linear, left top, right bottom, from(#094221b0), to(#ccffff));
+  background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
 }
 
 .game-board {
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: 24vw 50vw 24vw;
-      grid-template-columns: 24vw 50vw 24vw;
-  -ms-grid-rows: 20vh 58vh 20vh;
-      grid-template-rows: 20vh 58vh 20vh;
+  margin: 0;
+  -ms-grid-columns: 24vw 52vw 24vw;
+      grid-template-columns: 24vw 52vw 24vw;
+  -ms-grid-rows: 20vh 46vh 20vh;
+      grid-template-rows: 20vh 46vh 20vh;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  background: -webkit-gradient(linear, left top, right bottom, from(#094221b0), to(#ccffff));
-  background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
 }
 
 .box {
@@ -26,18 +29,14 @@ body {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  background-color: #d9d9d9;
-  background-color: transparent;
-}
-
-.game-field {
-  border-radius: 15%;
-  background-image: url("../images/table-background.jpg");
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
 }
 
 .player {
   margin: 2vmax 2vmax;
-  border: 2px solid black;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -53,12 +52,36 @@ h1 {
   font-size: 2rem;
 }
 
+.stack {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: left;
+      -ms-flex-pack: left;
+          justify-content: left;
+  list-style: none;
+  width: 100px;
+  height: calc($card-width * 1.4);
+}
+
+.stack li {
+  width: 0.2px;
+}
+
 .card {
-  width: 120px;
+  width: 100px;
+  height: calc($card-width * 1.4);
   position: relative;
   top: 0;
   -webkit-transition-duration: 200ms;
           transition-duration: 200ms;
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+    width: 60px;
+    height: calc($card-width * 1.4);
+  }
 }
 
 .unselectable {
@@ -73,23 +96,20 @@ h1 {
           transition-duration: 200ms;
 }
 
-.stack {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
-  list-style: none;
-  width: 120px;
-  height: calc(120px * 1.4);
-}
-
-.stack li {
-  width: 0.2px;
-}
-
 .flip {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.flip > .card {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
 }
@@ -199,17 +219,108 @@ h1 {
   outline: none;
 }
 
+#player-buttons-mobile {
+  display: none;
+}
+
 @media screen and (max-width: 1400px) {
   #player-buttons-div {
-    width: 1px;
-    left: 156px;
+    display: none;
   }
-  #player-buttons-div .place-button {
-    right: 6px;
-    top: -8px;
+  #player-buttons-mobile {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+    margin: auto;
+    width: 46vw;
+    padding-top: 1%;
   }
-  #player-buttons-div .place-button:active {
-    top: -9px;
+  #player-buttons-mobile .place-button {
+    position: relative;
+    top: unset;
+    right: unset;
+    background-color: #118c32;
+    border-radius: 28px;
+    border: 1px solid #18ab29;
+    display: inline-block;
+    cursor: pointer;
+    color: #ffffff;
+    font-family: Times New Roman;
+    font-size: 16px;
+    padding: 10px 3px;
+    text-decoration: none;
+    text-shadow: 0px 1px 0px #b1c2ae;
+  }
+  #player-buttons-mobile .place-button:hover {
+    background-color: #5cbf2a;
+  }
+  #player-buttons-mobile .place-button:active {
+    top: 1px;
+  }
+  #player-buttons-mobile .place-button:focus {
+    outline: none;
+  }
+  #player-buttons-mobile .yaniv-button {
+    position: relative;
+    right: unset;
+    top: unset;
+    -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
+            box-shadow: 0px 1px 0px 0px #fff6af;
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffec64), to(#ffab23));
+    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+    background-color: #ffec64;
+    border: 1px solid #ffaa22;
+    color: #333333;
+    font-family: Verdana;
+    font-weight: bold;
+    text-shadow: 0px 1px 0px #ffee66;
+    right: unset;
+    border-radius: 28px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 10px 3px;
+    text-decoration: none;
+  }
+  #player-buttons-mobile .yaniv-button:hover {
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffab23), to(#ffec64));
+    background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+    background-color: #ffab23;
+  }
+  #player-buttons-mobile .yaniv-button:active {
+    top: 36px;
+  }
+  #player-buttons-mobile .yaniv-button:focus {
+    outline: none;
+  }
+  #player-buttons-mobile .assaf-button {
+    background-color: #d35603;
+    border: 1px solid #b45b08;
+    color: #ffffff;
+    text-shadow: 0px 1px 0px #850d0d;
+    position: relative;
+    right: unset;
+    top: unset;
+    font-family: Verdana;
+    font-weight: bold;
+    border-radius: 28px;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 10px 3px;
+    text-decoration: none;
+  }
+  #player-buttons-mobile .assaf-button:hover {
+    background-color: #e67845;
+  }
+  #player-buttons-mobile .assaf-button:active {
+    top: 76px;
+  }
+  #player-buttons-mobile .assaf-button:focus {
+    outline: none;
   }
 }
 /*# sourceMappingURL=style.css.map */

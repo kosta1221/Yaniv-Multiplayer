@@ -11,6 +11,11 @@ function onLoad() {
   const activePlayerMove = {
     "selected-cards": new Deck(),
   };
+  const updateGameObj = {
+    name: myName,
+    move: {},
+    cards: {},
+  };
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
   const readyButton = document.querySelector("#ready-button");
@@ -188,15 +193,25 @@ function onLoad() {
 
   function executeMove(move) {
     //looks at move player is trying to make and asks gameManager to perform
+    const selectedPlayerCards = activePlayerMove["selected-cards"].cards;
+    const pile_Deck = netUtils.getGameStateForPlayer(myName).pileDeck;
     switch (move) {
       case "Place": {
-        if (activePlayerMove["selected-cards"].cards.length < 1) {
+        if (selectedPlayerCards.length < 1) {
           Swal.fire({
             icon: "info",
             title: "Oops...",
             text: "You must pick a card!",
             toast: true,
           });
+        } else {
+          // for (let i = 0; i < selectedPlayerCards.length; i++) {
+          //   pile_Deck.addCard(selectedPlayerCards[i]);
+          // }
+          // selectedPlayerCards.length = 0;
+          updateGameObj.move = "Place";
+          updateGameObj.push(...selectedPlayerCards);
+          onPut({ updateGameObj });
         }
       }
       case "Yaniv!": {
