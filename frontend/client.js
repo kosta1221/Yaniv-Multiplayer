@@ -116,7 +116,7 @@ function onLoad() {
     const playerCardCount = player.cards.length;
     const tableDeckCount =
       54 - pileDeckCount - opponentsCardCount - playerCardCount;
-    for (let i = 0; i < tableDeckCount + 30; i++) {
+    for (let i = 0; i < tableDeckCount; i++) {
       const li = document.createElement("li");
       const cardElement = utils.createCardElement(null, true);
       li.appendChild(cardElement);

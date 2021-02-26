@@ -44,19 +44,20 @@ const netUtils = {
   getWaitingGames() {},
   createGame() {},
   joinGame(userName) {
-    mock.players.push(userName);
-    mock.playersReady[userName] = false;
+    mocks.joinGame(userName);
   },
   ready(playerIdentity) {
-    mock.playersReady[playerIdentity] = true;
+    mocks.setReady(playerIdentity);
   },
   getPlayersStatus() {
-    return mock.playersReady;
+    return mocks.playersReady();
   },
   getGameStateForPlayer(playerIdentity) {
     return mock.state(playerIdentity);
   },
-  play() {},
+  play(move) {
+    mocks.executeMove(move);
+  },
 };
 
 // joinRequest = {
