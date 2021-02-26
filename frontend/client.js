@@ -1,6 +1,5 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", onLoad);
-
 function onLoad() {
   let myName;
   let id;
@@ -191,12 +190,12 @@ function onLoad() {
     //looks at move player is trying to make and asks gameManager to perform
     switch (move) {
       case "Place": {
-        if (!activePlayerMove["selected-cards"].cards) {
+        if (activePlayerMove["selected-cards"].cards.length < 1) {
           Swal.fire({
-            icon: "error",
+            icon: "info",
             title: "Oops...",
-            text: "Something went wrong!",
-            footer: "<a href>Why do I have this issue?</a>",
+            text: "You must pick a card!",
+            toast: true,
           });
         }
       }
