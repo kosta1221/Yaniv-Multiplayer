@@ -1,22 +1,19 @@
 "use strict";
-const netUtils = {
-  getWaitingGames() {},
-  createGame() {},
-  joinGame(userName) {
-    //add player to que
-    //show ready btn and other play ready status
+const mock = {
+  players:["koren", "kosta", "dvir"],
+  playersReady: {
+    koren: true,
+    kosta: true,
+    dvir: true
   },
-  getGameStateForPlayer(playerIdentity) {
-    //fetch()
+  state(name) {
     const pd = new PileDeck();
     pd.createNewFullDeck();
     const state = {
       playersPoints: {
-        alon: 30,
         koren: 15,
       },
       playersCardNumbers: {
-        alon: 5,
         koren: 3,
         kosta: 1,
         dvir: 2,
@@ -29,10 +26,29 @@ const netUtils = {
         new Card("hearts", "queen", false),
       ],
       pileDeck: pd,
-      playerInTurn: "alon",
-      playerNames: ["alon", "koren", "kosta", "dvir"],
+      playerInTurn: name,
+      playerNames: this.players
     };
+    state.playersCardNumbers[name] = 5;
     return state;
+  }
+}
+
+const netUtils = {
+  getWaitingGames() {},
+  createGame() {},
+  joinGame(userName) {
+    mock.players.push(userName);
+    playersReady[userName] = false;
+  },
+  ready(playerIdentity) {
+    playersReady[playerIdentity] = false;
+  },
+  getPlayersStatus() {
+    return mock.playersReady;
+  },
+  getGameStateForPlayer(playerIdentity) {
+    return mock.state(playerIdentity);
   },
   play() {},
 };

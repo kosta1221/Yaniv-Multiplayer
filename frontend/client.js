@@ -2,10 +2,11 @@
 document.addEventListener("DOMContentLoaded", onLoad);
 
 function onLoad() {
-  let myName = "alon";
+  let myName;
+  let id;
   let player;
   let opponents = {};
-  let activePlayer;
+  let playerInTurn;
   let matchNumber;
   let pileDeck;
   const activePlayerMove = {
@@ -13,11 +14,6 @@ function onLoad() {
   };
   const playerElement = document.querySelector(".active-player");
   
-  
-  updateGameState();
-  renderAll();
-  updateGameState();
-
   const joinButton = document.querySelector("#join-button");
   joinButton.addEventListener("click", () => {
     const input = document.querySelector("#login");
@@ -27,6 +23,16 @@ function onLoad() {
     joinGame();
     joinButton.hidden = true;
     input.hidden = true;
+    const readyButton = document.querySelector("#ready-button");
+    readyButton.hidden = false;
+    readyButton.addEventListener("click", () => {
+      netUtils.ready = true;
+      updateGameState();
+      renderAll();
+    });
+
+    updateGameState();
+    renderAll();
   });
   
   playerElement.addEventListener("click", (e) => {
@@ -36,6 +42,8 @@ function onLoad() {
 
   function joinGame() {
     netUtils.joinGame(myName);
+    const state = netUtils.getGameStateForPlayer(myName);
+
   }
 
   function updateGameState() {
@@ -53,18 +61,21 @@ function onLoad() {
       opponents[playerName] = new Player(null, points, numberOfCards);
     }
     pileDeck = state.pileDeck;
-    if (state.playerInTurn === myName) {
-      const allPlayerCards = document.querySelectorAll("#active-player > .card");
-      for (const cardElement of allPlayerCards) {
-        cardElement.classList.add("selectable");
-      }
-    }
+    playerInTurn = state.playerInTurn;
   }
 
   function renderAll() {
+    const playersStatus = netUtils.getPlayersStatus();
+    let isAllReady = true;
+    for(const name in playersStatus) {
+      isAllReady = isAllReady && playersStatus[name];
+    }
+    if (!isAllReady) return;
     //RENDER PLAYER
     for (const card of player.cards) {
       const cardElement = utils.createCardElement(card);
+      const cardSelectability = playerInTurn === myName ? "selectable" : "unselectable";
+      cardElement.classList.add(cardSelectability);
       playerElement.appendChild(cardElement);
     }
     //RENDER OPPONENTS
@@ -87,12 +98,28 @@ function onLoad() {
       li.appendChild(cardElement);
       pileDeckElement.appendChild(li);
     }
+    //RENDER TABLE DECK
+    const tableDeckElement = document.querySelector("#table-deck");
+    const pileDeckCount = pileDeck.cards.length;
+    let opponentsCardCount = 0;
+    for (const opponentName in opponents) {
+      const opponent = opponents[opponentName];
+      opponentsCardCount += opponent.numberOfCards;   
+    }
+    const playerCardCount = player.cards.length;
+    const tableDeckCount = 54 - pileDeckCount - opponentsCardCount - playerCardCount;
+    for (let i = 0; i < tableDeckCount + 30; i++) {
+      const li = document.createElement("li");
+      const cardElement = utils.createCardElement(null, true);
+      li.appendChild(cardElement);
+      tableDeckElement.appendChild(li);
+    }
   }
   
   function collectMoveData(clickedCard) {
-    //if card is not selectable stop operation
+  
     if ( !clickedCard.classList.contains("selectable") ) return;
-    //make Card of clicked card element
+  
     const suit = clickedCard.getAttribute("suit");
     const rank = clickedCard.getAttribute("rank");
     const isJoker = clickedCard.getAttribute("is-joker");
@@ -113,8 +140,6 @@ function onLoad() {
       const rank = cardElement.getAttribute("rank");
       const isJoker = cardElement.getAttribute("is-joker");
       const card = new Card(suit, rank, isJoker);
-      console.log(card);
-      console.log(verifyMoveEligibility(card));
       if ( !verifyMoveEligibility(card) ) {
         cardElement.classList.replace("selectable", "unselectable");
       } else {
