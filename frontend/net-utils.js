@@ -36,11 +36,11 @@ const netUtils = {
       body: JSON.stringify({
         yaniv: isYaniv,
         cardsToDiscard: cards,
-        isCardToGetFromGameDeck: false,
+        isCardToGetFromGameDeck: true,
         cardPickedFromSet: null
       })
     };
-    fetch(this.URL, init);
+    fetch(this.URL , init);
   }
 };
 
