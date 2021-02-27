@@ -1,8 +1,8 @@
-// const classes = require("../classes");
+const classes = require("../classes");
 
 const mockPlayerNames = ["alon", "koren", "kosta", "dvir"];
 
-const mockGame = new Game(mockPlayerNames);
+const mockGame = new classes.Game(mockPlayerNames);
 
 const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
 
@@ -233,3 +233,5 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 function areObjectsSimilar(object1, object2) {
 	return JSON.stringify(object1) === JSON.stringify(object2);
 }
+
+module.exports = { makeTurn, areObjectsSimilar };
