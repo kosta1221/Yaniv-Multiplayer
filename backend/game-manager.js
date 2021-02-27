@@ -144,6 +144,11 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		// console.log(gameDeck);
 		// console.log(openCardDeck);
 		if (isCardToGetFromGameDeck) {
+			// If the player chooses to draw the card from the gameDeck, he cannot pick a card from set.
+			if (cardPickedFromSet) {
+				throw new Error(`Can only pick from a set of cards from the openCardDeck!`);
+			}
+
 			// Draw a card from the draw pile (game deck)
 			playerInTurn.giveFirstCardFromDeck(gameDeck);
 
