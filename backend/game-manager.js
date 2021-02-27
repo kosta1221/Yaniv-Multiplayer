@@ -19,8 +19,8 @@ console.log(mockGame.players[0].playerDeck.cards);
 // console.log(mockGame.getGameState());
 
 try {
-	makeTurn(mockGame, false, true, null, mockCardsToDiscard2);
-	makeTurn(mockGame, false, false, null, [new Card("hearts", "king", false)]);
+	makeTurn(mockGame, false, mockCardsToDiscard2, true, null);
+	makeTurn(mockGame, false, [new Card("hearts", "king", false)], false, null);
 } catch (error) {
 	console.log(error);
 }
@@ -29,7 +29,7 @@ try {
 console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, cardsToDiscard) {
+function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, cardPickedFromSet) {
 	// shortening obvious variables for better readability
 	const playerInTurn = game.playerInTurn;
 	const gameDeck = game.gameDeck;
