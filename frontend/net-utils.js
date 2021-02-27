@@ -1,14 +1,21 @@
 "use strict"
 
 const netUtils = {
+  URL: "localhost:3000",
   getWaitingGames() {},
-  createGame() {},
+  createGame() {
+    const init = {
+      method: "POST"
+    };
+    fetch(this.URL + "createGame", init);
+  },
   async joinGame(userName) {
     mocks.joinGame(userName);
     const init = {
       method: "POST",
       body: JSON.stringify({"player-name": userName})
     }; 
+    fetch(this.URL + "/join", init);
   },
   ready(playerIdentity) {
     mocks.setReady(playerIdentity);
@@ -18,6 +25,7 @@ const netUtils = {
   },
   getGameStateForPlayer(playerIdentity) {
     return mocks.state(playerIdentity);
+    fetch(this.URL + "/status");
   },
   play(move) {
     mocks.executeMove(move);
@@ -27,9 +35,12 @@ const netUtils = {
       method: "PUT",
       body: JSON.stringify({
         yaniv: isYaniv,
-        cardsToDiscard: cards
+        cardsToDiscard: cards,
+        isCardToGetFromGameDeck: false,
+        cardPickedFromSet: null
       })
-    }
+    };
+    fetch(this.URL, init);
   }
 };
 
