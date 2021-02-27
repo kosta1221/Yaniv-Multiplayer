@@ -1,5 +1,6 @@
 body {
   overflow-y: hidden;
+  overflow-x: hidden;
   margin: 0;
   height: 100vh;
   background: linear-gradient(to bottom right, #094221b0 0%, #ccffff 100%);
@@ -19,7 +20,7 @@ body {
   align-items: center;
   user-select: none;
 }
-.game-field{
+.game-field {
   flex-direction: row;
 }
 .player {
@@ -62,6 +63,7 @@ $card-width: 100px;
 
 .flip > .card {
   transform: rotate(90deg);
+  margin: -1.4rem;
 }
 
 @media screen and (max-width: 900px) {
@@ -69,6 +71,10 @@ $card-width: 100px;
   .card {
     width: $card-width;
     height: calc($card-width * 1.4);
+  }
+  .flip > .card {
+    transform: rotate(90deg);
+    margin: -0.9rem;
   }
 }
 
@@ -80,8 +86,6 @@ $card-width: 100px;
   top: -20%;
   transition-duration: 200ms;
 }
-
-
 
 //BUTTONS
 #player-buttons-div {

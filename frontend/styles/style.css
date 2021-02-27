@@ -1,5 +1,6 @@
 body {
   overflow-y: hidden;
+  overflow-x: hidden;
   margin: 0;
   height: 100vh;
   background: -webkit-gradient(linear, left top, right bottom, from(#094221b0), to(#ccffff));
@@ -104,12 +105,18 @@ h1 {
 .flip > .card {
   -webkit-transform: rotate(90deg);
           transform: rotate(90deg);
+  margin: -1.4rem;
 }
 
 @media screen and (max-width: 900px) {
   .card {
     width: 60px;
     height: calc($card-width * 1.4);
+  }
+  .flip > .card {
+    -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+    margin: -0.9rem;
   }
 }
 
