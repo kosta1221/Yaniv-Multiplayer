@@ -38,6 +38,12 @@ class Player {
 		return sum;
 	}
 
+	// Default value is cards in own playerDeck.
+	sortCardsByRankIndex(cards = this.playerDeck.cards) {
+		// Numeric sort of cards by rankIndex in ascending order
+		cards.sort((a, b) => a.rankIndex - b.rankIndex);
+	}
+
 	giveFirstCardFromDeck(deck) {
 		this.playerDeck.cards.push(deck.getFirstCard());
 		this.numberOfCards++;
@@ -77,6 +83,24 @@ class Card {
 		this.#suit = suit;
 		this.#rank = rank;
 		this.#isJoker = isJoker;
+
+		switch (rank) {
+			case "ace":
+				this.rankIndex = 1;
+				break;
+			case "jack":
+				this.rankIndex = 11;
+				break;
+			case "queen":
+				this.rankIndex = 12;
+				break;
+			case "king":
+				this.rankIndex = 13;
+				break;
+			default:
+				this.rankIndex = +this.rank;
+				break;
+		}
 	}
 
 	get suit() {
@@ -220,7 +244,7 @@ class Deck {
 		secondDeck.cards.push(this.cards[this.cards.length - 1]);
 	}
 
-	// works
+	// removes cards from deck
 	removeCards(cardsToRemove) {
 		for (const cardToRemove of cardsToRemove) {
 			for (const card of this.cards) {

@@ -5,6 +5,12 @@ const mockPlayerNames = ["alon", "koren", "kosta", "dvir"];
 const mockGame = new Game(mockPlayerNames);
 
 const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
+const mockCardsToDiscard2 = [new Card("spades", "king", false), new Card("hearts", "king", false)];
+mockGame.players[0].playerDeck.cards.push(
+	new Card("spades", "king", false),
+	new Card("hearts", "king", false)
+);
+console.log(mockGame.players[0].playerDeck.cards);
 // console.log("The cards I want to discard from alon");
 // console.log(mockCardsToDiscard);
 
@@ -12,7 +18,12 @@ const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
 // console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-makeTurn(mockGame, false, true, null, mockCardsToDiscard);
+try {
+	makeTurn(mockGame, false, true, null, mockCardsToDiscard2);
+	makeTurn(mockGame, false, false, null, [new Card("hearts", "king", false)]);
+} catch (error) {
+	console.log(error);
+}
 
 // console.log("Game after turn");
 console.log(mockGame);
@@ -24,18 +35,6 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, c
 	const gameDeck = game.gameDeck;
 	const openCardDeck = game.openCardDeck;
 	const players = game.players;
-
-	// rules for cardsToDiscard
-
-	//player can discard a single card
-	if (cardsToDiscard.length === 1) {
-		const cardToDiscard = cardsToDiscard[0];
-		// the discarded card has to be from player's cards.
-		if (!playerInTurn.playerDeck.cards.includes(cardToDiscard)) {
-			throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
-		}
-	} else if (cardsToDiscard.length > 1) {
-	}
 
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
@@ -90,7 +89,51 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, c
 			}
 		}
 	} else {
-		// When playing cards, the player may discard a single card or a single set of cards, placing them into the discard pile. The player must then draw a card from the open cards or draw pile.
+		console.log(cardsToDiscard);
+		// When playing cards, the player may discard a single card or a single set of cards, placing them into the openCardDeck. The player must then draw a card from the open cards or draw pile.
+
+		// rules for cardsToDiscard
+
+		if (cardsToDiscard.length === 1) {
+			const cardToDiscard = cardsToDiscard[0];
+			// the discarded card has to be from player's cards.
+			if (!playerInTurn.playerDeck.cards.some((card) => areObjectsSimilar(card, cardToDiscard))) {
+				throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
+			}
+		} else if (cardsToDiscard.length > 1) {
+			// the discarded cards have to be from player's cards.
+			cardsToDiscard.forEach((cardToDiscard) => {
+				console.log(cardToDiscard);
+				console.log(playerInTurn.playerDeck.cards[5]);
+				console.log(areObjectsSimilar(playerInTurn.playerDeck.cards[5], cardToDiscard));
+				if (!playerInTurn.playerDeck.cards.some((card) => areObjectsSimilar(card, cardToDiscard))) {
+					throw new Error(`Discarded cards have to be in ${playerInTurn.playerName}s cards!`);
+				}
+			});
+			// true if the rank of even one card in cardsToDiscard isn't the same as the rank of the other cards.
+			if (!cardsToDiscard.every((card) => card.rank === cardsToDiscard[0].rank)) {
+				// true if the suit of even one card in cardsToDiscard isn't the same as the suit of the other cards.
+				if (!cardsToDiscard.every((card) => card.suit === cardsToDiscard[0].suit)) {
+					// Throws error when: trying to discard multiple cards, which are not all the same rank and also not all the same suit.
+					throw new Error(
+						`Illegal set of ${cardsToDiscard.length} cards, they have to be of the same rank or suit!`
+					);
+				}
+				// true if the suit of every card in cardsToDiscard is the same.
+				else {
+					// sorting cardsToDiscard by their index in ascending order
+					playerInTurn.sortCardsByRankIndex(cardsToDiscard);
+					for (let i = 0; i < cardsToDiscard.length - 1; i++) {
+						if (cardsToDiscard[i + 1].rankIndex - cardsToDiscard[i].rankIndex > 1) {
+							// Throws error when: trying to discard multiple cards, which are not all the same rank, but do have the same suit, but aren't in order.
+							throw new Error(
+								`Illegal set of ${cardsToDiscard.length} cards of the ${cardsToDiscard[0].suit} suit, they are not in order!`
+							);
+						}
+					}
+				}
+			}
+		}
 
 		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
 		// console.log(playerInTurn.numberOfCards);
@@ -127,4 +170,10 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, c
 
 	game.turnsSinceStart++;
 	game.playerInTurn = players[(players.indexOf(game.playerInTurn) + 1) % game.numberOfPlayers];
+}
+
+// Utility function for checking object similarity (not by memory)
+// Works when you have simple JSON-style objects without methods and DOM nodes inside.
+function areObjectsSimilar(object1, object2) {
+	return JSON.stringify(object1) === JSON.stringify(object2);
 }
