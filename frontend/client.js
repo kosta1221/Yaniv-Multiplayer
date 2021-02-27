@@ -1,6 +1,6 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", onLoad);
-function onLoad() {
+async function onLoad() {
   let myName;
   let id;
   let player;
@@ -74,13 +74,13 @@ function onLoad() {
     collectMoveData(clickedCard);
   });
   function joinGame() {
-    netUtils.joinGame(myName);
-    const state = netUtils.getGameStateForPlayer(myName);
+    await netUtils.joinGame(myName);
+    const state = await netUtils.getGameStateForPlayer(myName);
     sessionStorage.setItem("gameStarted", "true");
   }
   function updateGameState() {
     //runs every x seconds and asks for data relevant to player
-    const state = netUtils.getGameStateForPlayer(myName);
+    const state = await netUtils.getGameStateForPlayer(myName);
     player = new Player(
       state.cards,
       state.playersPoints[myName],
@@ -101,7 +101,7 @@ function onLoad() {
     const stacks = Array.from(document.querySelectorAll(".stack"));
     stacks.forEach((elem) => (elem.innerHTML = ""));
 
-    const playersStatus = netUtils.getPlayersStatus();
+    const playersStatus = await netUtils.getPlayersStatus();
     let isAllReady = true;
     for (const name in playersStatus) {
       isAllReady = isAllReady && playersStatus[name];
@@ -235,7 +235,6 @@ function onLoad() {
   function executeMove(move) {
     //looks at move player is trying to make and asks gameManager to perform
     const selectedPlayerCards = activePlayerMove["selected-cards"].cards;
-    const pile_Deck = netUtils.getGameStateForPlayer(myName).pileDeck;
     switch (move) {
       case "Place": {
         if (selectedPlayerCards.length < 1) {

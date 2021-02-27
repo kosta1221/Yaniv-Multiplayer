@@ -3,7 +3,7 @@
 const netUtils = {
   URL: "localhost:3000",
   getWaitingGames() {},
-  createGame() {
+  async createGame() {
     const init = {
       method: "POST"
     };
@@ -23,11 +23,11 @@ const netUtils = {
   getPlayersStatus() {
     return mocks.playersReady();
   },
-  getGameStateForPlayer(playerIdentity) {
+  async getGameStateForPlayer(playerIdentity) {
     return mocks.state(playerIdentity);
     fetch(this.URL + "/status");
   },
-  play(move) {
+  async play(move) {
     mocks.executeMove(move);
     const isYaniv = move.move === "Yaniv"; 
     const cards = move.cards.cards;
