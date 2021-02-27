@@ -14,28 +14,28 @@
     <title>Yaniv</title>
   </head>
   <body>
+    <div id="left-opps-names">
+      <p id="opp-name1">David</p>
+      <p id="opp-name2">Koka</p>
+    </div>
+    <div id="right-opps-names">
+      <p id="opp-name3">Sharon</p>
+    </div>
     <div class="game-board">
       <div class="box">
         <input type="text" id="login" placeholder="Enter name" />
         <button id="join-button">Join Game</button>
         <button id="ready-button" hidden="true">Ready</button>
-        <div class="opp-name"><p id="name"></p></div>
       </div>
       <div class="box player opponent"></div>
-      <div class="box">
-        <div class="opp-name">
-          <p id="name">Koka</p>
-        </div>
-      </div>
+      <div class="box"></div>
       <div class="box player opponent"></div>
       <div class="box game-field">
         <ol id="table-deck" class="stack"></ol>
         <ol id="pile-deck" class="stack"></ol>
       </div>
       <div class="box player opponent"></div>
-      <div class="box">
-        <div class="opp-name"><p id="name"></p></div>
-      </div>
+      <div class="box"></div>
       <div class="box player active-player" id="active-player"></div>
       <div class="box" id="player-buttons-div">
         <button class="place-button">Place</button>
