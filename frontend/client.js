@@ -26,7 +26,10 @@ function onLoad() {
   const input = document.querySelector("#login");
   joinButton.addEventListener("click", () => {
     const userName = input.value;
-    if (!userName) return;
+    if (!userName) {
+      input.focus();
+      return;
+    }
     myName = userName;
     joinGame();
     joinButton.hidden = true;
@@ -51,6 +54,11 @@ function onLoad() {
       });
     });
   });
+  input.addEventListener("keydown", (event) => {
+    if (event.keyCode == 13 || event.which == 13) {
+      joinButton.click();
+    }
+  });
   input.focus();
   const STARTFAST = false; //change to false for full join sequence
   playerButtonsMobile.style.display = "none";
@@ -64,12 +72,11 @@ function onLoad() {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
   });
-
   function joinGame() {
     netUtils.joinGame(myName);
     const state = netUtils.getGameStateForPlayer(myName);
+    sessionStorage.setItem("gameStarted", "true");
   }
-
   function updateGameState() {
     //runs every x seconds and asks for data relevant to player
     const state = netUtils.getGameStateForPlayer(myName);
@@ -87,7 +94,6 @@ function onLoad() {
     pileDeck = state.pileDeck;
     playerInTurn = state.playerInTurn;
   }
-
   function renderAll() {
     const playersElements = Array.from(document.querySelectorAll(".player"));
     playersElements.forEach((elem) => (elem.innerHTML = ""));
@@ -262,13 +268,25 @@ function onLoad() {
     updateGameState();
     renderAll();
   }
-
   function switchPlayer() {
     //myName = state.playerInturn;
   }
-
   playerButtons.addEventListener("click", (e) => {
     let clickedBtn = e.target;
     executeMove(clickedBtn.innerHTML);
   });
+  if (playerInTurn === myName) {
+  } else {
+    setInterval(() => {}, 5000);
+  }
+
+  setInterval(() => {
+    let state = netUtils.getGameStateForPlayer(myName);
+    if (state.playerInTurn === myName) {
+      return;
+    } else {
+      updateGameState();
+      renderAll();
+    }
+  }, 4000);
 }
