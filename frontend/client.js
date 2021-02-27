@@ -101,9 +101,13 @@ function onLoad() {
     const opponentsElements = document.querySelectorAll(".opponent");
     let j = 0;
     for (const opponentName in opponents) {
+      const opponentNameTag = document.querySelector(`#opp-name${j + 1}`);
+
       const opponentElement = opponentsElements.item(j);
       opponentsElements[1].classList.add("flip");
       opponentsElements[2].classList.add("flip");
+      opponentNameTag.innerHTML = opponentName;
+      opponentNameTag.hidden = false;
       j++;
       const opponent = opponents[opponentName];
       for (let i = 0; i < opponent.numberOfCards; i++) {

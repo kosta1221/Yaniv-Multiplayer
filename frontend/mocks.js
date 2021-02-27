@@ -2,9 +2,9 @@ const mocks = {
   tableDeck: null,
   pileDeck: null,
   players: {
-    "koren": new Player(new PlayerDeck(), 0, 0),
-    "kosta": new Player(new PlayerDeck(), 0, 0), 
-    "dvir": new Player(new PlayerDeck(), 0, 0)
+    koren: new Player(new PlayerDeck(), 0, 0),
+    kosta: new Player(new PlayerDeck(), 0, 0),
+    dvir: new Player(new PlayerDeck(), 0, 0),
   },
   playerInTurn: null,
   initialize() {
@@ -13,10 +13,10 @@ const mocks = {
     this.players["dvir"].isReady = false;
   },
   joinGame(playerName) {
-    this.players[playerName] = new Player(new PlayerDeck(), 0, 0); 
+    this.players[playerName] = new Player(new PlayerDeck(), 0, 0);
     this.players[playerName].isReady = false;
-    this.players["dvir"].isReady = true; 
-  }, 
+    this.players["dvir"].isReady = true;
+  },
   setReady(playerName) {
     this.players[playerName].isReady = true;
     this.startGame(playerName);
@@ -43,11 +43,11 @@ const mocks = {
   state(playerName) {
     const playersPoints = {};
     const playersCardNumbers = {};
-    for(const name in this.players) {
+    for (const name in this.players) {
       playersPoints[name] = this.players[name].points;
-      playersCardNumbers[name] = this.players[name].cards.cards.length; 
+      playersCardNumbers[name] = this.players[name].cards.cards.length;
     }
-    const cards = this.players[playerName].cards.cards; 
+    const cards = this.players[playerName].cards.cards;
     const pd = this.pileDeck;
     const playerNames = Object.getOwnPropertyNames(this.players);
     const PIN = this.playerInTurn;
@@ -57,16 +57,13 @@ const mocks = {
       cards,
       pileDeck: pd,
       playerInTurn: PIN,
-      playerNames
+      playerNames,
     };
     return state;
   },
-  executeMove(name, moveObj) {
-
-  }
+  executeMove(name, moveObj) {},
 };
 mocks.initialize();
-
 
 // const onPut = (obj) => {
 //     updatedState(obj.name) {
