@@ -1,16 +1,18 @@
 "use strict"
 
 const netUtils = {
-  URL: "localhost:3000",
+  URL: "http://localhost:3000",
   getWaitingGames() {},
   async createGame() {
+    return;
     const init = {
       method: "POST"
     };
-    fetch(this.URL + "createGame", init);
+    fetch(this.URL + "/createGame", init);
   },
   async joinGame(userName) {
     mocks.joinGame(userName);
+    return;
     const init = {
       method: "POST",
       body: JSON.stringify({"player-name": userName})
@@ -19,6 +21,7 @@ const netUtils = {
   },
   ready(playerIdentity) {
     mocks.setReady(playerIdentity);
+    return;
   },
   getPlayersStatus() {
     return mocks.playersReady();
@@ -29,6 +32,7 @@ const netUtils = {
   },
   async play(move) {
     mocks.executeMove(move);
+    return;
     const isYaniv = move.move === "Yaniv"; 
     const cards = move.cards.cards;
     const init = {

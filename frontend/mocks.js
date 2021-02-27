@@ -55,7 +55,7 @@ const mocks = {
       playersPoints,//allPlayersPoints
       playersCardNumbers,//allPlayersNumberOfCards
       cards,
-      deckOfPlayerInTurn,
+      deckOfPlayerInTurn: null,
       pileDeck: pd,
       playerInTurn: PIN,
       playerNames,

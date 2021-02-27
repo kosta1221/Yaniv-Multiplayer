@@ -25,21 +25,21 @@ async function onLoad() {
   const oppNames = document.querySelectorAll(".opp-name");
   const body = document.getElementsByTagName("BODY")[0];
   const input = document.querySelector("#login");
-  joinButton.addEventListener("click", () => {
+  joinButton.addEventListener("click", async () => {
     const userName = input.value;
     if (!userName) {
       input.focus();
       return;
     }
     myName = userName;
-    joinGame();
+    await joinGame();
     joinButton.hidden = true;
     input.hidden = true;
     readyButton.hidden = false;
     console.log("show ready button");
-    readyButton.addEventListener("click", () => {
+    readyButton.addEventListener("click", async () => {
       netUtils.ready(myName);
-      updateGameState();
+      await updateGameState();
       renderAll();
       readyButton.hidden = true;
       let x = window.matchMedia("(max-width: 1100px)");
@@ -73,12 +73,12 @@ async function onLoad() {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
   });
-  function joinGame() {
-    await netUtils.joinGame(myName);
+  async function joinGame() {
+    const joinstatus = await netUtils.joinGame(myName);
     const state = await netUtils.getGameStateForPlayer(myName);
     sessionStorage.setItem("gameStarted", "true");
   }
-  function updateGameState() {
+  async function updateGameState() {
     //runs every x seconds and asks for data relevant to player
     const state = await netUtils.getGameStateForPlayer(myName);
     player = new Player(
@@ -101,7 +101,7 @@ async function onLoad() {
     const stacks = Array.from(document.querySelectorAll(".stack"));
     stacks.forEach((elem) => (elem.innerHTML = ""));
 
-    const playersStatus = await netUtils.getPlayersStatus();
+    const playersStatus = netUtils.getPlayersStatus();
     let isAllReady = true;
     for (const name in playersStatus) {
       isAllReady = isAllReady && playersStatus[name];
