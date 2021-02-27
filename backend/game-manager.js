@@ -38,6 +38,10 @@ function makeTurn(game, callYaniv, isCardToGetFromGameDeck, cardPickedFromSet, c
 
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
+		if (isCardToGetFromGameDeck !== undefined || cardPickedFromSet || cardsToDiscard) {
+			throw new Error(`Cannot call yaniv and do other things!`);
+		}
+
 		let winningPlayer;
 		let playersRoundPointSum = [];
 		const indexOfPlayerInTurn = players.indexOf(playerInTurn);
