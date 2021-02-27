@@ -30,8 +30,19 @@ app.use(function (req, res, next) {
     }
 } */
 app.get("/status", (req, res) => {
-	console.log(mockGame.getGameState());
-	res.send(mockGame.getGameState());
+	const requestingPlayerId = req.headers.playerId;
+
+	if (!game || !gameId) {
+		res.status(404).json({ message: "Game not found!" });
+	} else if (!players.some((player) => player.playerId !== requestingPlayerId)) {
+		res.status(401).json({
+			message: `Unauthorized request to get game state, player with id ${requestingPlayerId} is not recognized!`,
+		});
+	} else {
+		console.log(`Game state for player id: ${requestingPlayerId} of game with id:${gameId}:`);
+		console.log(game.getGameState());
+		res.send(game.getGameState());
+	}
 });
 
 // EXAMPLE JOIN REQUEST (POST):
@@ -44,21 +55,21 @@ app.get("/status", (req, res) => {
 }; */
 // POST requests to /join adds a new player file and gives him an id
 app.post("/join", (req, res) => {
-	const responseBody = req.body;
-	// create 36 char id
+	const body = req.body;
+	// create 36 char id for player
 	const id = uuid.v4();
-	responseBody.playerId = id;
-	players.push(responseBody);
+	body.playerId = id;
+	players.push(body);
 
-	if (!responseBody.playerName) {
+	if (!body.playerName) {
 		res.status(400).json({ message: "New player must have a name!" });
 	} else {
-		fs.writeFile(`./players/${id}.json`, JSON.stringify(responseBody, null, 4), (err) => {
+		fs.writeFile(`./players/${id}.json`, JSON.stringify(body, null, 4), (err) => {
 			if (err) {
 				res.status(500).json({ message: "Internal server error", error: err });
 			} else {
-				console.log(`joined player id: ${id}, name: ${responseBody["player-name"]}`);
-				res.status(201).json(responseBody);
+				console.log(`joined player id: ${id}, name: ${body.playerName}`);
+				res.status(201).json(body);
 			}
 		});
 	}
@@ -67,23 +78,36 @@ app.post("/join", (req, res) => {
 // EXAMPLE CREATE NEW GAME REQUEST (POST):
 /* createGameRequest = {
     URL: "/game/new",
-    method: "POST"
+    method: "POST",
+    headers: {
+        "playerId": "idString"
+    }
 } */
 // POST request to /game/new - create a new game
 app.post("/game/new", (req, res) => {
-	try {
-		const body = req.body;
-		gameId = uuid.v4();
-		body["game-id"] = gameId;
+	const requestingPlayerId = req.headers.playerId;
 
-		console.log(players);
-		game = new classes.Game(players);
-		body.status = newGame;
+	if (!players.some((player) => player.playerId !== requestingPlayerId)) {
+		res.status(401).json({
+			message: `Unauthorized request to get create new game, player with id ${requestingPlayerId} is not recognized!`,
+		});
+	} else if (game || gameId) {
+		res.status(400).json({ message: "Game already running!" });
+	} else {
+		try {
+			const body = req.body;
+			gameId = uuid.v4();
+			body.gameId = gameId;
 
-		console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
-		res.status(201).json(body);
-	} catch (error) {
-		res.status(500).json({ message: "Internal server error", error: err });
+			console.log(players);
+			game = new classes.Game(players);
+			body.status = newGame;
+
+			console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
+			res.status(201).json(body);
+		} catch (error) {
+			res.status(500).json({ message: "Internal server error", error: err });
+		}
 	}
 });
 
@@ -108,7 +132,6 @@ app.put("/game/play", (req, res) => {
 	if (requestingPlayerId !== game.playerInTurn.playerId) {
 		res.status(401).json({
 			message: `Unauthorized request to make turn, it is not ${requestingPlayerId.playerName}'s turn!`,
-			error: err,
 		});
 	}
 
