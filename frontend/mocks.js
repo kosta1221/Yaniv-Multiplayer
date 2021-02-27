@@ -52,9 +52,10 @@ const mocks = {
     const playerNames = Object.getOwnPropertyNames(this.players);
     const PIN = this.playerInTurn;
     const state = {
-      playersPoints,
-      playersCardNumbers,
+      playersPoints,//allPlayersPoints
+      playersCardNumbers,//allPlayersNumberOfCards
       cards,
+      deckOfPlayerInTurn,
       pileDeck: pd,
       playerInTurn: PIN,
       playerNames,

@@ -11,6 +11,7 @@ function onLoad() {
   const activePlayerMove = {
     "selected-cards": new Deck(),
   };
+  const lastDiscardedCards = [];
   const updateGameObj = {
     name: myName,
     move: {},
@@ -290,3 +291,7 @@ function onLoad() {
     }
   }, 4000);
 }
+
+// TODO:
+//remove assaf
+//add dicarded cards selection
