@@ -1,8 +1,9 @@
 "use strict";
 // A class for building player objects
 class Player {
-	constructor(playerName, points, playerDeck) {
+	constructor(playerName, playerId, points, playerDeck) {
 		this.playerName = playerName;
+		this.playerId = playerId;
 
 		if (points) {
 			this.points = points;
@@ -136,7 +137,7 @@ class Card {
 
 // A class for having instances of games
 class Game {
-	constructor(playerNames, gameDeck) {
+	constructor(playerNamesAndIds, gameDeck) {
 		if (gameDeck) {
 			this.gameDeck = gameDeck;
 		} else {
@@ -147,8 +148,8 @@ class Game {
 		}
 
 		this.players = [];
-		for (const playerName of playerNames) {
-			const player = new Player(playerName);
+		for (const playerNameAndId of playerNamesAndIds) {
+			const player = new Player(playerNameAndId.playerName, playerNameAndId.playerId);
 			this.players.push(player);
 			player.giveFiveCardsFromTopOfDeck(this.gameDeck);
 		}
@@ -162,7 +163,7 @@ class Game {
 		this.gameDeck.putFirstCardFromOneDeckToAnother(this.openCardDeck);
 		this.gameDeck.cards.shift();
 
-		this.numberOfPlayers = playerNames.length;
+		this.numberOfPlayers = playerNamesAndIds.length;
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
@@ -182,12 +183,12 @@ class Game {
 				});
 			}
 
-			gameState.cards = this.gameDeck;
 			gameState.openCards = this.openCardDeck;
 
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
-			gameState.playerNames = playerNames;
+			gameState.players = this.players;
+			gameState.playerNamesAndIds = playerNamesAndIds;
 
 			return gameState;
 		};
@@ -281,4 +282,4 @@ class PileDeck extends Deck {
 	}
 }
 
-module.exports = { Player, Card, Game, Deck, PlayerDeck };
+// module.exports = { Player, Card, Game, Deck, PlayerDeck };
