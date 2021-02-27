@@ -8,6 +8,41 @@ body {
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
+#player-buttons-div * {
+  display: none;
+}
+#player-buttons-mobile * {
+  display: none;
+}
+
+body[disable-select="true"] {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  pointer-events: none;
+  .active-player {
+    filter: brightness(60%);
+  }
+  #player-buttons-div * {
+    filter: brightness(60%);
+  }
+  #player-buttons-mobile {
+    filter: brightness(60%);
+  }
+}
+
+#login {
+  z-index: 9001;
+}
+#join-button {
+  z-index: 9001;
+}
+#ready-button {
+  z-index: 9001;
+}
+
 .game-board {
   display: grid;
   margin: 0;

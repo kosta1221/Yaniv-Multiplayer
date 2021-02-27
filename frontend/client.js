@@ -21,6 +21,7 @@ function onLoad() {
   const readyButton = document.querySelector("#ready-button");
   const playerButtons = document.querySelector("#player-buttons-div");
   const oppNames = document.querySelectorAll(".opp-name");
+  const body = document.getElementsByTagName("BODY")[0];
   joinButton.addEventListener("click", () => {
     const input = document.querySelector("#login");
     const userName = input.value;
@@ -97,6 +98,7 @@ function onLoad() {
       cardElement.classList.add(cardSelectability);
       playerElement.appendChild(cardElement);
     }
+
     //RENDER OPPONENTS
     const opponentsElements = document.querySelectorAll(".opponent");
     let j = 0;
@@ -140,8 +142,10 @@ function onLoad() {
       li.appendChild(cardElement);
       tableDeckElement.appendChild(li);
     }
+    playerInTurn == !myName
+      ? body.setAttribute("disable-select", "true")
+      : body.setAttribute("disable-select", "false");
   }
-
   function collectMoveData(clickedCard) {
     if (!clickedCard.classList.contains("selectable")) return;
 
