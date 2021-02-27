@@ -20,6 +20,7 @@ function onLoad() {
   const joinButton = document.querySelector("#join-button");
   const readyButton = document.querySelector("#ready-button");
   const playerButtons = document.querySelector("#player-buttons-div");
+  const oppNames = document.querySelectorAll(".opp-name");
   joinButton.addEventListener("click", () => {
     const input = document.querySelector("#login");
     const userName = input.value;
@@ -28,18 +29,22 @@ function onLoad() {
     joinGame();
     joinButton.hidden = true;
     input.hidden = true;
-    readyButton.hidden = false; console.log("show ready button");
+    readyButton.hidden = false;
+    console.log("show ready button");
     readyButton.addEventListener("click", () => {
       netUtils.ready(myName);
       updateGameState();
       renderAll();
       readyButton.hidden = true;
+      oppNames.forEach((name) => {
+        name.style.display = "unset";
+      });
     });
   });
 
+  const STARTFAST = true; //change to false for full join sequence
 
-  const STARTFAST = true;//change to false for full join sequence
-  if(STARTFAST) {
+  if (STARTFAST) {
     document.querySelector("#login").value = "fast-name";
     joinButton.click();
     readyButton.click();
@@ -73,10 +78,10 @@ function onLoad() {
   }
 
   function renderAll() {
-    const playersElements = Array.from( document.querySelectorAll(".player") );
-    playersElements.forEach(elem => elem.innerHTML = "");
-    const stacks = Array.from( document.querySelectorAll(".stack") );
-    stacks.forEach(elem => elem.innerHTML = "");
+    const playersElements = Array.from(document.querySelectorAll(".player"));
+    playersElements.forEach((elem) => (elem.innerHTML = ""));
+    const stacks = Array.from(document.querySelectorAll(".stack"));
+    stacks.forEach((elem) => (elem.innerHTML = ""));
 
     const playersStatus = netUtils.getPlayersStatus();
     let isAllReady = true;
@@ -216,20 +221,20 @@ function onLoad() {
         } else {
           netUtils.play({
             move: "place",
-            cards: activePlayerMove["selected-cards"]
+            cards: activePlayerMove["selected-cards"],
           });
         }
       }
       case "Yaniv!": {
         netUtils.play({
           move: "yaniv",
-          cards: null
+          cards: null,
         });
       }
       case "Assaf!": {
         netUtils.play({
           move: "assaf",
-          cards: null
+          cards: null,
         });
       }
     }
