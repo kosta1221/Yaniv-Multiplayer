@@ -73,13 +73,19 @@ $card-width: 100px;
 }
 
 .opp-name {
-  position: relative;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.582);
   padding: 20px;
+  width: 40px;
 
+  text-align: center;
+  border-radius: 50%;
+  display: block;
+  border: 5px solid #fff;
+  background-color: rgba(245, 222, 179, 0.795);
   #name {
     color: rgb(8, 7, 7);
-    font-size: 18px;
+    font-size: 12px;
+    font-weight: bold;
   }
 }
 
@@ -92,6 +98,9 @@ $card-width: 100px;
   .flip > .card {
     transform: rotate(90deg);
     margin: -0.9rem;
+  }
+  .opp-name {
+    right: unset;
   }
 }
 
