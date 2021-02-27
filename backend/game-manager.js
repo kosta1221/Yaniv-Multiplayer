@@ -6,11 +6,7 @@ const mockGame = new Game(mockPlayerNames);
 
 const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
 const mockCardsToDiscard2 = [new Card("spades", "king", false), new Card("hearts", "king", false)];
-mockGame.players[0].playerDeck.cards.push(
-	new Card("spades", "king", false),
-	new Card("hearts", "king", false)
-);
-console.log(mockGame.players[0].playerDeck.cards);
+
 // console.log("The cards I want to discard from alon");
 // console.log(mockCardsToDiscard);
 
@@ -19,8 +15,8 @@ console.log(mockGame.players[0].playerDeck.cards);
 // console.log(mockGame.getGameState());
 
 try {
-	makeTurn(mockGame, false, mockCardsToDiscard2, true, null);
-	makeTurn(mockGame, false, [new Card("hearts", "king", false)], false, null);
+	makeTurn(mockGame, true);
+	// makeTurn(mockGame, false, [new Card("hearts", "king", false)], false, null);
 } catch (error) {
 	console.log(error);
 }
@@ -42,20 +38,35 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			throw new Error(`Cannot call yaniv and do other things!`);
 		}
 
-		let winningPlayer;
 		let playersRoundPointSum = [];
 		const indexOfPlayerInTurn = players.indexOf(playerInTurn);
 		for (const player of players) {
 			let playerRoundPointSum = player.calculateRoundPointsBasedOnRank();
 			playersRoundPointSum.push(playerRoundPointSum);
 		}
-		const indexOfPlayerWithLowestSum = playersRoundPointSum.indexOf(
+		let indexOfPlayerWithLowestSum = playersRoundPointSum.indexOf(
 			Math.min(...playersRoundPointSum)
 		);
 
+		// indexOfPlayerWithLowestSum is the same as the player in turn, and there can be a similar sum in the rest of the array (because indexOf returns the first instance of the minimum value found) which we need to check for.
+		if (indexOfPlayerWithLowestSum === indexOfPlayerInTurn) {
+			const secondPotentialIndexOfPlayerWithLowestSum = playersRoundPointSum.indexOf(
+				Math.min(...playersRoundPointSum.slice(indexOfPlayerWithLowestSum + 1)),
+				indexOfPlayerWithLowestSum + 1
+			);
+			console.log(secondPotentialIndexOfPlayerWithLowestSum);
+			//If the check was successful, meaning that there was in fact a similar sum in the rest of the array, we need to check if it is equal to the first one (assaf), then we reassign value of indexOfPlayerWithLowestSum
+			if (
+				playersRoundPointSum[secondPotentialIndexOfPlayerWithLowestSum] ===
+				playersRoundPointSum[indexOfPlayerWithLowestSum]
+			) {
+				indexOfPlayerWithLowestSum = secondPotentialIndexOfPlayerWithLowestSum;
+			}
+		}
+
 		// Assaf
 		if (indexOfPlayerWithLowestSum !== indexOfPlayerInTurn) {
-			winningPlayer = players[indexOfPlayerWithLowestSum];
+			console.log("In assaf");
 			for (let i = 0; i < playersRoundPointSum.length; i++) {
 				if (i === indexOfPlayerInTurn) {
 					players[i].points += 30 + playersRoundPointSum[i];
@@ -76,6 +87,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		}
 		// Yaniv successful
 		else {
+			console.log("In yaniv");
 			for (let i = 0; i < playersRoundPointSum.length; i++) {
 				if (i !== indexOfPlayerInTurn) {
 					players[i].points += playersRoundPointSum[i];
@@ -128,7 +140,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 					// sorting cardsToDiscard by their index in ascending order
 					playerInTurn.sortCardsByRankIndex(cardsToDiscard);
 					for (let i = 0; i < cardsToDiscard.length - 1; i++) {
-						if (cardsToDiscard[i + 1].rankIndex - cardsToDiscard[i].rankIndex > 1) {
+						if (cardsToDiscard[i + 1].rankIndex - cardsToDiscard[i].rankIndex !== 1) {
 							// Throws error when: trying to discard multiple cards, which are not all the same rank, but do have the same suit, but aren't in order.
 							throw new Error(
 								`Illegal set of ${cardsToDiscard.length} cards of the ${cardsToDiscard[0].suit} suit, they are not in order!`
