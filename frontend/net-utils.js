@@ -3,8 +3,12 @@
 const netUtils = {
   getWaitingGames() {},
   createGame() {},
-  joinGame(userName) {
+  async joinGame(userName) {
     mocks.joinGame(userName);
+    const init = {
+      method: "POST",
+      body: JSON.stringify({"player-name": userName})
+    }; 
   },
   ready(playerIdentity) {
     mocks.setReady(playerIdentity);
@@ -17,7 +21,16 @@ const netUtils = {
   },
   play(move) {
     mocks.executeMove(move);
-  },
+    const isYaniv = move.move === "Yaniv"; 
+    const cards = move.cards.cards;
+    const init = {
+      method: "PUT",
+      body: JSON.stringify({
+        yaniv: isYaniv,
+        cardsToDiscard: cards
+      })
+    }
+  }
 };
 
 // joinRequest = {
