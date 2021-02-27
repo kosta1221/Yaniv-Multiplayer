@@ -56,6 +56,12 @@ class Player {
 		deck.cards.pop();
 	}
 
+	giveNthCardFromDeck(deck, n) {
+		this.playerDeck.cards.push(deck.cards[n]);
+		this.numberOfCards++;
+		deck.cards.splice(n, 1);
+	}
+
 	giveFiveCardsFromTopOfDeck(deck) {
 		for (let i = 0; i < 5; i++) {
 			this.playerDeck.cards.push(deck.getFirstCard());
@@ -159,6 +165,7 @@ class Game {
 		this.numberOfPlayers = playerNames.length;
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
+		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
 
 		this.getGameState = function () {
 			const gameState = {};

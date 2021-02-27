@@ -4,8 +4,7 @@ const mockPlayerNames = ["alon", "koren", "kosta", "dvir"];
 
 const mockGame = new Game(mockPlayerNames);
 
-const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 4);
-const mockCardsToDiscard2 = [new Card("spades", "king", false), new Card("hearts", "king", false)];
+const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
 
 // console.log("The cards I want to discard from alon");
 // console.log(mockCardsToDiscard);
@@ -15,8 +14,11 @@ const mockCardsToDiscard2 = [new Card("spades", "king", false), new Card("hearts
 // console.log(mockGame.getGameState());
 
 try {
-	makeTurn(mockGame, true);
-	// makeTurn(mockGame, false, [new Card("hearts", "king", false)], false, null);
+	// makeTurn(mockGame, true);
+	makeTurn(mockGame, false, mockCardsToDiscard, true, null);
+
+	const mockCardsToDiscard2 = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
+	makeTurn(mockGame, false, mockCardsToDiscard2, false, mockCardsToDiscard);
 } catch (error) {
 	console.log(error);
 }
@@ -128,6 +130,10 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			});
 			// true if the rank of even one card in cardsToDiscard isn't the same as the rank of the other cards.
 			if (!cardsToDiscard.every((card) => card.rank === cardsToDiscard[0].rank)) {
+				// If trying to discard a set of 2 cards which don't have the same rank, throw an error!
+				if (cardsToDiscard.length === 2) {
+					throw new Error(`Illegal set of 2 cards, can't throw 2 cards with consecutive order!`);
+				}
 				// true if the suit of even one card in cardsToDiscard isn't the same as the suit of the other cards.
 				if (!cardsToDiscard.every((card) => card.suit === cardsToDiscard[0].suit)) {
 					// Throws error when: trying to discard multiple cards, which are not all the same rank and also not all the same suit.
@@ -151,7 +157,6 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			}
 		}
 
-		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
 		// console.log(playerInTurn.numberOfCards);
 		// console.log(gameDeck);
 		// console.log(openCardDeck);
@@ -178,19 +183,49 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 				gameDeck.cards.pop();
 				gameDeck.shuffleDeck();
 			}
-		} else {
-			// Draw a card from the open cards deck instead
-			playerInTurn.giveLastCardFromDeck(openCardDeck);
+		}
+		// Draw a card from the open cards deck instead
+		else {
+			// If it's the first turn of the game just give him the card that is open
+			if (game.turnsSinceStart === 0) {
+				playerInTurn.giveLastCardFromDeck(openCardDeck);
+			} else {
+				let areRanksSame = true;
+				let indexOfCardPickedFromSet;
+				const iterationStart = openCardDeck.lengh - game.amountOfCardsLastPlayerPutInOpenCardDeck;
+
+				for (let i = iterationStart; i < openCardDeck.lengh; i++) {
+					if (openCardDeck[iterationStart].rank !== openCardDeck[i].rank) {
+						areRanksSame = false;
+					}
+				}
+				if (areRanksSame) {
+					// if trying to pick a card from openCardDeck which is part from a set of cards with the same rank
+					playerInTurn.giveLastCardFromDeck(openCardDeck);
+				} else {
+					// If trying to pick a card from open deck which is part of a consecutive set
+					if (openCardDeck[iterationStart].rank === cardPickedFromSet.rank) {
+						playerInTurn.giveNthCardFromDeck(openCardDeck, iterationStart);
+					} else if (openCardDeck[openCardDeck.length - 1].rank === cardPickedFromSet.rank) {
+						playerInTurn.giveLastCardFromDeck(openCardDeck);
+					} else {
+						throw new Error(
+							`Trying to pick an illegal card, with rank ${cardPickedFromSet.rank} which is not part of the set that the last player put in the open card deck!`
+						);
+					}
+				}
+			}
 		}
 		// console.log(gameDeck);
 		// console.log(openCardDeck);
 
 		// console.log(playerInTurn);
-		console.log(playerInTurn.numberOfCards);
 	}
-
+	playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
+	game.amountOfCardsLastPlayerPutInOpenCardDeck = cardsToDiscard.length;
 	game.turnsSinceStart++;
 	game.playerInTurn = players[(players.indexOf(game.playerInTurn) + 1) % game.numberOfPlayers];
+	console.log(playerInTurn.numberOfCards);
 }
 
 // Utility function for checking object similarity (not by memory)
