@@ -20,10 +20,11 @@ function onLoad() {
   const joinButton = document.querySelector("#join-button");
   const readyButton = document.querySelector("#ready-button");
   const playerButtons = document.querySelector("#player-buttons-div");
+  const playerButtonsMobile = document.querySelector("#player-buttons-mobile");
   const oppNames = document.querySelectorAll(".opp-name");
   const body = document.getElementsByTagName("BODY")[0];
+  const input = document.querySelector("#login");
   joinButton.addEventListener("click", () => {
-    const input = document.querySelector("#login");
     const userName = input.value;
     if (!userName) return;
     myName = userName;
@@ -37,13 +38,22 @@ function onLoad() {
       updateGameState();
       renderAll();
       readyButton.hidden = true;
+      let x = window.matchMedia("(max-width: 1100px)");
+      if (x.matches) {
+        playerButtonsMobile.style.display = "flex";
+        playerButtons.style.display = "none";
+      } else {
+        playerButtonsMobile.style.display = "none";
+        playerButtons.style.display = "unset";
+      }
       oppNames.forEach((name) => {
         name.style.display = "unset";
       });
     });
   });
-
-  const STARTFAST = true; //change to false for full join sequence
+  input.focus();
+  const STARTFAST = false; //change to false for full join sequence
+  playerButtonsMobile.style.display = "none";
 
   if (STARTFAST) {
     document.querySelector("#login").value = "fast-name";
@@ -142,9 +152,11 @@ function onLoad() {
       li.appendChild(cardElement);
       tableDeckElement.appendChild(li);
     }
-    playerInTurn == !myName
-      ? body.setAttribute("disable-select", "true")
-      : body.setAttribute("disable-select", "false");
+    if (playerInTurn === myName) {
+      body.setAttribute("disable-select", "false");
+    } else {
+      body.setAttribute("disable-select", "true");
+    }
   }
   function collectMoveData(clickedCard) {
     if (!clickedCard.classList.contains("selectable")) return;
