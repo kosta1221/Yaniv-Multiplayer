@@ -294,6 +294,7 @@ async function onLoad() {
   }
 
   function executeMove(move) {
+    if(playerInTurn !== myName) return;
     //looks at move player is trying to make and asks gameManager to perform
     const selectedPlayerCards = activePlayerMove["selected-cards"].cards;
     switch (move) {
