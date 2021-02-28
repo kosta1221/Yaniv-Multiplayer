@@ -586,7 +586,7 @@ $card-width: 100px;
     color: #ffffff;
     font-family: Times New Roman;
     font-size: 16px;
-    padding: 10px 3px;
+    padding: 14px 6px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #b1c2ae;
   }
@@ -599,11 +599,10 @@ $card-width: 100px;
   .place-button:focus {
     outline: none;
   }
-
   .yaniv-button {
     position: absolute;
     right: 0;
-    top: 35px;
+    top: 50px;
     box-shadow: 0px 1px 0px 0px #fff6af;
     background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
     background-color: #ffec64;
@@ -617,8 +616,8 @@ $card-width: 100px;
     border-radius: 28px;
     display: inline-block;
     cursor: pointer;
-    font-size: 10px;
-    padding: 10px 3px;
+    font-size: 12px;
+    padding: 14px 8px;
     text-decoration: none;
   }
   .yaniv-button:hover {
@@ -672,7 +671,7 @@ $card-width: 100px;
     display: flex;
     justify-content: space-between;
     margin: auto;
-    width: 46vw;
+    width: 22vw;
     padding-top: 1%;
     .place-button {
       position: relative;
@@ -686,7 +685,8 @@ $card-width: 100px;
       color: #ffffff;
       font-family: Times New Roman;
       font-size: 16px;
-      padding: 10px 3px;
+      padding: 14px 6px;
+
       text-decoration: none;
       text-shadow: 0px 1px 0px #b1c2ae;
     }
@@ -716,8 +716,9 @@ $card-width: 100px;
       border-radius: 28px;
       display: inline-block;
       cursor: pointer;
-      font-size: 10px;
-      padding: 10px 3px;
+      font-size: 12px;
+      padding: 14px 6px;
+
       text-decoration: none;
     }
     .yaniv-button:hover {

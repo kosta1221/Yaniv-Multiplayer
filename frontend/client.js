@@ -61,7 +61,7 @@ async function onLoad() {
     }
   });
   input.focus();
-  const STARTFAST = false; //change to false for full join sequence
+  const STARTFAST = true; //change to false for full join sequence
   playerButtonsMobile.style.display = "none";
 
   if (STARTFAST) {

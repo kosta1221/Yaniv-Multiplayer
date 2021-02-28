@@ -590,7 +590,7 @@ h1 {
   color: #ffffff;
   font-family: Times New Roman;
   font-size: 16px;
-  padding: 10px 3px;
+  padding: 14px 6px;
   text-decoration: none;
   text-shadow: 0px 1px 0px #b1c2ae;
 }
@@ -610,7 +610,7 @@ h1 {
 #player-buttons-div .yaniv-button {
   position: absolute;
   right: 0;
-  top: 35px;
+  top: 50px;
   -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
           box-shadow: 0px 1px 0px 0px #fff6af;
   background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffec64), to(#ffab23));
@@ -626,8 +626,8 @@ h1 {
   border-radius: 28px;
   display: inline-block;
   cursor: pointer;
-  font-size: 10px;
-  padding: 10px 3px;
+  font-size: 12px;
+  padding: 14px 8px;
   text-decoration: none;
 }
 
@@ -692,7 +692,7 @@ h1 {
         -ms-flex-pack: justify;
             justify-content: space-between;
     margin: auto;
-    width: 46vw;
+    width: 22vw;
     padding-top: 1%;
   }
   #player-buttons-mobile .place-button {
@@ -707,7 +707,7 @@ h1 {
     color: #ffffff;
     font-family: Times New Roman;
     font-size: 16px;
-    padding: 10px 3px;
+    padding: 14px 6px;
     text-decoration: none;
     text-shadow: 0px 1px 0px #b1c2ae;
   }
@@ -738,8 +738,8 @@ h1 {
     border-radius: 28px;
     display: inline-block;
     cursor: pointer;
-    font-size: 10px;
-    padding: 10px 3px;
+    font-size: 12px;
+    padding: 14px 6px;
     text-decoration: none;
   }
   #player-buttons-mobile .yaniv-button:hover {
