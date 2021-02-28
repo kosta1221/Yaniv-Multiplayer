@@ -31,6 +31,9 @@ class Card {
 		return this.#isJoker;
 	}
 
+	equals(card) {
+		return (this.#suit === card.suit && this.#rank === card.rank && this.#isJoker === card.isJoker); 
+	}
 	// set suit(suit) {
 	// 	this.#suit = suit;
 	// }
@@ -46,15 +49,15 @@ class Card {
 
 // A class for building objects of decks of cards
 class Deck {
-	constructor() {
-		this.cards = [];
+	constructor(cards = []) {
+		this.cards = cards;
 	}
 
 	createNewFullDeck() {
 		let suits = ["clubs", "diamonds", "hearts", "spades"];
 		let ranks = ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"];
 		for (let i = 0; i < suits.length; i++) {
-			for (let j = 0; j < ranks.length; j++) {s
+			for (let j = 0; j < ranks.length; j++) {
 				this.cards.push(new Card(suits[i], ranks[j], false));
 			}
 		}
@@ -72,6 +75,19 @@ class Deck {
 	}
 	getFirstCard(deck) {
 		return deck.cards[0];
+	}
+	removeCard(cardToRemove) {
+		let indexToRemove = -1;
+		const cards = this.cards;
+		this.cards.forEach( (card,index) => {
+			if ( card.equals(cardToRemove) ) {
+				indexToRemove = index;
+			}
+		});
+		if (indexToRemove > -1) this.cards.splice(indexToRemove, 1);  
+	}
+	addCard(card) {
+		this.cards.push(card);
 	}
 }
 
@@ -100,8 +116,8 @@ class TableDeck extends Deck {
 }
 
 class PileDeck extends Deck {
-	constructor() {
-		super();
+	constructor(cards = []) {
+		super(cards);
 	}
 }
 
