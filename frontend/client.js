@@ -281,6 +281,7 @@ async function onLoad() {
   }
 
   setInterval(() => {
+    if(playerInTurn === myName) return;
     let state = netUtils.getGameStateForPlayer(myName);
     if (state.playerInTurn === myName) {
       return;
