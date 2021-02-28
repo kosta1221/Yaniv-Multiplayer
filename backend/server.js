@@ -6,10 +6,49 @@ const classes = require("../classes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const PLAYER_TIMEOUT = 30 * 1000; // 30 seconds
+const TIMEOUT_CHECKING_TIME = 10 * 1000; // 10 seconds
 
 let gameId;
 let game;
 let players = [];
+let playersTimedOut = [];
+
+// Checking for player timeouts every TIMEOUT_CHECKING_TIME milliseconds.
+setInterval(() => {
+	for (const player of players) {
+		if (Date.now() - player.lastPinged > PLAYER_TIMEOUT) {
+			playersTimedOut.push(player);
+			players.splice(players.indexOf(player), 1);
+			console.log(
+				`Moved player ${player.playerName}, id: ${player.playerId}, to timed out players!`
+			);
+			console.log(
+				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
+					Date.now() - player.lastPinged
+				} ms ago.`
+			);
+
+			// Adding reason for timeout in the player file
+			fs.appendFileSync(
+				`./players/${player.playerId}.json`,
+				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
+					Date.now() - player.lastPinged
+				} ms ago.`
+			);
+
+			// Moving the player file to timedOutPlayers folder
+			fs.rename(
+				`./players/${player.playerId}.json`,
+				`./timedOutPlayers/${player.playerId}.json`,
+				function (err) {
+					if (err) throw err;
+					console.log("Successfully moved players file to timedOutPlayers!");
+				}
+			);
+		}
+	}
+}, TIMEOUT_CHECKING_TIME);
 
 // turning request into JSON
 app.use(express.json());
@@ -21,9 +60,17 @@ app.use(function (req, res, next) {
 	setTimeout(next, 100);
 });
 
-// if make turn, set time out for the player that comes after
-app.get("/ping/:id", (req, res) => {
-	const { pingingPlayerId } = req.params;
+// EXAMPLE PING REQUEST (GET):
+/* gameStateRequest = {
+    URL: "/ping + playerId",
+    method: "GET",
+    headers: {
+        "Content-Type": "application/json",
+    }
+} */
+// if received ping from player, set his lastPinged property to the current time. also sets out the game state as the response.
+app.get("/ping:playerId", (req, res) => {
+	const pingingPlayerId = req.params.playerId;
 
 	if (!players.some((player) => player.playerId !== pingingPlayerId)) {
 		res.status(401).json({
@@ -31,7 +78,7 @@ app.get("/ping/:id", (req, res) => {
 		});
 	} else {
 		let currentTime = Date.now();
-		for (const palyer of players) {
+		for (const player of players) {
 			if (player.playerId === pingingPlayerId) {
 				player.lastPinged = currentTime;
 			}
@@ -39,19 +86,21 @@ app.get("/ping/:id", (req, res) => {
 		console.log(
 			`Ping time: ${currentTime}, by player id: ${requestingPlayerId} of game with id:${gameId}:`
 		);
+		res.send(game.getGameState());
 	}
 });
 
 // EXAMPLE STATE REQUEST (GET):
 /* gameStateRequest = {
-    URL: "/game/state",
+    URL: "/game/state + playerId",
     method: "GET",
     headers: {
-        "playerId": "idString"
+        "Content-Type": "application/json",
     }
 } */
-app.get("/game/state", (req, res) => {
-	const requestingPlayerId = req.headers.playerId;
+// GET requests to /game/state:playerId gets the current state of the game for playerId
+app.get("/game/state:playerId", (req, res) => {
+	const requestingPlayerId = req.params.playerId;
 
 	if (!game || !gameId) {
 		res.status(404).json({ message: "Game not found!" });
@@ -70,6 +119,9 @@ app.get("/game/state", (req, res) => {
 /* joinRequest = {
 	URL: "/join",
 	method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+    },
 	body: {
 		"playerName": "Name",
 	},
@@ -81,6 +133,7 @@ app.post("/join", (req, res) => {
 	const id = uuid.v4();
 	body.playerId = id;
 	body.lastPinged = Date.now();
+	body.gameJoined = gameId;
 	players.push(body);
 
 	if (!body.playerName) {
@@ -99,14 +152,14 @@ app.post("/join", (req, res) => {
 
 // EXAMPLE CREATE NEW GAME REQUEST (POST):
 /* createGameRequest = {
-    URL: "/game/new",
+    URL: "/game/new + playerId",
     method: "POST",
     headers: {
-        "playerId": "idString"
+        "Content-Type": "application/json",
     }
 } */
-// POST request to /game/new - create a new game
-app.post("/game/new", (req, res) => {
+// POST request to /game/new:playerId - create a new game
+app.post("/game/new:playerId", (req, res) => {
 	const requestingPlayerId = req.headers.playerId;
 
 	if (!players.some((player) => player.playerId !== requestingPlayerId)) {
@@ -135,10 +188,10 @@ app.post("/game/new", (req, res) => {
 
 // EXAMPLE MAKE A TURN REQUEST (PUT):
 /* playRequest = {
-	URL: "/game/play",
+	URL: "/game/play + playerId",
 	method: "PUT",
 	headers: {
-		"playerId": "idString",
+		"Content-Type": "application/json",
 	},
 	body: {
         callYaniv: false,
@@ -147,10 +200,10 @@ app.post("/game/new", (req, res) => {
         *cardPickedFromSet: Card
     } (* are optional parameters)
 }; */
-// PUT requests to /game/play to make a new turn
-app.put("/game/play", (req, res) => {
+// PUT requests to /game/play:playerId to make a new turn
+app.put("/game/play:playerId", (req, res) => {
 	const body = req.body;
-	const requestingPlayerId = req.headers.playerId;
+	const requestingPlayerId = req.params.playerId;
 	if (requestingPlayerId !== game.playerInTurn.playerId) {
 		res.status(401).json({
 			message: `Unauthorized request to make turn, it is not ${requestingPlayerId.playerName}'s turn!`,
