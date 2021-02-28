@@ -1,6 +1,7 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", onLoad);
 async function onLoad() {
+  let isGameStarted = false;
   let myName;
   let id;
   let player;
@@ -46,6 +47,7 @@ async function onLoad() {
   readyButton.addEventListener("click", async () => {
     netUtils.ready(myName);
     await netUtils.startGame();
+    isGameStarted = true;
     await updateGameState();
     renderAll();
     readyButton.hidden = true;
@@ -62,6 +64,10 @@ async function onLoad() {
   });
 
   playerButtons.addEventListener("click", (e) => {
+    let clickedBtn = e.target;
+    executeMove(clickedBtn.innerHTML);
+  });
+  playerButtonsMobile.addEventListener("click", (e) => {
     let clickedBtn = e.target;
     executeMove(clickedBtn.innerHTML);
   });
@@ -111,7 +117,7 @@ async function onLoad() {
   });
 
   setInterval(() => {
-    if (playerInTurn === myName) return;
+    if (playerInTurn === myName || !isGameStarted) return;
     updateGameState();
     renderAll();
   }, 4000);
@@ -128,9 +134,8 @@ async function onLoad() {
   }
 
   async function joinGame() {
-    const joinstatus = await netUtils.joinGame(myName);
-    const state = await netUtils.getGameStateForPlayer(myName);
-    sessionStorage.setItem("gameStarted", "true");
+    await netUtils.joinGame(myName);
+    // sessionStorage.setItem("gameStarted", "true");
   }
   
   async function updateGameState() {
@@ -138,15 +143,17 @@ async function onLoad() {
     const state = await netUtils.getGameStateForPlayer(myName);
     allPlayersPoints = state.playersPoints;
     player = new Player(
-      state.cards,
-      state.playersPoints[myName],
-      state.playersCardNumbers[myName]
+      myName,
+      null,
+      allPlayersPoints[myName],
+      state.cards
     );
     for (const playerName of state.playerNames) {
       if (playerName === myName) continue;
       const points = state.playersPoints[playerName];
       const numberOfCards = state.playersCardNumbers[playerName];
-      opponents[playerName] = new Player(null, points, numberOfCards);
+      opponents[playerName] = new Player(playerName, null, points, null);
+      opponents[playerName].numberOfCards = numberOfCards;
     }
     pileDeck = state.pileDeck;
     playerInTurn = state.playerInTurn;
@@ -157,7 +164,7 @@ async function onLoad() {
     playersElements.forEach((elem) => (elem.innerHTML = ""));
     const stacks = Array.from(document.querySelectorAll(".stack"));
     stacks.forEach((elem) => (elem.innerHTML = ""));
-    document.querySelectorAll("#pile-selection").innerHTML = "";
+    document.querySelector("#pile-selection").innerHTML = "";
     const playerBox = document.createElement("div");
     const playerInfo = document.createElement("p");
     const lineBreak = document.createElement("BR");
@@ -168,7 +175,7 @@ async function onLoad() {
     }
     if (!isAllReady) return;
     //RENDER PLAYER
-    for (const card of player.cards) {
+    for (const card of player.playerDeck.cards) {
       const cardElement = utils.createCardElement(card);
       const cardSelectability =
         playerInTurn === myName ? "selectable" : "unselectable";
@@ -220,7 +227,7 @@ async function onLoad() {
       const opponent = opponents[opponentName];
       opponentsCardCount += opponent.numberOfCards;
     }
-    const playerCardCount = player.cards.length;
+    const playerCardCount = player.playerDeck.cards.length;
     const tableDeckCount =
       54 - pileDeckCount - opponentsCardCount - playerCardCount;
     for (let i = 0; i < tableDeckCount; i++) {
@@ -247,7 +254,7 @@ async function onLoad() {
     if (clickedCard.classList.contains("selected")) {
       clickedCard.classList.remove("selected");
       makeShiny();
-      activePlayerMove["selected-cards"].removeCard(card);
+      activePlayerMove["selected-cards"].removeCards([card]);
     } else {
       clickedCard.classList.add("selected");
       makeShiny("true");
@@ -327,6 +334,7 @@ async function onLoad() {
     }
     activePlayerMove["selected-cards"].cards = [];
     activePlayerMove.cardToTake = null;
+    console.log("rerendering");
     updateGameState();
     renderAll();
   }
