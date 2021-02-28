@@ -12,7 +12,7 @@ async function onLoad() {
   const activePlayerMove = {
     "selected-cards": new Deck(),
   };
-  const lastDiscardedCards = [];
+  const lastDiscardedCards = [new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
   const updateGameObj = {
     name: myName,
     move: {},
@@ -284,9 +284,7 @@ async function onLoad() {
     updateGameState();
     renderAll();
   }
-  function switchPlayer() {
-    //myName = state.playerInturn;
-  }
+  
   playerButtons.addEventListener("click", (e) => {
     let clickedBtn = e.target;
     executeMove(clickedBtn.innerHTML);
@@ -308,32 +306,41 @@ async function onLoad() {
   }, 4000);
 
   function makeShiny(bool) {
-    const tableDeckElement = document.querySelector("#table-deck");
+    // const tableDeckElement = document.querySelector("#table-deck");
     const pileDeckElement = document.querySelector("#pile-deck");
     if (bool) {
-      tableDeckElement.classList.add("shimmer-table");
+      // tableDeckElement.classList.add("shimmer-table");
       pileDeckElement.classList.add("shimmer-pile");
     } else if (!bool) {
-      tableDeckElement.classList.remove("shimmer-table");
+      // tableDeckElement.classList.remove("shimmer-table");
       pileDeckElement.classList.remove("shimmer-pile");
     }
   }
 
-  const gameField = document.querySelector(".game-field");
-  gameField.addEventListener("click", (e) => {
-    if (!e.target.classList.contains("card")) return;
-    let j = 0;
-    for (const card of pileDeck.cards) {
-      j++;
-      const cardElement = utils.createCardElement(card);
-      const cardSelectability =
-        playerInTurn === myName ? "selectable" : "unselectable";
-      cardElement.classList.add(cardSelectability);
-      gameField.appendChild(cardElement);
-      if (j === 3) {
-        break;
-      }
+  document.querySelector("#pile-deck").addEventListener("click", (e) => {
+    if (lastDiscardedCards.length === 0) return;
+    const gameField = document.querySelector(".game-field");
+    const bottomCard = utils.createCardElement(lastDiscardedCards[0]);
+    const cardSelectability = playerInTurn === myName ? "selectable" : "unselectable";
+    bottomCard.classList.add(cardSelectability);
+    gameField.appendChild(bottomCard);
+    if (lastDiscardedCards.length > 1) {
+      const topCard = utils.createCardElement(lastDiscardedCards[lastDiscardedCards.length-1]);
+      topCard.classList.add(cardSelectability);
+      gameField.appendChild(topCard);
     }
+    // let j = 0;
+    // for (const card of pileDeck.cards) {
+    //   j++;
+    //   const cardElement = utils.createCardElement(card);
+    //   const cardSelectability =
+    //     playerInTurn === myName ? "selectable" : "unselectable";
+    //   cardElement.classList.add(cardSelectability);
+    //   gameField.appendChild(cardElement);
+    //   if (j === 3) {
+    //     break;
+    //   }
+    // }
   });
 }
 
