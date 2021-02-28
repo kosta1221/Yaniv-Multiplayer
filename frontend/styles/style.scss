@@ -84,6 +84,7 @@ body[disable-select="true"] {
 #ready-button:focus {
   outline: none;
 }
+
 #join-button:focus {
   outline: none;
 }
@@ -598,7 +599,6 @@ $card-width: 100px;
 
 //BUTTONS
 #player-buttons-div {
-  display: none;
   border-radius: 50%;
   position: relative;
   width: 10px;
@@ -660,37 +660,12 @@ $card-width: 100px;
     outline: none;
   }
 
-  .assaf-button {
-    background-color: #d35603;
-    border: 1px solid #b45b08;
-    color: #ffffff;
-    text-shadow: 0px 1px 0px #850d0d;
-    position: absolute;
-    right: -25px;
-    top: 75px;
-    font-family: Verdana;
-    font-weight: bold;
-    position: absolute;
-    border-radius: 28px;
-    display: inline-block;
-    cursor: pointer;
-    font-size: 10px;
-    padding: 10px 3px;
-    text-decoration: none;
-    &:hover {
-      background-color: #e67845;
-    }
-    &:active {
-      top: 76px;
-    }
-    &:focus {
-      outline: none;
-    }
-  }
+
 }
 #player-buttons-mobile {
   display: none;
 }
+
 @media screen and (max-width: 1100px) {
   #player-buttons-div {
     display: none;

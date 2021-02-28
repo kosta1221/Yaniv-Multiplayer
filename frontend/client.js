@@ -9,15 +9,9 @@ async function onLoad() {
   let matchNumber;
   let pileDeck;
   let allPlayersPoints;
-  const activePlayerMove = {
-    "selected-cards": new Deck(),
-  };
+  const activePlayerMove = { "selected-cards": new Deck() };
   const lastDiscardedCards = [new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
-  const updateGameObj = {
-    name: myName,
-    move: {},
-    cards: {},
-  };
+
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
   const readyButton = document.querySelector("#ready-button");
@@ -26,6 +20,8 @@ async function onLoad() {
   const oppNames = document.querySelectorAll(".opp-name");
   const body = document.getElementsByTagName("BODY")[0];
   const input = document.querySelector("#login");
+
+  
   joinButton.addEventListener("click", async () => {
     const userName = input.value;
     if (!userName) {
@@ -38,47 +34,94 @@ async function onLoad() {
     input.hidden = true;
     readyButton.hidden = false;
     console.log("show ready button");
-    readyButton.addEventListener("click", async () => {
-      netUtils.ready(myName);
-      await updateGameState();
-      renderAll();
-      readyButton.hidden = true;
-      let x = window.matchMedia("(max-width: 1100px)");
-      if (x.matches) {
-        playerButtonsMobile.style.display = "flex";
-        playerButtons.style.display = "none";
-      } else {
-        playerButtonsMobile.style.display = "none";
-        playerButtons.style.display = "unset";
-      }
-      oppNames.forEach((name) => {
-        name.style.display = "unset";
-      });
-    });
   });
+
   input.addEventListener("keydown", (event) => {
     if (event.keyCode == 13 || event.which == 13) {
       joinButton.click();
     }
   });
-  input.focus();
-  const STARTFAST = true; //change to false for full join sequence
-  playerButtonsMobile.style.display = "none";
 
-  if (STARTFAST) {
-    document.querySelector("#login").value = "fast-name";
-    joinButton.click();
-    readyButton.click();
-  }
+  readyButton.addEventListener("click", async () => {
+    netUtils.ready(myName);
+    await updateGameState();
+    renderAll();
+    readyButton.hidden = true;
+    playerButtons.style.visibility = "visible";
+    playerButtonsMobile.style.visibility = "visible";
+    // let x = window.matchMedia("(max-width: 1100px)");
+    // if (x.matches) {
+    //   playerButtonsMobile.style.display = "flex";
+    //   playerButtons.style.display = "none";
+    // } else {
+    //   playerButtonsMobile.style.display = "none";
+    //   playerButtons.style.display = "unset";
+    // }
+    oppNames.forEach((name) => {
+      name.style.display = "unset";
+    });
+  });
+  
+  // window.addEventListener("resize", () => {
+  //   let x = window.matchMedia("(max-width: 1100px)");
+  //   if (x.matches) {
+  //     playerButtonsMobile.style.display = "flex";
+  //     playerButtons.style.display = "none";
+  //   } else {
+  //     playerButtonsMobile.style.display = "none";
+  //     playerButtons.style.display = "unset";
+  //   }
+  // })
+  
+  // playerButtonsMobile.style.display = "none";
+
+  
   playerElement.addEventListener("click", (e) => {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
   });
+  playerButtons.addEventListener("click", (e) => {
+    let clickedBtn = e.target;
+    executeMove(clickedBtn.innerHTML);
+  });
+
+  document.querySelector("#pile-deck").addEventListener("click", (e) => {
+    if (lastDiscardedCards.length === 0) return;
+    const gameField = document.querySelector(".game-field");
+    const bottomCard = utils.createCardElement(lastDiscardedCards[0]);
+    const cardSelectability = playerInTurn === myName ? "selectable" : "unselectable";
+    bottomCard.classList.add(cardSelectability);
+    gameField.appendChild(bottomCard);
+    if (lastDiscardedCards.length > 1) {
+      const topCard = utils.createCardElement(lastDiscardedCards[lastDiscardedCards.length-1]);
+      topCard.classList.add(cardSelectability);
+      gameField.appendChild(topCard);
+    }
+  });
+
+  setInterval(() => {
+    if (playerInTurn === myName) return;
+    updateGameState();
+    renderAll();
+  }, 4000);
+
+  input.focus();
+  playerButtons.style.visibility = "hidden";
+  playerButtonsMobile.style.visibility = "hidden";
+  const STARTFAST = false; //change to false for full join sequence
+  if (STARTFAST) {
+    document.querySelector("#login").value = "fast-name";
+    joinButton.click();
+    await setTimeout(()=>{}, 1000);
+    readyButton.click();
+  }
+
   async function joinGame() {
     const joinstatus = await netUtils.joinGame(myName);
     const state = await netUtils.getGameStateForPlayer(myName);
     sessionStorage.setItem("gameStarted", "true");
   }
+  
   async function updateGameState() {
     //runs every x seconds and asks for data relevant to player
     const state = await netUtils.getGameStateForPlayer(myName);
@@ -97,6 +140,7 @@ async function onLoad() {
     pileDeck = state.pileDeck;
     playerInTurn = state.playerInTurn;
   }
+
   function renderAll() {
     const playersElements = Array.from(document.querySelectorAll(".player"));
     playersElements.forEach((elem) => (elem.innerHTML = ""));
@@ -179,6 +223,7 @@ async function onLoad() {
       body.setAttribute("disable-select", "true");
     }
   }
+
   function collectMoveData(clickedCard) {
     if (!clickedCard.classList.contains("selectable")) return;
 
@@ -285,63 +330,14 @@ async function onLoad() {
     renderAll();
   }
   
-  playerButtons.addEventListener("click", (e) => {
-    let clickedBtn = e.target;
-    executeMove(clickedBtn.innerHTML);
-  });
-  if (playerInTurn === myName) {
-  } else {
-    setInterval(() => {}, 5000);
-  }
-
-  setInterval(() => {
-    if (playerInTurn === myName) return;
-    let state = netUtils.getGameStateForPlayer(myName);
-    if (playerInTurn === myName) {
-      return;
-    } else {
-      updateGameState();
-      renderAll();
-    }
-  }, 4000);
-
   function makeShiny(bool) {
-    // const tableDeckElement = document.querySelector("#table-deck");
     const pileDeckElement = document.querySelector("#pile-deck");
     if (bool) {
-      // tableDeckElement.classList.add("shimmer-table");
       pileDeckElement.classList.add("shimmer-pile");
     } else if (!bool) {
-      // tableDeckElement.classList.remove("shimmer-table");
       pileDeckElement.classList.remove("shimmer-pile");
     }
   }
-
-  document.querySelector("#pile-deck").addEventListener("click", (e) => {
-    if (lastDiscardedCards.length === 0) return;
-    const gameField = document.querySelector(".game-field");
-    const bottomCard = utils.createCardElement(lastDiscardedCards[0]);
-    const cardSelectability = playerInTurn === myName ? "selectable" : "unselectable";
-    bottomCard.classList.add(cardSelectability);
-    gameField.appendChild(bottomCard);
-    if (lastDiscardedCards.length > 1) {
-      const topCard = utils.createCardElement(lastDiscardedCards[lastDiscardedCards.length-1]);
-      topCard.classList.add(cardSelectability);
-      gameField.appendChild(topCard);
-    }
-    // let j = 0;
-    // for (const card of pileDeck.cards) {
-    //   j++;
-    //   const cardElement = utils.createCardElement(card);
-    //   const cardSelectability =
-    //     playerInTurn === myName ? "selectable" : "unselectable";
-    //   cardElement.classList.add(cardSelectability);
-    //   gameField.appendChild(cardElement);
-    //   if (j === 3) {
-    //     break;
-    //   }
-    // }
-  });
 }
 
 // TODO:
