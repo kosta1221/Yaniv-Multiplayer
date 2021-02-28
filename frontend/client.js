@@ -9,7 +9,9 @@ async function onLoad() {
   let matchNumber;
   let pileDeck;
   let allPlayersPoints;
-  const activePlayerMove = { "selected-cards": new Deck() };
+  const activePlayerMove = { 
+    "selected-cards": new Deck() 
+  };
   const lastDiscardedCards = [new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
 
   const playerElement = document.querySelector(".active-player");
@@ -33,7 +35,6 @@ async function onLoad() {
     joinButton.hidden = true;
     input.hidden = true;
     readyButton.hidden = false;
-    console.log("show ready button");
   });
 
   input.addEventListener("keydown", (event) => {
@@ -71,6 +72,7 @@ async function onLoad() {
     pileSelection.innerHTML = "";
     if (pileSelection.getAttribute("expanded") === "true") {
       pileSelection.setAttribute("expanded", "false");
+      activePlayerMove.cardToTake = null;
       return;
     }
     pileSelection.setAttribute("expanded", "true");
@@ -82,6 +84,28 @@ async function onLoad() {
       const topCard = utils.createCardElement(lastDiscardedCards[lastDiscardedCards.length-1]);
       topCard.classList.add(cardSelectability);
       pileSelection.appendChild(topCard);
+    }
+  });
+  document.querySelector("#pile-selection").addEventListener("click", (e) => {
+    const cardElement = e.target; 
+    if ( !cardElement.classList.contains("card") ) return;
+    if ( cardElement.classList.contains("unselectable") ) return;
+    const card = new Card(cardElement.getAttribute("suit"), cardElement.getAttribute("rank"), cardElement.getAttribute("isJ-joker"));
+    if ( cardElement.classList.contains("selected") ) {
+      activePlayerMove.cardToTake = null;
+      cardElement.classList.remove("selected");
+    } else {
+      activePlayerMove.cardToTake = card;
+      cardElement.classList.add("selected");
+    }
+    const openCards = Array.from(document.querySelector("#pile-selection").querySelectorAll(".card"));
+    for(const openCardElement of openCards) {
+      if(openCardElement === cardElement) continue;
+      if(activePlayerMove.cardToTake !== null) {
+        openCardElement.classList.replace("selectable", "unselectable");
+      } else {
+        openCardElement.classList.replace("unselectable", "selectable");
+      }
     }
   });
 
@@ -245,7 +269,7 @@ async function onLoad() {
 
   function verifyMoveEligibility(card) {
     //takes a card from player hand and checks if is selectable by comparison to selected cards
-    const selectedCards = activePlayerMove["selected-cards"].cards; //object array of active cards [{}]
+    const selectedCards = activePlayerMove["selected-cards"].cards;
     //no cards selected => true
     if (selectedCards.length === 0) return true;
     //same rank cards => true
@@ -282,9 +306,12 @@ async function onLoad() {
             toast: true,
           });
         } else {
+          const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
           netUtils.play({
             move: "place",
             cards: activePlayerMove["selected-cards"],
+            isCardToGetFromGameDeck,
+            cardPickedFromSet: activePlayerMove.cardToTake
           });
         }
       }
@@ -294,14 +321,9 @@ async function onLoad() {
           cards: null,
         });
       }
-      case "Assaf!": {
-        netUtils.play({
-          move: "assaf",
-          cards: null,
-        });
-      }
     }
     activePlayerMove["selected-cards"].cards = [];
+    activePlayerMove.cardToTake = null;
     updateGameState();
     renderAll();
   }
