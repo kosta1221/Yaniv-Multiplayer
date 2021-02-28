@@ -58,7 +58,7 @@ async function onLoad() {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
   });
-  
+
   playerButtons.addEventListener("click", (e) => {
     let clickedBtn = e.target;
     executeMove(clickedBtn.innerHTML);
@@ -66,15 +66,22 @@ async function onLoad() {
 
   document.querySelector("#pile-deck").addEventListener("click", (e) => {
     if (lastDiscardedCards.length === 0) return;
-    const gameField = document.querySelector(".game-field");
+    if (activePlayerMove["selected-cards"].cards.length === 0) return;
+    const pileSelection = document.querySelector("#pile-selection");
+    pileSelection.innerHTML = "";
+    if (pileSelection.getAttribute("expanded") === "true") {
+      pileSelection.setAttribute("expanded", "false");
+      return;
+    }
+    pileSelection.setAttribute("expanded", "true");
     const bottomCard = utils.createCardElement(lastDiscardedCards[0]);
     const cardSelectability = playerInTurn === myName ? "selectable" : "unselectable";
     bottomCard.classList.add(cardSelectability);
-    gameField.appendChild(bottomCard);
+    pileSelection.appendChild(bottomCard);
     if (lastDiscardedCards.length > 1) {
       const topCard = utils.createCardElement(lastDiscardedCards[lastDiscardedCards.length-1]);
       topCard.classList.add(cardSelectability);
-      gameField.appendChild(topCard);
+      pileSelection.appendChild(topCard);
     }
   });
 
