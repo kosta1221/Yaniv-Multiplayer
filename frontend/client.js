@@ -49,37 +49,16 @@ async function onLoad() {
     readyButton.hidden = true;
     playerButtons.style.visibility = "visible";
     playerButtonsMobile.style.visibility = "visible";
-    // let x = window.matchMedia("(max-width: 1100px)");
-    // if (x.matches) {
-    //   playerButtonsMobile.style.display = "flex";
-    //   playerButtons.style.display = "none";
-    // } else {
-    //   playerButtonsMobile.style.display = "none";
-    //   playerButtons.style.display = "unset";
-    // }
     oppNames.forEach((name) => {
       name.style.display = "unset";
     });
   });
   
-  // window.addEventListener("resize", () => {
-  //   let x = window.matchMedia("(max-width: 1100px)");
-  //   if (x.matches) {
-  //     playerButtonsMobile.style.display = "flex";
-  //     playerButtons.style.display = "none";
-  //   } else {
-  //     playerButtonsMobile.style.display = "none";
-  //     playerButtons.style.display = "unset";
-  //   }
-  // })
-  
-  // playerButtonsMobile.style.display = "none";
-
-  
   playerElement.addEventListener("click", (e) => {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
   });
+  
   playerButtons.addEventListener("click", (e) => {
     let clickedBtn = e.target;
     executeMove(clickedBtn.innerHTML);
