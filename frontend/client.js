@@ -45,6 +45,7 @@ async function onLoad() {
 
   readyButton.addEventListener("click", async () => {
     netUtils.ready(myName);
+    await netUtils.startGame();
     await updateGameState();
     renderAll();
     readyButton.hidden = true;
@@ -156,6 +157,7 @@ async function onLoad() {
     playersElements.forEach((elem) => (elem.innerHTML = ""));
     const stacks = Array.from(document.querySelectorAll(".stack"));
     stacks.forEach((elem) => (elem.innerHTML = ""));
+    document.querySelectorAll("#pile-selection").innerHTML = "";
     const playerBox = document.createElement("div");
     const playerInfo = document.createElement("p");
     const lineBreak = document.createElement("BR");

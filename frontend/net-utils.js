@@ -2,14 +2,6 @@
 
 const netUtils = {
   URL: "http://localhost:3000",
-  getWaitingGames() {},
-  async createGame() {
-    return;
-    const init = {
-      method: "POST"
-    };
-    fetch(this.URL + "/createGame", init);
-  },
   async joinGame(userName) {
     mocks.joinGame(userName);
     return;
@@ -22,6 +14,13 @@ const netUtils = {
   ready(playerIdentity) {
     mocks.setReady(playerIdentity);
     return;
+  },
+  async startGame() {
+    return;
+    const init = {
+      method: "POST"
+    };
+    fetch(this.URL + "/createGame", init);
   },
   getPlayersStatus() {
     return mocks.playersReady();
