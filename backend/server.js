@@ -21,6 +21,27 @@ app.use(function (req, res, next) {
 	setTimeout(next, 100);
 });
 
+// if make turn, set time out for the player that comes after
+app.get("/ping/:id", (req, res) => {
+	const { pingingPlayerId } = req.params;
+
+	if (!players.some((player) => player.playerId !== pingingPlayerId)) {
+		res.status(401).json({
+			message: `Unrecognized ping, player with id ${requestingPlayerId} is not recognized!`,
+		});
+	} else {
+		let currentTime = Date.now();
+		for (const palyer of players) {
+			if (player.playerId === pingingPlayerId) {
+				player.lastPinged = currentTime;
+			}
+		}
+		console.log(
+			`Ping time: ${currentTime}, by player id: ${requestingPlayerId} of game with id:${gameId}:`
+		);
+	}
+});
+
 // EXAMPLE STATE REQUEST (GET):
 /* gameStateRequest = {
     URL: "/game/state",
@@ -29,7 +50,7 @@ app.use(function (req, res, next) {
         "playerId": "idString"
     }
 } */
-app.get("/status", (req, res) => {
+app.get("/game/state", (req, res) => {
 	const requestingPlayerId = req.headers.playerId;
 
 	if (!game || !gameId) {
@@ -59,6 +80,7 @@ app.post("/join", (req, res) => {
 	// create 36 char id for player
 	const id = uuid.v4();
 	body.playerId = id;
+	body.lastPinged = Date.now();
 	players.push(body);
 
 	if (!body.playerName) {

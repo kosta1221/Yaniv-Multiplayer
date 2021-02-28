@@ -1,10 +1,16 @@
 const classes = require("../classes");
 
-const mockPlayerNames = ["alon", "koren", "kosta", "dvir"];
+// const mockPlayerNames = [
+// 	{ "player-name": "alon", "player-id": "asdfwera" },
+// 	{ "player-name": "asdg", "player-id": "asdfgsaera" },
+// 	{ "player-name": "dfga", "player-id": "asdfsdfgra" },
+// 	{ "player-name": "fdghfsgh", "player-id": "asdfdsfgsdfgsdfgra" },
+// ];
 
-const mockGame = new classes.Game(mockPlayerNames);
+// const mockGame = new Game(mockPlayerNames);
+// console.log(mockGame.getGameState());
 
-const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
+// const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
 
 // console.log("The cards I want to discard from alon");
 // console.log(mockCardsToDiscard);
@@ -13,18 +19,18 @@ const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
 // console.log(mockGame);
 // console.log(mockGame.getGameState());
 
-try {
-	// makeTurn(mockGame, true);
-	makeTurn(mockGame, false, mockCardsToDiscard, true, null);
+// try {
+// 	// makeTurn(mockGame, true);
+// 	makeTurn(mockGame, false, mockCardsToDiscard, true, null);
 
-	const mockCardsToDiscard2 = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
-	makeTurn(mockGame, false, mockCardsToDiscard2, false, mockCardsToDiscard);
-} catch (error) {
-	console.log(error);
-}
+// 	const mockCardsToDiscard2 = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
+// 	makeTurn(mockGame, false, mockCardsToDiscard2, false, mockCardsToDiscard);
+// } catch (error) {
+// 	console.log(error);
+// }
 
 // console.log("Game after turn");
-console.log(mockGame);
+// console.log(mockGame);
 // console.log(mockGame.getGameState());
 
 function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, cardPickedFromSet) {
@@ -115,16 +121,14 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		if (cardsToDiscard.length === 1) {
 			const cardToDiscard = cardsToDiscard[0];
 			// the discarded card has to be from player's cards.
-			if (!playerInTurn.playerDeck.cards.some((card) => areObjectsSimilar(card, cardToDiscard))) {
+			if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
 				throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
 			}
 		} else if (cardsToDiscard.length > 1) {
 			// the discarded cards have to be from player's cards.
 			cardsToDiscard.forEach((cardToDiscard) => {
 				console.log(cardToDiscard);
-				console.log(playerInTurn.playerDeck.cards[5]);
-				console.log(areObjectsSimilar(playerInTurn.playerDeck.cards[5], cardToDiscard));
-				if (!playerInTurn.playerDeck.cards.some((card) => areObjectsSimilar(card, cardToDiscard))) {
+				if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
 					throw new Error(`Discarded cards have to be in ${playerInTurn.playerName}s cards!`);
 				}
 			});

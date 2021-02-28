@@ -260,7 +260,7 @@ class Deck {
 	removeCards(cardsToRemove) {
 		for (const cardToRemove of cardsToRemove) {
 			for (const card of this.cards) {
-				if (card == cardToRemove) {
+				if (card.cardEquals(cardToRemove)) {
 					this.cards.splice(this.cards.indexOf(card), 1);
 				}
 			}
