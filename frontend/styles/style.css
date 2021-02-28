@@ -245,6 +245,9 @@ h1 {
   -webkit-align-self: flex-start;
   -ms-flex-item-align: start;
   align-self: flex-start;
+  font-family: roboto;
+  letter-spacing: 1px;
+  font-size: 16px;
 }
 
 #left-opps-names:nth-child(2) {
@@ -287,6 +290,12 @@ h1 {
   background-color: rgba(245, 222, 179, 0.795);
 }
 
+#point-span {
+  font-family: roboto;
+  font-size: 14px;
+  padding: 2px;
+}
+
 #player-buttons-div {
   left: 20px;
 }
@@ -302,6 +311,7 @@ h1 {
   text-align: center;
   border-radius: 50%;
   border: 5px solid #fff;
+  font-family: roboto;
   background-color: rgba(245, 222, 179, 0.795);
 }
 
@@ -496,6 +506,9 @@ h1 {
     font-size: 9px;
     width: 20px;
     background-color: rgba(245, 222, 179, 0.795);
+  }
+  #point-span {
+    font-size: 9px;
   }
   #opp-name2 {
     position: absolute;

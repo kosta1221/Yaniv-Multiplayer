@@ -8,6 +8,7 @@ async function onLoad() {
   let playerInTurn;
   let matchNumber;
   let pileDeck;
+  let allPlayersPoints;
   const activePlayerMove = {
     "selected-cards": new Deck(),
   };
@@ -61,7 +62,7 @@ async function onLoad() {
     }
   });
   input.focus();
-  const STARTFAST = false; //change to false for full join sequence
+  const STARTFAST = true; //change to false for full join sequence
   playerButtonsMobile.style.display = "none";
 
   if (STARTFAST) {
@@ -81,6 +82,7 @@ async function onLoad() {
   async function updateGameState() {
     //runs every x seconds and asks for data relevant to player
     const state = await netUtils.getGameStateForPlayer(myName);
+    allPlayersPoints = state.playersPoints;
     player = new Player(
       state.cards,
       state.playersPoints[myName],
@@ -121,11 +123,12 @@ async function onLoad() {
     let j = 0;
     for (const opponentName in opponents) {
       const opponentNameTag = document.querySelector(`#opp-name${j + 1}`);
-
       const opponentElement = opponentsElements.item(j);
+      const pointsSpan = document.createElement("span");
       opponentsElements[1].classList.add("flip");
       opponentsElements[2].classList.add("flip");
-      opponentNameTag.innerHTML = opponentName;
+      opponentNameTag.appendChild(pointsSpan);
+      opponentNameTag.innerHTML = `${opponentName}, <span id="point-span">Points: ${allPlayersPoints[opponentName]}</span>`;
       opponentNameTag.hidden = false;
       j++;
       const opponent = opponents[opponentName];
@@ -281,7 +284,7 @@ async function onLoad() {
   }
 
   setInterval(() => {
-    if(playerInTurn === myName) return;
+    if (playerInTurn === myName) return;
     let state = netUtils.getGameStateForPlayer(myName);
     if (playerInTurn === myName) {
       return;
