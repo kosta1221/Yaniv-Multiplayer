@@ -249,24 +249,14 @@ async function onLoad() {
     //no cards selected => true
     if (selectedCards.length === 0) return true;
     //same rank cards => true
-    let isAllSelectedCardsSameRank = true;
-    for (let i = 0; i < selectedCards.length - 1; i++) {
-      if (selectedCards[i].rank !== selectedCards[i + 1].rank)
-        isAllSelectedCardsSameRank = false;
-    }
+    const isAllSelectedCardsSameRank = selectedCards.every((card, i, cards) => cards[0].rank === card.rank);
     if (isAllSelectedCardsSameRank && card.rank === selectedCards[0].rank)
       return true;
     //same suit series => true
-    let isAllSelectedCardsSameSuit = true;
-    for (let i = 0; i < selectedCards.length - 1; i++) {
-      if (selectedCards[i].suit !== selectedCards[i + 1].suit)
-        isAllSelectedCardsSameSuit = false;
-    }
+    const isAllSelectedCardsSameSuit = selectedCards.every((card, i, cards) => cards[0].suit === card.suit);
     const rankPlace = utils.ranks.indexOf(card.rank);
     const lowSelectedCard = utils.ranks.indexOf(selectedCards[0].rank);
-    const highSelectedCard = utils.ranks.indexOf(
-      selectedCards[selectedCards.length - 1].rank
-    );
+    const highSelectedCard = utils.ranks.indexOf(selectedCards[selectedCards.length - 1].rank);
     const isOneAboveOrBelow =
       lowSelectedCard - 1 === rankPlace || highSelectedCard + 1 === rankPlace;
     if (
