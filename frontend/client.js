@@ -61,7 +61,7 @@ async function onLoad() {
     }
   });
   input.focus();
-  const STARTFAST = true; //change to false for full join sequence
+  const STARTFAST = false; //change to false for full join sequence
   playerButtonsMobile.style.display = "none";
 
   if (STARTFAST) {
@@ -175,9 +175,11 @@ async function onLoad() {
 
     if (clickedCard.classList.contains("selected")) {
       clickedCard.classList.remove("selected");
+      makeShiny();
       activePlayerMove["selected-cards"].removeCard(card);
     } else {
       clickedCard.classList.add("selected");
+      makeShiny("true");
       activePlayerMove["selected-cards"].addCard(card);
     }
 
@@ -282,15 +284,44 @@ async function onLoad() {
 
   setInterval(() => {
     let state = netUtils.getGameStateForPlayer(myName);
-    if (state.playerInTurn === myName) {
+    if (playerInTurn === myName) {
       return;
     } else {
       updateGameState();
       renderAll();
     }
   }, 4000);
+
+  function makeShiny(bool) {
+    const tableDeckElement = document.querySelector("#table-deck");
+    const pileDeckElement = document.querySelector("#pile-deck");
+    if (bool) {
+      tableDeckElement.classList.add("shimmer-table");
+      pileDeckElement.classList.add("shimmer-pile");
+    } else if (!bool) {
+      tableDeckElement.classList.remove("shimmer-table");
+      pileDeckElement.classList.remove("shimmer-pile");
+    }
+  }
+
+  const gameField = document.querySelector(".game-field");
+  gameField.addEventListener("click", (e) => {
+    if (!e.target.classList.contains("card")) return;
+    let j = 0;
+    for (const card of pileDeck.cards) {
+      j++;
+      const cardElement = utils.createCardElement(card);
+      const cardSelectability =
+        playerInTurn === myName ? "selectable" : "unselectable";
+      cardElement.classList.add(cardSelectability);
+      gameField.appendChild(cardElement);
+      if (j === 3) {
+        break;
+      }
+    }
+  });
 }
 
 // TODO:
-//remove assaf
 //add dicarded cards selection
+// add player points and opp points

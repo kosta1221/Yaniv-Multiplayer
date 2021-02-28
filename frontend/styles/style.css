@@ -780,4 +780,50 @@ h1 {
     outline: none;
   }
 }
+
+.shimmer-table li:first-child > img {
+  background-color: #ccc;
+  -webkit-animation: glow 1s infinite alternate;
+          animation: glow 1s infinite alternate;
+}
+
+.shimmer-table li:last-child > img {
+  background-color: #ccc;
+  -webkit-animation: glow 1s infinite alternate;
+          animation: glow 1s infinite alternate;
+}
+
+.shimmer-pile li:first-child > img {
+  background-color: #ccc;
+  -webkit-animation: glow 1s infinite alternate;
+          animation: glow 1s infinite alternate;
+}
+
+.shimmer-pile li:last-child > img {
+  background-color: #ccc;
+  -webkit-animation: glow 1s infinite alternate;
+          animation: glow 1s infinite alternate;
+}
+
+@-webkit-keyframes glow {
+  from {
+    -webkit-box-shadow: 0 0 10px -10px #aef4af;
+            box-shadow: 0 0 10px -10px #aef4af;
+  }
+  to {
+    -webkit-box-shadow: 0 0 10px 10px #aef4af;
+            box-shadow: 0 0 10px 10px #aef4af;
+  }
+}
+
+@keyframes glow {
+  from {
+    -webkit-box-shadow: 0 0 10px -10px #aef4af;
+            box-shadow: 0 0 10px -10px #aef4af;
+  }
+  to {
+    -webkit-box-shadow: 0 0 10px 10px #aef4af;
+            box-shadow: 0 0 10px 10px #aef4af;
+  }
+}
 /*# sourceMappingURL=style.css.map */
