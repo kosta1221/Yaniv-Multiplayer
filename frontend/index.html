@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/style.css" />
+    <script src="../classes.js"></script>
+    <script src="./mocks.js"></script>
+    <script src="./net-utils.js"></script>
+    <script src="./utils.js"></script>
+    <script src="./client.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
+    <title>Yaniv</title>
+  </head>
+  <body disable-select="false">
+    <div id="left-opps-names">
+      <p id="opp-name1" hidden="true"></p>
+      <p id="opp-name2" hidden="true"></p>
+    </div>
+    <div id="right-opps-names">
+      <p id="opp-name3" hidden="true"></p>
+    </div>
+    <div class="game-board">
+      <div class="box">
+        <input type="text" id="login" placeholder="Enter name" />
+        <button id="join-button">Join Game</button>
+        <button id="ready-button" hidden>Start</button>
+      </div>
+      <div class="box player opponent"></div>
+      <div class="box"></div>
+      <div class="box player opponent"></div>
+      <div class="box game-field">
+        <ol id="table-deck" class="stack"></ol>
+        <ol id="pile-deck" class="stack"></ol>
+        <div id = "pile-selection" expanded = "false"></div>
+      </div>
+      <div class="box player opponent"></div>
+      <div class="box"></div>
+      <div class="box player active-player" id="active-player"></div>
+      
+      <div class="box" id="player-buttons-div" hidden>
+        <button class="place-button">Place</button>
+        <button class="yaniv-button">Yaniv!</button>
+        <!-- <button class="assaf-button">Assaf!</button> -->
+      </div>
+    </div>
+    <div class="box" id="player-buttons-mobile" hidden>
+      <button class="place-button">Place</button>
+      <button class="yaniv-button">Yaniv!</button>
+      <!-- <button class="assaf-button">Assaf!</button> -->
+    </div>
+  </body>
+</html>

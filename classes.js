@@ -255,6 +255,11 @@ class Deck {
 	putLastCardFromOneDeckToAnother(secondDeck) {
 		secondDeck.cards.push(this.cards[this.cards.length - 1]);
 	}
+    
+    //adds card to top of deck
+    addCard(card) {
+        this.cards.push(card);
+    }
 
 	// removes cards from deck
 	removeCards(cardsToRemove) {
