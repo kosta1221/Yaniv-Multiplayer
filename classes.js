@@ -122,6 +122,10 @@ class Card {
 		return this.#isJoker;
 	}
 
+	cardEquals(card) {
+		return this.#suit === card.suit && this.#rank === card.rank && this.#isJoker === card.isJoker;
+	}
+
 	// set suit(suit) {
 	// 	this.#suit = suit;
 	// }
