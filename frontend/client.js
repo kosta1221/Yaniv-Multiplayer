@@ -102,7 +102,9 @@ async function onLoad() {
     playersElements.forEach((elem) => (elem.innerHTML = ""));
     const stacks = Array.from(document.querySelectorAll(".stack"));
     stacks.forEach((elem) => (elem.innerHTML = ""));
-
+    const playerBox = document.createElement("div");
+    const playerInfo = document.createElement("p");
+    const lineBreak = document.createElement("BR");
     const playersStatus = netUtils.getPlayersStatus();
     let isAllReady = true;
     for (const name in playersStatus) {
@@ -117,6 +119,15 @@ async function onLoad() {
       cardElement.classList.add(cardSelectability);
       playerElement.appendChild(cardElement);
     }
+    playerBox.setAttribute("id", "player-tag");
+    playerInfo.setAttribute("id", "my-name");
+    playerInfo.appendChild(document.createTextNode(`Name: ${myName}`));
+    playerInfo.appendChild(lineBreak);
+    playerInfo.appendChild(
+      document.createTextNode(`Points: ${allPlayersPoints[myName]}`)
+    );
+    playerBox.appendChild(playerInfo);
+    playerElement.appendChild(playerBox);
 
     //RENDER OPPONENTS
     const opponentsElements = document.querySelectorAll(".opponent");

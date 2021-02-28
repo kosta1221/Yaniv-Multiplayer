@@ -88,6 +88,23 @@ body[disable-select="true"] {
   outline: none;
 }
 
+#my-name {
+  font-weight: bold;
+}
+
+#player-tag {
+  position: absolute;
+  top: 85vh;
+  text-align: center;
+  word-wrap: break-word;
+  padding-left: 14px;
+  padding-right: 14px;
+  border-radius: 12px;
+  background-color: rgba(245, 222, 179, 0.657);
+  height: 100px;
+  width: 35%;
+}
+
 @media (max-width: 900px) {
   #join-button {
     position: relative;
@@ -683,7 +700,7 @@ $card-width: 100px;
     display: flex;
     justify-content: space-between;
     margin: auto;
-    width: 22vw;
+    width: 62vw;
     padding-top: 1%;
     .place-button {
       position: relative;
