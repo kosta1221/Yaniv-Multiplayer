@@ -134,13 +134,13 @@ async function onLoad() {
   }
 
   async function joinGame() {
-    await netUtils.joinGame(myName);
+    id = await netUtils.joinGame(myName);
     // sessionStorage.setItem("gameStarted", "true");
   }
   
   async function updateGameState() {
     //runs every x seconds and asks for data relevant to player
-    const state = await netUtils.getGameStateForPlayer(myName);
+    const state = await netUtils.getGameStateForPlayer(myName, id);
     allPlayersPoints = state.playersPoints;
     player = new Player(
       myName,
@@ -322,14 +322,14 @@ async function onLoad() {
             cards: activePlayerMove["selected-cards"],
             isCardToGetFromGameDeck,
             cardPickedFromSet: activePlayerMove.cardToTake
-          });
+          }, id);
         }
       }
       case "Yaniv!": {
         netUtils.play({
           move: "yaniv",
           cards: null,
-        });
+        }, id);
       }
     }
     activePlayerMove["selected-cards"].cards = [];

@@ -7,29 +7,31 @@ const netUtils = {
     return;
     const init = {
       method: "POST",
-      body: JSON.stringify({"player-name": userName})
+      body: JSON.stringify({playerName: userName})
     }; 
-    fetch(this.URL + "/join", init);
+    const response = await fetch(this.URL + "/join", init);
+    const body = await response.json();
+    return body.playerId;
   },
   ready(playerIdentity) {
     mocks.setReady(playerIdentity);
     return;
   },
-  async startGame() {
+  async startGame(id) {
     return;
     const init = {
       method: "POST"
     };
-    fetch(this.URL + "/createGame", init);
+    fetch(`${this.URL}/game/new/${id}`, init);
   },
   getPlayersStatus() {
     return mocks.playersReady();
   },
-  async getGameStateForPlayer(playerIdentity) {
+  async getGameStateForPlayer(playerIdentity, id) {
     return mocks.state(playerIdentity);
-    fetch(this.URL + "/status");
+    fetch(`${this.URL}/game/state/${id}`);
   },
-  async play(move) {
+  async play(move, id) {
     mocks.executeMove(move);
     return;
     const isYaniv = move.move === "Yaniv"; 
@@ -43,7 +45,7 @@ const netUtils = {
         cardPickedFromSet: null
       })
     };
-    fetch(this.URL , init);
+    fetch(`${this.URL}/game/play/${id}` , init);
   }
 };
 
