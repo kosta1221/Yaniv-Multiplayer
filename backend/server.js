@@ -49,9 +49,8 @@ let playersTimedOut = [];
 // 			);
 // 		}
 // 	}
-// }, TIMEOUT_CHECKING_TIME);
-
-
+// }, TIMEOUT_CHECKING_TIME)
+app.use(express.static("../frontend"));
 app.use(cors());
 // turning request into JSON
 app.use(express.json());

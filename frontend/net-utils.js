@@ -1,7 +1,7 @@
 "use strict"
 
 const netUtils = {
-  URL: "http://localhost:3000",
+  URL: "http://464aa3064c24.ngrok.io",
   async joinGame(userName) {
     // mocks.joinGame(userName);
     // return;
