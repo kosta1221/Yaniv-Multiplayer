@@ -1,7 +1,7 @@
 
 node_modules
-players
+players/*
 !player/.gitkeep
 games
-timedOutPlayers
+timedOutPlayers/*
 !timedOutPlayers/.gitkeep
