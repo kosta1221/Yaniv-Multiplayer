@@ -69,7 +69,7 @@ app.use(function (req, res, next) {
     }
 } */
 // if received ping from player, set his lastPinged property to the current time. also sets out the game state as the response.
-app.get("/ping:playerId", (req, res) => {
+app.get("/ping/:playerId", (req, res) => {
 	const pingingPlayerId = req.params.playerId;
 
 	if (!players.some((player) => player.playerId !== pingingPlayerId)) {
@@ -99,7 +99,7 @@ app.get("/ping:playerId", (req, res) => {
     }
 } */
 // GET requests to /game/state:playerId gets the current state of the game for playerId
-app.get("/game/state:playerId", (req, res) => {
+app.get("/game/state/:playerId", (req, res) => {
 	const requestingPlayerId = req.params.playerId;
 
 	if (!game || !gameId) {
@@ -159,7 +159,7 @@ app.post("/join", (req, res) => {
     }
 } */
 // POST request to /game/new:playerId - create a new game
-app.post("/game/new:playerId", (req, res) => {
+app.post("/game/new/:playerId", (req, res) => {
 	const requestingPlayerId = req.headers.playerId;
 
 	if (!players.some((player) => player.playerId !== requestingPlayerId)) {
@@ -201,7 +201,7 @@ app.post("/game/new:playerId", (req, res) => {
     } (* are optional parameters)
 }; */
 // PUT requests to /game/play:playerId to make a new turn
-app.put("/game/play:playerId", (req, res) => {
+app.put("/game/play/:playerId", (req, res) => {
 	const body = req.body;
 	const requestingPlayerId = req.params.playerId;
 	if (requestingPlayerId !== game.playerInTurn.playerId) {
