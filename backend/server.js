@@ -86,7 +86,7 @@ app.get("/ping/:playerId", (req, res) => {
 		console.log(
 			`Ping time: ${currentTime}, by player id: ${requestingPlayerId} of game with id:${gameId}:`
 		);
-		res.send(game.getGameState());
+		res.send(game.getGameState(pingingPlayerId));
 	}
 });
 
@@ -110,8 +110,8 @@ app.get("/game/state/:playerId", (req, res) => {
 		});
 	} else {
 		console.log(`Game state for player id: ${requestingPlayerId} of game with id:${gameId}:`);
-		console.log(game.getGameState());
-		res.send(game.getGameState());
+		console.log(game.getGameState(requestingPlayerId));
+		res.send(game.getGameState(requestingPlayerId));
 	}
 });
 

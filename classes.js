@@ -172,11 +172,13 @@ class Game {
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
 
-		this.getGameState = function () {
+		this.getGameState = function (requestingPlayerId) {
 			const gameState = {};
+			gameState.allPlayersNames = [];
 			gameState.allPlayersPoints = {};
 			gameState.allPlayersNumberOfCards = {};
 			for (const player of this.players) {
+				gameState.allPlayersNames.push(player.playerName);
 				Object.defineProperty(gameState.allPlayersPoints, player.playerName, {
 					value: player.points,
 					writable: false,
@@ -185,14 +187,15 @@ class Game {
 					value: player.numberOfCards,
 					writable: false,
 				});
-			}
 
+				if (requestingPlayerId === player.playerId) {
+					gameState.requestingPlayer = player;
+				}
+			}
 			gameState.openCards = this.openCardDeck;
 
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
-			gameState.players = this.players;
-			gameState.playerNamesAndIds = playerNamesAndIds;
 
 			return gameState;
 		};
@@ -255,11 +258,11 @@ class Deck {
 	putLastCardFromOneDeckToAnother(secondDeck) {
 		secondDeck.cards.push(this.cards[this.cards.length - 1]);
 	}
-    
-    //adds card to top of deck
-    addCard(card) {
-        this.cards.push(card);
-    }
+
+	//adds card to top of deck
+	addCard(card) {
+		this.cards.push(card);
+	}
 
 	// removes cards from deck
 	removeCards(cardsToRemove) {
