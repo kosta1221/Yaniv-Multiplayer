@@ -1,7 +1,7 @@
 "use strict"
 
 const netUtils = {
-  URL: "http://464aa3064c24.ngrok.io",
+  URL: "http://localhost:3000",
   async joinGame(userName) {
     // mocks.joinGame(userName);
     // return;
@@ -16,9 +16,9 @@ const netUtils = {
     const response = await fetch(this.URL + "/join", init);
     const body = await response.json();
     const id = body.playerId;
-    setInterval(()=>{
-      fetch(`${this.URL}/ping/${id}`);
-    }, 5000);
+    // setInterval(()=>{
+    //   fetch(`${this.URL}/ping/${id}`);
+    // }, 25000);
     return id;
   },
   ready(playerIdentity) {

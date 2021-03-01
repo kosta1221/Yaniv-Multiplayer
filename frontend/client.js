@@ -120,7 +120,7 @@ async function onLoad() {
     if (playerInTurn === myName || !isGameStarted) return;
     updateGameState();
     renderAll();
-  }, 4000);
+  }, 25000);
 
   input.focus();
   playerButtons.style.visibility = "hidden";
