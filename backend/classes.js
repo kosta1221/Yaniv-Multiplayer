@@ -173,7 +173,7 @@ class Game {
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
-
+		console.log("game constructor breakpoint 3");
 		this.getGameState = function (requestingPlayerId) {
 			const gameState = {};
 			gameState.allPlayersNames = [];
@@ -201,6 +201,7 @@ class Game {
 
 			return gameState;
 		};
+		console.log("game constructor breakpoint 4");
 	}
 }
 

@@ -3,41 +3,59 @@
 const netUtils = {
   URL: "http://localhost:3000",
   async joinGame(userName) {
-    mocks.joinGame(userName);
+    // mocks.joinGame(userName);
     // return;
     const init = {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
       body: JSON.stringify({playerName: userName})
     }; 
+    console.log("trying to join with name: " + userName);
     const response = await fetch(this.URL + "/join", init);
     const body = await response.json();
-    console.log(body);
-    return body.playerId;
+    const id = body.playerId;
+    setInterval(()=>{
+      console.log(id);
+      fetch(`${this.URL}/ping/${id}`);
+    }, 5000);
+    return id;
   },
   ready(playerIdentity) {
-    mocks.setReady(playerIdentity);
+    // mocks.setReady(playerIdentity);
     return;
   },
   async startGame(id) {
     // return;
     const init = {
-      method: "POST"
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
     };
-    fetch(`${this.URL}/game/new/${id}`, init);
+    await fetch(`${this.URL}/game/new/${id}`, init);
   },
   getPlayersStatus() {
-    return mocks.playersReady();
+    // return; mocks.playersReady();
   },
   async getGameStateForPlayer(playerIdentity, id) {
     // return mocks.state(playerIdentity);
     const response = await fetch(`${this.URL}/game/state/${id}`);
     const body = response.json();
     console.log(body);
-    
-    return body;
+    const state = {
+      allPlayersNames: body.allPlayersNames,
+      allPlayersPoints: body.allPlayersPoints,
+      allPlayersNumberOfCards: body.allPlayersNumberOfCards,
+      playerDeck: body.requestingPlayer.playerDeck,
+      openCards: body.openCards,
+      playerInTurn: body.playerInTurn
+    };
+    return state;
   },
   async play(move, id) {
-    mocks.executeMove(move);
+    // mocks.executeMove(move);
     // return;
     const isYaniv = move.move === "Yaniv"; 
     const cards = move.cards.cards;

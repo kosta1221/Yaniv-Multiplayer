@@ -1,8 +1,9 @@
 const express = require("express");
 const fs = require("fs");
+const cors = require("cors");
 const uuid = require("uuid");
 const gameManager = require("./game-manager.js");
-const classes = require("../classes");
+const classes = require("./classes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,41 +16,43 @@ let players = [];
 let playersTimedOut = [];
 
 // Checking for player timeouts every TIMEOUT_CHECKING_TIME milliseconds.
-setInterval(() => {
-	for (const player of players) {
-		if (Date.now() - player.lastPinged > PLAYER_TIMEOUT) {
-			playersTimedOut.push(player);
-			players.splice(players.indexOf(player), 1);
-			console.log(
-				`Moved player ${player.playerName}, id: ${player.playerId}, to timed out players!`
-			);
-			console.log(
-				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
-					Date.now() - player.lastPinged
-				} ms ago.`
-			);
+// setInterval(() => {
+// 	for (const player of players) {
+// 		if (Date.now() - player.lastPinged > PLAYER_TIMEOUT) {
+// 			playersTimedOut.push(player);
+// 			players.splice(players.indexOf(player), 1);
+// 			console.log(
+// 				`Moved player ${player.playerName}, id: ${player.playerId}, to timed out players!`
+// 			);
+// 			console.log(
+// 				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
+// 					Date.now() - player.lastPinged
+// 				} ms ago.`
+// 			);
 
-			// Adding reason for timeout in the player file
-			fs.appendFileSync(
-				`./players/${player.playerId}.json`,
-				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
-					Date.now() - player.lastPinged
-				} ms ago.`
-			);
+// 			// Adding reason for timeout in the player file
+// 			fs.appendFileSync(
+// 				`./players/${player.playerId}.json`,
+// 				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
+// 					Date.now() - player.lastPinged
+// 				} ms ago.`
+// 			);
 
-			// Moving the player file to timedOutPlayers folder
-			fs.rename(
-				`./players/${player.playerId}.json`,
-				`./timedOutPlayers/${player.playerId}.json`,
-				function (err) {
-					if (err) throw err;
-					console.log("Successfully moved players file to timedOutPlayers!");
-				}
-			);
-		}
-	}
-}, TIMEOUT_CHECKING_TIME);
+// 			// Moving the player file to timedOutPlayers folder
+// 			fs.rename(
+// 				`./players/${player.playerId}.json`,
+// 				`./timedOutPlayers/${player.playerId}.json`,
+// 				function (err) {
+// 					if (err) throw err;
+// 					console.log("Successfully moved players file to timedOutPlayers!");
+// 				}
+// 			);
+// 		}
+// 	}
+// }, TIMEOUT_CHECKING_TIME);
 
+
+app.use(cors());
 // turning request into JSON
 app.use(express.json());
 
@@ -71,10 +74,9 @@ app.use(function (req, res, next) {
 // if received ping from player, set his lastPinged property to the current time. also sets out the game state as the response.
 app.get("/ping/:playerId", (req, res) => {
 	const pingingPlayerId = req.params.playerId;
-
-	if (!players.some((player) => player.playerId !== pingingPlayerId)) {
-		res.status(401).json({
-			message: `Unrecognized ping, player with id ${requestingPlayerId} is not recognized!`,
+	if (!players.some((player) => player.playerId === pingingPlayerId)) {
+		res.status(401).send({
+			message: `Unrecognized ping, player with id ${pingingPlayerId} is not recognized!`,
 		});
 	} else {
 		let currentTime = Date.now();
@@ -84,9 +86,9 @@ app.get("/ping/:playerId", (req, res) => {
 			}
 		}
 		console.log(
-			`Ping time: ${currentTime}, by player id: ${requestingPlayerId} of game with id:${gameId}:`
+			`Ping time: ${currentTime}, by player id: ${pingingPlayerId}`
 		);
-		res.send(game.getGameState(pingingPlayerId));
+		res.send("Pong " + pingingPlayerId);
 	}
 });
 
@@ -128,7 +130,7 @@ app.get("/game/state/:playerId", (req, res) => {
 }; */
 // POST requests to /join adds a new player file and gives him an id
 app.post("/join", (req, res) => {
-	const body = req.body;
+	const body = req.body;console.log(body);
 	// create 36 char id for player
 	const id = uuid.v4();
 	body.playerId = id;
@@ -144,7 +146,7 @@ app.post("/join", (req, res) => {
 				res.status(500).json({ message: "Internal server error", error: err });
 			} else {
 				console.log(`joined player id: ${id}, name: ${body.playerName}`);
-				res.status(201).json(body);
+				res.status(201).send(body);
 			}
 		});
 	}
@@ -174,14 +176,15 @@ app.post("/game/new/:playerId", (req, res) => {
 			gameId = uuid.v4();
 			body.gameId = gameId;
 
-			console.log(players);
+			// console.log(players);
 			game = new classes.Game(players);
-			body.status = newGame;
+			// body.status = newGame;
 
 			console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
 			res.status(201).json(body);
 		} catch (error) {
-			res.status(500).json({ message: "Internal server error", error: err });
+			console.log("failed to start game");
+			res.status(500).json({ message: "Internal server error", error: error });
 		}
 	}
 });

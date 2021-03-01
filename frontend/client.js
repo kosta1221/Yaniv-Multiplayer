@@ -45,8 +45,8 @@ async function onLoad() {
   });
 
   readyButton.addEventListener("click", async () => {
-    netUtils.ready(myName);
-    await netUtils.startGame();
+    // netUtils.ready(myName);
+    await netUtils.startGame(id);
     isGameStarted = true;
     await updateGameState();
     renderAll();
@@ -141,21 +141,21 @@ async function onLoad() {
   async function updateGameState() {
     //runs every x seconds and asks for data relevant to player
     const state = await netUtils.getGameStateForPlayer(myName, id);
-    allPlayersPoints = state.playersPoints;
+    allPlayersPoints = state.allPlayersPoints;
     player = new Player(
       myName,
       null,
       allPlayersPoints[myName],
       state.cards
     );
-    for (const playerName of state.playerNames) {
+    for (const playerName of state.allPlayersNames) {
       if (playerName === myName) continue;
-      const points = state.playersPoints[playerName];
-      const numberOfCards = state.playersCardNumbers[playerName];
+      const points = allPlayersPoints[playerName];
+      const numberOfCards = state.allPlayersNumberOfCards[playerName];
       opponents[playerName] = new Player(playerName, null, points, null);
       opponents[playerName].numberOfCards = numberOfCards;
     }
-    pileDeck = state.pileDeck;
+    pileDeck = new Deck(state.openCards.cards);
     playerInTurn = state.playerInTurn;
   }
 
@@ -168,12 +168,12 @@ async function onLoad() {
     const playerBox = document.createElement("div");
     const playerInfo = document.createElement("p");
     const lineBreak = document.createElement("BR");
-    const playersStatus = netUtils.getPlayersStatus();
-    let isAllReady = true;
-    for (const name in playersStatus) {
-      isAllReady = isAllReady && playersStatus[name];
-    }
-    if (!isAllReady) return;
+    // const playersStatus = netUtils.getPlayersStatus();
+    // let isAllReady = true;
+    // for (const name in playersStatus) {
+    //   isAllReady = isAllReady && playersStatus[name];
+    // }
+    // if (!isAllReady) return;
     //RENDER PLAYER
     for (const card of player.playerDeck.cards) {
       const cardElement = utils.createCardElement(card);
