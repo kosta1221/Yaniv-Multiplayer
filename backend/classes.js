@@ -83,14 +83,13 @@ class Player {
 
 // A class for building card objects
 class Card {
-	#suit;
-	#rank;
-	#isJoker;
 	constructor(suit, rank, isJoker) {
-		this.#suit = suit;
-		this.#rank = rank;
-		this.#isJoker = isJoker;
-
+		this.suit = suit;
+		this.rank = rank;
+		this.isJoker = isJoker;
+		
+		
+		
 		switch (rank) {
 			case "ace":
 				this.rankIndex = 1;
@@ -110,20 +109,20 @@ class Card {
 		}
 	}
 
-	get suit() {
-		return this.#suit;
-	}
+	// get suit() {
+	// 	return this.suit;
+	// }
 
-	get rank() {
-		return this.#rank;
-	}
+	// get rank() {
+	// 	return this.rank;
+	// }
 
-	get isJoker() {
-		return this.#isJoker;
-	}
+	// get isJoker() {
+	// 	return this.isJoker;
+	// }
 
 	cardEquals(card) {
-		return this.#suit === card.suit && this.#rank === card.rank && this.#isJoker === card.isJoker;
+		return this.suit === card.suit && this.rank === card.rank && this.isJoker === card.isJoker;
 	}
 
 	// set suit(suit) {
@@ -142,24 +141,25 @@ class Card {
 // A class for having instances of games
 class Game {
 	constructor(playerNamesAndIds, gameDeck) {
-		console.log("game construct test");
+		
 
 		if (gameDeck) {
 			this.gameDeck = gameDeck;
 		} else {
 			const fullDeck = new Deck();
 			fullDeck.createNewFullDeck();
+			console.log("game construct test 1.5");
 			fullDeck.shuffleDeck();
 			this.gameDeck = fullDeck;
 		}
-		console.log("game construct test");
+		
 		this.players = [];
 		for (const playerNameAndId of playerNamesAndIds) {
 			const player = new Player(playerNameAndId.playerName, playerNameAndId.playerId);
 			this.players.push(player);
 			player.giveFiveCardsFromTopOfDeck(this.gameDeck);
 		}
-		console.log("game constructor player: " + this.players);
+		
 		this.turn = 0;
 		this.playerInTurn = this.players[0];
 
@@ -173,22 +173,22 @@ class Game {
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
-		console.log("game constructor breakpoint 3");
 		this.getGameState = function (requestingPlayerId) {
 			const gameState = {};
 			gameState.allPlayersNames = [];
 			gameState.allPlayersPoints = {};
 			gameState.allPlayersNumberOfCards = {};
 			for (const player of this.players) {
+				console.log("get state for: ");
+				console.log(player);
+				console.log("get state for: " + player.playerName);
 				gameState.allPlayersNames.push(player.playerName);
-				Object.defineProperty(gameState.allPlayersPoints, player.playerName, {
-					value: player.points,
-					writable: false,
-				});
-				Object.defineProperty(gameState.allPlayersNumberOfCards, player.playerName, {
-					value: player.numberOfCards,
-					writable: false,
-				});
+				gameState.allPlayersPoints[player.playerName] = player.points;
+				gameState.allPlayersNumberOfCards[player.playerName] = player.numberOfCards;
+				// Object.defineProperty(gameState.allPlayersNumberOfCards, player.playerName, {
+				// 	value: player.numberOfCards,
+				// 	writable: false,
+				// });
 
 				if (requestingPlayerId === player.playerId) {
 					gameState.requestingPlayer = player;
@@ -198,10 +198,11 @@ class Game {
 
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
-
+			console.log("state:");
+			console.log(gameState);
 			return gameState;
 		};
-		console.log("game constructor breakpoint 4");
+		
 	}
 }
 
@@ -221,7 +222,9 @@ class Deck {
 		let ranks = ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"];
 		for (let i = 0; i < suits.length; i++) {
 			for (let j = 0; j < ranks.length; j++) {
+			
 				this.cards.push(new Card(suits[i], ranks[j], false));
+				
 			}
 		}
 		this.cards.push(new Card(null, null, true));

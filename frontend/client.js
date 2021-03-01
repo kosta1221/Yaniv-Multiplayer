@@ -146,7 +146,7 @@ async function onLoad() {
       myName,
       null,
       allPlayersPoints[myName],
-      state.cards
+      state.playerDeck
     );
     for (const playerName of state.allPlayersNames) {
       if (playerName === myName) continue;

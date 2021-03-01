@@ -17,7 +17,6 @@ const netUtils = {
     const body = await response.json();
     const id = body.playerId;
     setInterval(()=>{
-      console.log(id);
       fetch(`${this.URL}/ping/${id}`);
     }, 5000);
     return id;
@@ -42,7 +41,7 @@ const netUtils = {
   async getGameStateForPlayer(playerIdentity, id) {
     // return mocks.state(playerIdentity);
     const response = await fetch(`${this.URL}/game/state/${id}`);
-    const body = response.json();
+    const body = await response.json();
     console.log(body);
     const state = {
       allPlayersNames: body.allPlayersNames,
@@ -50,7 +49,7 @@ const netUtils = {
       allPlayersNumberOfCards: body.allPlayersNumberOfCards,
       playerDeck: body.requestingPlayer.playerDeck,
       openCards: body.openCards,
-      playerInTurn: body.playerInTurn
+      playerInTurn: body.nameOfPlayerInTurn
     };
     return state;
   },

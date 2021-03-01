@@ -106,7 +106,7 @@ app.get("/game/state/:playerId", (req, res) => {
 
 	if (!game || !gameId) {
 		res.status(404).json({ message: "Game not found!" });
-	} else if (!players.some((player) => player.playerId !== requestingPlayerId)) {
+	} else if (!players.some((player) => player.playerId === requestingPlayerId)) {
 		res.status(401).json({
 			message: `Unauthorized request to get game state, player with id ${requestingPlayerId} is not recognized!`,
 		});
@@ -176,9 +176,8 @@ app.post("/game/new/:playerId", (req, res) => {
 			gameId = uuid.v4();
 			body.gameId = gameId;
 
-			// console.log(players);
+			
 			game = new classes.Game(players);
-			// body.status = newGame;
 
 			console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
 			res.status(201).json(body);
