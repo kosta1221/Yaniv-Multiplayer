@@ -1,5 +1,7 @@
 
 node_modules
 players
+!player/.gitkeep
 games
 timedOutPlayers
+!timedOutPlayers/.gitkeep
