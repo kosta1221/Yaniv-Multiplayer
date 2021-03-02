@@ -87,9 +87,7 @@ class Card {
 		this.suit = suit;
 		this.rank = rank;
 		this.isJoker = isJoker;
-		
-		
-		
+
 		switch (rank) {
 			case "ace":
 				this.rankIndex = 1;
@@ -141,8 +139,6 @@ class Card {
 // A class for having instances of games
 class Game {
 	constructor(playerNamesAndIds, gameDeck) {
-		
-
 		if (gameDeck) {
 			this.gameDeck = gameDeck;
 		} else {
@@ -152,14 +148,14 @@ class Game {
 			fullDeck.shuffleDeck();
 			this.gameDeck = fullDeck;
 		}
-		
+
 		this.players = [];
 		for (const playerNameAndId of playerNamesAndIds) {
 			const player = new Player(playerNameAndId.playerName, playerNameAndId.playerId);
 			this.players.push(player);
 			player.giveFiveCardsFromTopOfDeck(this.gameDeck);
 		}
-		
+
 		this.turn = 0;
 		this.playerInTurn = this.players[0];
 
@@ -179,9 +175,6 @@ class Game {
 			gameState.allPlayersPoints = {};
 			gameState.allPlayersNumberOfCards = {};
 			for (const player of this.players) {
-				console.log("get state for: ");
-				console.log(player);
-				console.log("get state for: " + player.playerName);
 				gameState.allPlayersNames.push(player.playerName);
 				gameState.allPlayersPoints[player.playerName] = player.points;
 				gameState.allPlayersNumberOfCards[player.playerName] = player.numberOfCards;
@@ -198,11 +191,8 @@ class Game {
 
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
-			console.log("state:");
-			console.log(gameState);
 			return gameState;
 		};
-		
 	}
 }
 
@@ -222,9 +212,7 @@ class Deck {
 		let ranks = ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"];
 		for (let i = 0; i < suits.length; i++) {
 			for (let j = 0; j < ranks.length; j++) {
-			
 				this.cards.push(new Card(suits[i], ranks[j], false));
-				
 			}
 		}
 		this.cards.push(new Card(null, null, true));

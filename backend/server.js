@@ -84,9 +84,7 @@ app.get("/ping/:playerId", (req, res) => {
 				player.lastPinged = currentTime;
 			}
 		}
-		console.log(
-			`Ping time: ${currentTime}, by player id: ${pingingPlayerId}`
-		);
+		console.log(`Ping time: ${currentTime}, by player id: ${pingingPlayerId}`);
 		res.send("Pong " + pingingPlayerId);
 	}
 });
@@ -129,7 +127,7 @@ app.get("/game/state/:playerId", (req, res) => {
 }; */
 // POST requests to /join adds a new player file and gives him an id
 app.post("/join", (req, res) => {
-	const body = req.body;console.log(body);
+	const body = req.body;
 	// create 36 char id for player
 	const id = uuid.v4();
 	body.playerId = id;
@@ -175,7 +173,6 @@ app.post("/game/new/:playerId", (req, res) => {
 			gameId = uuid.v4();
 			body.gameId = gameId;
 
-			
 			game = new classes.Game(players);
 
 			console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
@@ -209,18 +206,19 @@ app.put("/game/play/:playerId", (req, res) => {
 		res.status(401).json({
 			message: `Unauthorized request to make turn, it is not ${requestingPlayerId.playerName}'s turn!`,
 		});
-	}
-
-	try {
-		gameManager.makeTurn(
-			game,
-			body.callYaniv,
-			body.cardsToDiscard,
-			body.isCardToGetFromGameDeck,
-			body.cardPickedFromSet
-		);
-	} catch (error) {
-		res.status(500).json({ message: "Illegal move error!", error: err });
+	} else {
+		try {
+			console.log(body.callYaniv);
+			gameManager.makeTurn(
+				game,
+				body.callYaniv,
+				body.cardsToDiscard,
+				body.isCardToGetFromGameDeck,
+				body.cardPickedFromSet
+			);
+		} catch (error) {
+			res.status(500).json(error);
+		}
 	}
 });
 
