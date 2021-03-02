@@ -16,50 +16,50 @@ let players = [];
 let playersTimedOut = [];
 
 // Checking for player timeouts every TIMEOUT_CHECKING_TIME milliseconds.
-// setInterval(() => {
-// 	for (const player of players) {
-// 		if (Date.now() - player.lastPinged > PLAYER_TIMEOUT) {
-// 			playersTimedOut.push(player);
-// 			players.splice(players.indexOf(player), 1);
-// 			console.log(
-// 				`Moved player ${player.playerName}, id: ${player.playerId}, to timed out players!`
-// 			);
-// 			console.log(
-// 				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
-// 					Date.now() - player.lastPinged
-// 				} ms ago.`
-// 			);
+setInterval(() => {
+	for (const player of players) {
+		if (Date.now() - player.lastPinged > PLAYER_TIMEOUT) {
+			playersTimedOut.push(player);
+			players.splice(players.indexOf(player), 1);
+			console.log(
+				`Moved player ${player.playerName}, id: ${player.playerId}, to timed out players!`
+			);
+			console.log(
+				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
+					Date.now() - player.lastPinged
+				} ms ago.`
+			);
 
-// 			// Adding reason for timeout in the player file
-// 			fs.appendFileSync(
-// 				`./players/${player.playerId}.json`,
-// 				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
-// 					Date.now() - player.lastPinged
-// 				} ms ago.`
-// 			);
+			// Adding reason for timeout in the player file
+			fs.appendFileSync(
+				`./players/${player.playerId}.json`,
+				`Reason for timeout: haven't recieved ping from player in ${PLAYER_TIMEOUT} ms, last ping was ${
+					Date.now() - player.lastPinged
+				} ms ago.`
+			);
 
-// 			// Moving the player file to timedOutPlayers folder
-// 			fs.rename(
-// 				`./players/${player.playerId}.json`,
-// 				`./timedOutPlayers/${player.playerId}.json`,
-// 				function (err) {
-// 					if (err) throw err;
-// 					console.log("Successfully moved players file to timedOutPlayers!");
-// 				}
-// 			);
-// 		}
-// 	}
-// }, TIMEOUT_CHECKING_TIME)
+			// Moving the player file to timedOutPlayers folder
+			fs.rename(
+				`./players/${player.playerId}.json`,
+				`./timedOutPlayers/${player.playerId}.json`,
+				function (err) {
+					if (err) throw err;
+					console.log("Successfully moved players file to timedOutPlayers!");
+				}
+			);
+		}
+	}
+}, TIMEOUT_CHECKING_TIME)
 app.use(express.static("../frontend"));
 app.use(cors());
 // turning request into JSON
 app.use(express.json());
 
-// middleware for waiting 0.1 seconds between server requests
+// middleware for waiting 0.01 seconds between server requests
 app.use(function (req, res, next) {
 	console.log("Time:", Date.now());
 	console.log("Request Type:", req.method);
-	setTimeout(next, 100);
+	setTimeout(next, 10);
 });
 
 // EXAMPLE PING REQUEST (GET):

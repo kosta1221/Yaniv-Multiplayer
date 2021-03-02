@@ -16,9 +16,9 @@ const netUtils = {
 		const response = await fetch(this.URL + "/join", init);
 		const body = await response.json();
 		const id = body.playerId;
-		// setInterval(()=>{
-		//   fetch(`${this.URL}/ping/${id}`);
-		// }, 25000);
+		setInterval(()=>{
+		  fetch(`${this.URL}/ping/${id}`);
+		}, 20000);
 		console.log("join request responded with:");
 		console.log(body);
 		return id;
