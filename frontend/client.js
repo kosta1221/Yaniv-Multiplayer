@@ -65,9 +65,9 @@ async function onLoad() {
 
   playerButtons.addEventListener("click", (e) => {
     let clickedBtn = e.target;
-    console.log(clickedBtn.tagName);
     if(clickedBtn.tagName !== "BUTTON") {
-      clickedBtn = clickedBtn.childNodes.forEach((elem) => {
+      clickedBtn = playerButtons;
+      clickedBtn.childNodes.forEach((elem) => {
         if (elem.tagName === "BUTTON" && elem.innerHTML === "Place") {
           clickedBtn = elem;
         }
@@ -77,15 +77,11 @@ async function onLoad() {
   });
   playerButtonsMobile.addEventListener("click", (e) => {
     let clickedBtn = e.target;
-    console.log(clickedBtn.tagName);
     if(clickedBtn.tagName !== "BUTTON") {
-      console.log(clickedBtn.childNodes);
-      clickedBtn = clickedBtn.childNodes.forEach((elem) => {
-        console.log(elem.innerHTML);
+      clickedBtn = playerButtonsMobile;
+      clickedBtn.childNodes.forEach((elem) => {
         if (elem.tagName === "BUTTON" && elem.innerHTML === "Yaniv!") {
-          console.log(clickedBtn);
           clickedBtn = elem;
-          console.log(clickedBtn);
         }
       })
     }
