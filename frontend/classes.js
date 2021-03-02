@@ -83,13 +83,11 @@ class Player {
 
 // A class for building card objects
 class Card {
-	#suit;
-	#rank;
-	#isJoker;
+
 	constructor(suit, rank, isJoker) {
-		this.#suit = suit;
-		this.#rank = rank;
-		this.#isJoker = isJoker;
+		this.suit = suit;
+		this.rank = rank;
+		this.isJoker = isJoker;
 
 		switch (rank) {
 			case "ace":
@@ -110,20 +108,8 @@ class Card {
 		}
 	}
 
-	get suit() {
-		return this.#suit;
-	}
-
-	get rank() {
-		return this.#rank;
-	}
-
-	get isJoker() {
-		return this.#isJoker;
-	}
-
 	cardEquals(card) {
-		return this.#suit === card.suit && this.#rank === card.rank && this.#isJoker === card.isJoker;
+		return this.suit === card.suit && this.rank === card.rank && this.isJoker === card.isJoker;
 	}
 
 	// set suit(suit) {

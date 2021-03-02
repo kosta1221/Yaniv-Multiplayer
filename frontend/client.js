@@ -120,7 +120,7 @@ async function onLoad() {
     if (playerInTurn === myName || !isGameStarted) return;
     updateGameState();
     renderAll();
-  }, 25000);
+  }, 4000);
 
   input.focus();
   playerButtons.style.visibility = "hidden";
@@ -260,6 +260,8 @@ async function onLoad() {
       makeShiny("true");
       activePlayerMove["selected-cards"].addCard(card);
     }
+    console.log('after click front');
+    console.log(activePlayerMove);
 
     const allPlayerCards = document.querySelectorAll("#active-player > .card");
     for (const cardElement of allPlayerCards) {
@@ -304,6 +306,7 @@ async function onLoad() {
 
   function executeMove(move) {
     if(playerInTurn !== myName) return;
+    console.log(move);
     //looks at move player is trying to make and asks gameManager to perform
     const selectedPlayerCards = activePlayerMove["selected-cards"].cards;
     switch (move) {
@@ -317,6 +320,14 @@ async function onLoad() {
           });
         } else {
           const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
+          console.log('b4 play function345435');
+          console.log(activePlayerMove);
+          console.log({
+            move: "place",
+            cards: activePlayerMove["selected-cards"],
+            isCardToGetFromGameDeck,
+            cardPickedFromSet: activePlayerMove.cardToTake
+          });
           netUtils.play({
             move: "place",
             cards: activePlayerMove["selected-cards"],
@@ -324,12 +335,15 @@ async function onLoad() {
             cardPickedFromSet: activePlayerMove.cardToTake
           }, id);
         }
+        break;
       }
       case "Yaniv!": {
+        console.log('in yaniv');
         netUtils.play({
           move: "yaniv",
           cards: null,
         }, id);
+        break;
       }
     }
     activePlayerMove["selected-cards"].cards = [];

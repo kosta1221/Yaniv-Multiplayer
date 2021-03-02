@@ -1,38 +1,5 @@
 // const classes = require("../classes");
 
-// const mockPlayerNames = [
-// 	{ "player-name": "alon", "player-id": "asdfwera" },
-// 	{ "player-name": "asdg", "player-id": "asdfgsaera" },
-// 	{ "player-name": "dfga", "player-id": "asdfsdfgra" },
-// 	{ "player-name": "fdghfsgh", "player-id": "asdfdsfgsdfgsdfgra" },
-// ];
-
-// const mockGame = new Game(mockPlayerNames);
-// console.log(mockGame.getGameState());
-
-// const mockCardsToDiscard = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
-
-// console.log("The cards I want to discard from alon");
-// console.log(mockCardsToDiscard);
-
-// console.log("game upon creation");
-// console.log(mockGame);
-// console.log(mockGame.getGameState());
-
-// try {
-// 	// makeTurn(mockGame, true);
-// 	makeTurn(mockGame, false, mockCardsToDiscard, true, null);
-
-// 	const mockCardsToDiscard2 = mockGame.playerInTurn.playerDeck.cards.slice(1, 2);
-// 	makeTurn(mockGame, false, mockCardsToDiscard2, false, mockCardsToDiscard);
-// } catch (error) {
-// 	console.log(error);
-// }
-
-// console.log("Game after turn");
-// console.log(mockGame);
-// console.log(mockGame.getGameState());
-
 function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, cardPickedFromSet) {
 	// shortening obvious variables for better readability
 	const playerInTurn = game.playerInTurn;
@@ -122,6 +89,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			const cardToDiscard = cardsToDiscard[0];
 			// the discarded card has to be from player's cards.
 			if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
+				console.log("error1");
 				throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
 			}
 		} else if (cardsToDiscard.length > 1) {
@@ -129,6 +97,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			cardsToDiscard.forEach((cardToDiscard) => {
 				console.log(cardToDiscard);
 				if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
+					console.log("error2");
 					throw new Error(`Discarded cards have to be in ${playerInTurn.playerName}s cards!`);
 				}
 			});
@@ -136,10 +105,12 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			if (!cardsToDiscard.every((card) => card.rank === cardsToDiscard[0].rank)) {
 				// If trying to discard a set of 2 cards which don't have the same rank, throw an error!
 				if (cardsToDiscard.length === 2) {
+					console.log("error3");
 					throw new Error(`Illegal set of 2 cards, can't throw 2 cards with consecutive order!`);
 				}
 				// true if the suit of even one card in cardsToDiscard isn't the same as the suit of the other cards.
 				if (!cardsToDiscard.every((card) => card.suit === cardsToDiscard[0].suit)) {
+					console.log("error4");
 					// Throws error when: trying to discard multiple cards, which are not all the same rank and also not all the same suit.
 					throw new Error(
 						`Illegal set of ${cardsToDiscard.length} cards, they have to be of the same rank or suit!`
@@ -151,6 +122,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 					playerInTurn.sortCardsByRankIndex(cardsToDiscard);
 					for (let i = 0; i < cardsToDiscard.length - 1; i++) {
 						if (cardsToDiscard[i + 1].rankIndex - cardsToDiscard[i].rankIndex !== 1) {
+							console.log("error5");
 							// Throws error when: trying to discard multiple cards, which are not all the same rank, but do have the same suit, but aren't in order.
 							throw new Error(
 								`Illegal set of ${cardsToDiscard.length} cards of the ${cardsToDiscard[0].suit} suit, they are not in order!`
@@ -167,6 +139,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		if (isCardToGetFromGameDeck) {
 			// If the player chooses to draw the card from the gameDeck, he cannot pick a card from set.
 			if (cardPickedFromSet) {
+				console.log("error6");
 				throw new Error(`Can only pick from a set of cards from the openCardDeck!`);
 			}
 
@@ -213,6 +186,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 					} else if (openCardDeck[openCardDeck.length - 1].rank === cardPickedFromSet.rank) {
 						playerInTurn.giveLastCardFromDeck(openCardDeck);
 					} else {
+						console.log("error7");
 						throw new Error(
 							`Trying to pick an illegal card, with rank ${cardPickedFromSet.rank} which is not part of the set that the last player put in the open card deck!`
 						);

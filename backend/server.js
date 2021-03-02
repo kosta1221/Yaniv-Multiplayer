@@ -109,7 +109,6 @@ app.get("/game/state/:playerId", (req, res) => {
 		});
 	} else {
 		console.log(`Game state for player id: ${requestingPlayerId} of game with id:${gameId}:`);
-		console.log(game.getGameState(requestingPlayerId));
 		res.send(game.getGameState(requestingPlayerId));
 	}
 });
@@ -208,7 +207,8 @@ app.put("/game/play/:playerId", (req, res) => {
 		});
 	} else {
 		try {
-			console.log(body.callYaniv);
+			console.log("hi");
+			console.log(body);
 			gameManager.makeTurn(
 				game,
 				body.callYaniv,
