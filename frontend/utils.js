@@ -18,6 +18,12 @@ const utils = {
         cardElement.classList.add("card");
         return cardElement;
     },
+    getCardFromElement(cardElement) {
+      const suit = cardElement.getAttribute("suit")=== "null" ? null : cardElement.getAttribute("suit");
+    const rank = cardElement.getAttribute("rank") === "null" ? null : cardElement.getAttribute("rank");
+    const isJoker = cardElement.getAttribute("is-joker") === "true" ? true : false;
+    return new Card(suit, rank, isJoker);
+    },
     getImageName(card) {
         let imgName = "";
         if (card.isJoker) return "Black_joker";

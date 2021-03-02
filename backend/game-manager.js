@@ -90,6 +90,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			// the discarded card has to be from player's cards.
 			if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
 				console.log("error1");
+				console.log(playerInTurn.playerDeck.cards);
 				throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
 			}
 		} else if (cardsToDiscard.length > 1) {

@@ -97,7 +97,7 @@ async function onLoad() {
     const cardElement = e.target; 
     if ( !cardElement.classList.contains("card") ) return;
     if ( cardElement.classList.contains("unselectable") ) return;
-    const card = new Card(cardElement.getAttribute("suit"), cardElement.getAttribute("rank"), cardElement.getAttribute("isJ-joker"));
+    const card = utils.getCardFromElement(cardElement);
     if ( cardElement.classList.contains("selected") ) {
       activePlayerMove.cardToTake = null;
       cardElement.classList.remove("selected");
@@ -246,10 +246,7 @@ async function onLoad() {
   function collectMoveData(clickedCard) {
     if (!clickedCard.classList.contains("selectable")) return;
 
-    const suit = clickedCard.getAttribute("suit");
-    const rank = clickedCard.getAttribute("rank");
-    const isJoker = clickedCard.getAttribute("is-joker");
-    const card = new Card(suit, rank, isJoker);
+    const card = utils.getCardFromElement(clickedCard);
 
     if (clickedCard.classList.contains("selected")) {
       clickedCard.classList.remove("selected");
