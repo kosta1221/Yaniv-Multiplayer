@@ -199,9 +199,9 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		// console.log(openCardDeck);
 
 		// console.log(playerInTurn);
+		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
+		game.amountOfCardsLastPlayerPutInOpenCardDeck = cardsToDiscard.length;
 	}
-	playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
-	game.amountOfCardsLastPlayerPutInOpenCardDeck = cardsToDiscard.length;
 	game.turnsSinceStart++;
 	game.playerInTurn = players[(players.indexOf(game.playerInTurn) + 1) % game.numberOfPlayers];
 	console.log(playerInTurn.numberOfCards);
