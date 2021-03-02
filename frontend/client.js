@@ -116,9 +116,9 @@ async function onLoad() {
     }
   });
 
-  setInterval(() => {
+  setInterval(async () => {
     if (playerInTurn === myName || !isGameStarted) return;
-    updateGameState();
+    await updateGameState();
     renderAll();
   }, 4000);
 
@@ -301,7 +301,7 @@ async function onLoad() {
     return false;
   }
 
-  function executeMove(move) {
+  async function executeMove(move) {
     if(playerInTurn !== myName) return;
     console.log(move);
     //looks at move player is trying to make and asks gameManager to perform
@@ -317,25 +317,19 @@ async function onLoad() {
           });
         } else {
           const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
-          console.log('b4 play function345435');
-          console.log(activePlayerMove);
-          console.log({
-            move: "place",
-            cards: activePlayerMove["selected-cards"],
-            isCardToGetFromGameDeck,
-            cardPickedFromSet: activePlayerMove.cardToTake
-          });
           netUtils.play({
             move: "place",
             cards: activePlayerMove["selected-cards"],
             isCardToGetFromGameDeck,
             cardPickedFromSet: activePlayerMove.cardToTake
           }, id);
+          console.log("you placed the following cards:");
+          console.log(activePlayerMove["selected-cards"]);
         }
         break;
       }
       case "Yaniv!": {
-        console.log('in yaniv');
+        console.log('you called yaniv');
         netUtils.play({
           move: "yaniv",
           cards: null,
@@ -345,8 +339,9 @@ async function onLoad() {
     }
     activePlayerMove["selected-cards"].cards = [];
     activePlayerMove.cardToTake = null;
-    console.log("rerendering");
-    updateGameState();
+    await setTimeout(()=>console.log("rerendering after move execution in a few moments"), 1000);
+    playerInTurn = null;
+    await updateGameState;
     renderAll();
   }
   

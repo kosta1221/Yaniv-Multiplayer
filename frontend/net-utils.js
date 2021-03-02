@@ -19,6 +19,8 @@ const netUtils = {
 		// setInterval(()=>{
 		//   fetch(`${this.URL}/ping/${id}`);
 		// }, 25000);
+		console.log("join request responded with:");
+		console.log(body);
 		return id;
 	},
 	ready(playerIdentity) {
@@ -42,6 +44,7 @@ const netUtils = {
 		// return mocks.state(playerIdentity);
 		const response = await fetch(`${this.URL}/game/state/${id}`);
 		const body = await response.json();
+		console.log("gameState request responded with:");
 		console.log(body);
 		const state = {
 			allPlayersNames: body.allPlayersNames,
@@ -70,9 +73,10 @@ const netUtils = {
 				cardPickedFromSet: null,
 			}),
 		};
-		console.log(init.body);
+		console.log("sending move request:");
 		console.log(JSON.parse(init.body));
-		fetch(`${this.URL}/game/play/${id}`, init);
+		await fetch(`${this.URL}/game/play/${id}`, init)
+			.catch(err => console.log(err));
 	},
 };
 // body.callYaniv,
