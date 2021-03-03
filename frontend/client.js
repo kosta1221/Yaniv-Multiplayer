@@ -140,22 +140,26 @@ async function onLoad() {
   
   /* Show message, for an amount of time in ms */
   async function showMessage(message, time, color) {
+    document.querySelector("#game-message").innerText = message;
     document.querySelectorAll("body :not(#game-message)").forEach((element) => {
       element.style.filter = "blur(3px)";
       document.body.style.background = color;
     });
     document.body.style.pointerEvents = "none";
     document.querySelector("#game-message").style.display = "inline-block";
-    document.querySelector("#game-message").style.innerText = message;
-
-    setTimeout(() => {
-      document.querySelectorAll("body :not(#game-message)").forEach((element) => {
-        element.style.filter = "";
-        document.body.style.background = "";
-      });
-      document.body.style.pointerEvents = "auto";
-      document.querySelector("#game-message").style.display = "none";
-    }, time);
+    
+    return new Promise(resolve => {
+        setTimeout(() => {
+        document.querySelectorAll("body :not(#game-message)").forEach((element) => {
+          element.style.filter = "";
+          document.body.style.background = "";
+        });
+        document.body.style.pointerEvents = "auto";
+        document.querySelector("#game-message").style.display = "none";
+        
+        resolve();
+      }, time)
+    })
   }
 
   async function updateGameState() {
@@ -200,10 +204,9 @@ async function onLoad() {
     console.log(matchNumber === timesMessageShowed);
     // SHOW YANIV / ASSAF MESSAGE
     if (state.playerCalledYaniv && matchNumber === timesMessageShowed + 2) {
-      showMessage("Yaniv!", 3000,  "#d90000");
+      await showMessage("Yaniv", 3000,  "#d90000");
       if (state.playerCalledAssaf) {
-
-        showMessage("Assaf", 3000 , "#0080cd");
+        await showMessage("Assaf", 3000 , "#0080cd");
       }
       timesMessageShowed++;
     }
