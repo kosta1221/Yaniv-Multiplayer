@@ -64,27 +64,13 @@ async function onLoad() {
   });
 
   playerButtons.addEventListener("click", (e) => {
-    let clickedBtn = e.target;
-    if(clickedBtn.tagName === "BUTTON") {
-      clickedBtn = playerButtons;
-      clickedBtn.childNodes.forEach((elem) => {
-        if (elem.tagName === "BUTTON" && elem.innerHTML === "Place") {
-          clickedBtn = elem;
-        }
-      })
-    }
+    const clickedBtn = e.target;
+    if(clickedBtn.tagName !== "BUTTON") return;
     executeMove(clickedBtn.innerText);
   });
   playerButtonsMobile.addEventListener("click", (e) => {
-    let clickedBtn = e.target;
-    if(clickedBtn.tagName === "BUTTON") {
-      clickedBtn = playerButtonsMobile;
-      clickedBtn.childNodes.forEach((elem) => {
-        if (elem.tagName === "BUTTON" && elem.innerHTML === "Yaniv!") {
-          clickedBtn = elem;
-        }
-      })
-    }
+    const clickedBtn = e.target;
+    if(clickedBtn.tagName !== "BUTTON") return;
     executeMove(clickedBtn.innerText);
   });
 
