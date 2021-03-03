@@ -171,8 +171,14 @@ async function onLoad() {
       opponents[playerName] = new Player(playerName, null, points, null);
       opponents[playerName].numberOfCards = numberOfCards;
     }
+    const pileDeckLastTurn = pileDeck;
     pileDeck = new Deck(state.openCards.cards);
     playerInTurn = state.playerInTurn;
+    const openCardsDiff = pileDeck.cards.length - pileDeckLastTurn.cards.length;
+    lastDiscardedCards.splice(0, lastDiscardedCards.length);
+    for(let i = pileDeck.cards.length; i > pileDeck.cards.length - openCardsDiff; i--) {
+      lastDiscardedCards.unshift( pileDeck.cards[i - 1] );
+    }
   }
 
   function renderAll() {
