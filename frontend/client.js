@@ -326,41 +326,63 @@ async function onLoad() {
 
   async function executeMove(move) {
     if(playerInTurn !== myName) return;
-    console.log(move);
+    console.log("you pressed: " + move);
     //looks at move player is trying to make and asks gameManager to perform
-    const selectedPlayerCards = activePlayerMove["selected-cards"].cards;
-    switch (move) {
-      case "Place": {
-        if (selectedPlayerCards.length < 1) {
-          Swal.fire({
-            icon: "info",
-            title: "Oops...",
-            text: "You must pick a card!",
-            toast: true,
-          });
-        } else {
-          if(activePlayerMove["selected-cards"].cards)
-          const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
-          netUtils.play({
-            move: "place",
-            cards: activePlayerMove["selected-cards"],
-            isCardToGetFromGameDeck,
-            cardPickedFromSet: activePlayerMove.cardToTake
-          }, id);
-          console.log("you placed the following cards:");
-          console.log(activePlayerMove["selected-cards"]);
-        }
-        break;
+    const selectedCards = activePlayerMove["selected-cards"];
+    try {
+      const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
+      const moveName = move === "Place" ? "place" : move === "Yaniv!" ? "yaniv" : null; 
+      const playObject = {
+        move: moveName,
+        cards: selectedCards,
+        isCardToGetFromGameDeck,
+        cardPickedFromSet: activePlayerMove.cardToTake
+      };
+      if ( utils.isPlayValid(playObject, player.playerDeck) ) {
+        netUtils.play(playObject, id);
       }
-      case "Yaniv!": {
-        console.log('you called yaniv');
-        netUtils.play({
-          move: "yaniv",
-          cards: null,
-        }, id);
-        break;
-      }
+    } catch (error) {
+      Swal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: error,
+        toast: true,
+      });
     }
+    // switch (move) {
+    //   case "Place": {
+    //     if (selectedPlayerCards.length < 1) {
+    //       Swal.fire({
+    //         icon: "info",
+    //         title: "Oops...",
+    //         text: "You must pick a card!",
+    //         toast: true,
+    //       });
+    //     } else {
+    //       const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
+    //       const playObject = {
+    //         move: "place",
+    //         cards: activePlayerMove["selected-cards"],
+    //         isCardToGetFromGameDeck,
+    //         cardPickedFromSet: activePlayerMove.cardToTake
+    //       };
+    //       if ( utils.isPlayValid(play, player.playerDeck) ) netUtils.play(playObject, id);
+    //       console.log("you placed the following cards:");
+    //       console.log(activePlayerMove["selected-cards"]);
+    //     }
+    //     break;
+    //   }
+    //   case "Yaniv!": {
+    //     console.log('you called yaniv');
+    //     const playObject = {
+    //       move: "yaniv",
+    //       cards: null,
+    //     };
+    //     if (netUtils.isPlayValid(playObject))
+    //     netUtils.play(playObject, id);
+    //     break;
+    //   }
+    // }
     activePlayerMove["selected-cards"].cards = [];
     activePlayerMove.cardToTake = null;
     await setTimeout(()=>console.log("rerendering after move execution in a few moments"), 1000);

@@ -24,18 +24,29 @@ const utils = {
     const isJoker = cardElement.getAttribute("is-joker") === "true" ? true : false;
     return new Card(suit, rank, isJoker);
     },
-    isPlayValid(play) {
-      // move: "place",
-      // cards: activePlayerMove["selected-cards"],
-      // isCardToGetFromGameDeck,
-      // cardPickedFromSet: activePlayerMove.cardToTake
+    isPlayValid(play, playerDeck) {
+      const playerCardsValueSum = playerDeck.cards.reduce((card, nextCard) => {
+        return this.getCardValue(card) + this.getCardValue(nextCard)
+      }, 0);
+      if (play.move === "yaniv" && playerCardsValueSum <= 7) return true;
+      if (play.move === "yaniv" && playerCardsValueSum > 7) throw "Sum of cards values must be less than 7";
       const selectedCards = play.cards.cards;
-      if(selectedCards.length < 1 && play.move === "place") return false;
+      if (selectedCards.length < 1 && play.move === "place") throw "You must pick a card!";
+      if (selectedCards.length === 1) return true;
       const isAllSelectedCardsSameRank = selectedCards.every((card, i, cards) => cards[0].rank === card.rank);
-      if(isAllSelectedCardsSameRank) return true;
+      if (isAllSelectedCardsSameRank) return true;
+      if (selectedCards.length < 3) throw "You must discard at least 3 of same suit";
       const isAllSelectedCardsSameSuit = selectedCards.every((card, i, cards) => cards[0].suit === card.suit);
-      selectedCards.reduce((prevCard, curCard)=> this.ranks.indexOf(prevCard) === this.ranks.indexOf(curCard) - 1);
-
+      selectedCards.sort((a,b) => this.ranks.indexOf(a) - this.ranks.indexOf(b));
+      const isCardsConsecutive = selectedCards.every((card, i, cards)=> {
+        if(i === 0) return true;
+        this.ranks.indexOf(card) === this.ranks.indexOf(cards[i-1].rank) + 1;
+      });
+      if (isAllSelectedCardsSameSuit && isCardsConsecutive) return true;
+      throw "Cards must be consecutive";
+    },
+    getCardValue(card) {
+      return Math.min(this.ranks.indexOf(card.rank) + 1, 10);
     },
     getImageName(card) {
         let imgName = "";
