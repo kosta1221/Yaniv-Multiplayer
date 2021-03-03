@@ -53,6 +53,9 @@ const netUtils = {
 			playerDeck: body.requestingPlayer.playerDeck,
 			openCards: body.openCards,
 			playerInTurn: body.nameOfPlayerInTurn,
+			match: body.match,
+			playerCalledYaniv: body.playerCalledYaniv,
+			playerCalledAssaf: body.playerCalledAssaf
 		};
 		return state;
 	},

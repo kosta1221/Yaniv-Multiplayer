@@ -7,14 +7,14 @@ async function onLoad() {
   let player;
   let opponents = {};
   let playerInTurn;
-  let matchNumber;
+  let matchNumber = 1;
   let pileDeck = null;
   let allPlayersPoints;
   const activePlayerMove = { 
     cardPickedFromSet: null,
     "selected-cards": new Deck() 
   };
-  const lastDiscardedCards = [];//[new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
+  const lastDiscardedCards = [];
 
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
@@ -76,8 +76,8 @@ async function onLoad() {
   });
 
   document.querySelector("#pile-deck").addEventListener("click", (e) => {
-    if (lastDiscardedCards.length === 0) return;
-    if (activePlayerMove["selected-cards"].cards.length === 0) return;
+    // if (lastDiscardedCards.length === 0) return;
+    // if (activePlayerMove["selected-cards"].cards.length === 0) return;
     const pileSelection = document.querySelector("#pile-selection");
     pileSelection.innerHTML = "";
     if (pileSelection.getAttribute("expanded") === "true") {
@@ -151,24 +151,39 @@ async function onLoad() {
       allPlayersPoints[myName],
       state.playerDeck
     );
-    for (const playerName of state.allPlayersNames) {
+    for (const playerName of state.allPlayersNames) { 
       if (playerName === myName) continue;
       const points = allPlayersPoints[playerName];
       const numberOfCards = state.allPlayersNumberOfCards[playerName];
       opponents[playerName] = new Player(playerName, null, points, null);
       opponents[playerName].numberOfCards = numberOfCards;
+      if(playerName === state.playerCalledYaniv) opponents[playerName].calledYaniv = true; 
+      if(playerName === state.playerCalledAssaf) opponents[playerName].calledAssaf = true; 
     }
+    const lastPlayerInturn = playerInTurn;
+    playerInTurn = state.playerInTurn;
     const pileDeckLastTurn = pileDeck;
     pileDeck = new Deck(state.openCards.cards);
-    playerInTurn = state.playerInTurn;
     if (!pileDeckLastTurn) return;
     lastDiscardedCards.splice(0, lastDiscardedCards.length);
     const openCardsDiff = pileDeck.cards.length - pileDeckLastTurn.cards.length;
     for(let i = pileDeck.cards.length; i > pileDeck.cards.length - openCardsDiff; i--) {
       lastDiscardedCards.unshift( pileDeck.cards[i - 1] );
     }
+    console.log("last discarded cards: ");
+    console.log(lastDiscardedCards);
+    matchNumber = state.match;
   }
-
+  function MatchStartAnimation() {
+    if(matchNumber > 1) {
+      //show Yaniv! on player who called yaniv
+      //show Assaf! on player who called assaf
+      //collect all cards to game deck
+    }
+    //render game deck
+    //give cards to players
+    //place card open
+  }
   function renderAll() {
     const playersElements = Array.from(document.querySelectorAll(".player"));
     playersElements.forEach((elem) => (elem.innerHTML = ""));
@@ -223,6 +238,7 @@ async function onLoad() {
     }
     //RENDER PILE
     const pileDeckElement = document.querySelector("#pile-deck");
+    makeShiny(myName === playerInTurn);
     for (const card of pileDeck.cards) {
       const li = document.createElement("li");
       const cardElement = utils.createCardElement(card);
@@ -260,11 +276,9 @@ async function onLoad() {
 
     if (clickedCard.classList.contains("selected")) {
       clickedCard.classList.remove("selected");
-      makeShiny();
       activePlayerMove["selected-cards"].removeCards([card]);
     } else {
       clickedCard.classList.add("selected");
-      makeShiny("true");
       activePlayerMove["selected-cards"].addCard(card);
     }
     console.log('after click front');
@@ -353,7 +367,3 @@ async function onLoad() {
     }
   }
 }
-
-// TODO:
-//add dicarded cards selection
-// add player points and opp points

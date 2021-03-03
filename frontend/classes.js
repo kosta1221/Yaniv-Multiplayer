@@ -1,6 +1,8 @@
 "use strict";
 // A class for building player objects
 class Player {
+	calledYaniv = false;
+	calledAssaf = false;
 	constructor(playerName, playerId, points, playerDeck) {
 		this.playerName = playerName;
 		this.playerId = playerId;
@@ -83,7 +85,6 @@ class Player {
 
 // A class for building card objects
 class Card {
-
 	constructor(suit, rank, isJoker) {
 		this.suit = suit;
 		this.rank = rank;
@@ -108,6 +109,18 @@ class Card {
 		}
 	}
 
+	// get suit() {
+	// 	return this.suit;
+	// }
+
+	// get rank() {
+	// 	return this.rank;
+	// }
+
+	// get isJoker() {
+	// 	return this.isJoker;
+	// }
+
 	cardEquals(card) {
 		return this.suit === card.suit && this.rank === card.rank && this.isJoker === card.isJoker;
 	}
@@ -127,9 +140,8 @@ class Card {
 
 // A class for having instances of games
 class Game {
+	match = 1;
 	constructor(playerNamesAndIds, gameDeck) {
-		console.log("game construct test");
-
 		if (gameDeck) {
 			this.gameDeck = gameDeck;
 		} else {
@@ -138,14 +150,14 @@ class Game {
 			fullDeck.shuffleDeck();
 			this.gameDeck = fullDeck;
 		}
-		console.log("game construct test");
+
 		this.players = [];
 		for (const playerNameAndId of playerNamesAndIds) {
 			const player = new Player(playerNameAndId.playerName, playerNameAndId.playerId);
 			this.players.push(player);
 			player.giveFiveCardsFromTopOfDeck(this.gameDeck);
 		}
-		console.log("game constructor player: " + this.players);
+
 		this.turn = 0;
 		this.playerInTurn = this.players[0];
 
@@ -159,22 +171,23 @@ class Game {
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
-
 		this.getGameState = function (requestingPlayerId) {
 			const gameState = {};
+			gameState.playerCalledYaniv = null;
+			gameState.playerCalledAssaf = null;
 			gameState.allPlayersNames = [];
 			gameState.allPlayersPoints = {};
 			gameState.allPlayersNumberOfCards = {};
 			for (const player of this.players) {
 				gameState.allPlayersNames.push(player.playerName);
-				Object.defineProperty(gameState.allPlayersPoints, player.playerName, {
-					value: player.points,
-					writable: false,
-				});
-				Object.defineProperty(gameState.allPlayersNumberOfCards, player.playerName, {
-					value: player.numberOfCards,
-					writable: false,
-				});
+				gameState.allPlayersPoints[player.playerName] = player.points;
+				gameState.allPlayersNumberOfCards[player.playerName] = player.numberOfCards;
+				if (player.calledYaniv) gameState.playerCalledYaniv = player.playerName;
+				if (player.calledAssaf) gameState.playerCalledAssaf = player.playerName;
+				// Object.defineProperty(gameState.allPlayersNumberOfCards, player.playerName, {
+				// 	value: player.numberOfCards,
+				// 	writable: false,
+				// });
 
 				if (requestingPlayerId === player.playerId) {
 					gameState.requestingPlayer = player;
@@ -184,7 +197,7 @@ class Game {
 
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
-
+			gameState.match = this.match;
 			return gameState;
 		};
 	}
