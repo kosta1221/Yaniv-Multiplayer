@@ -1,6 +1,8 @@
 "use strict";
 // A class for building player objects
 class Player {
+	calledYaniv = false;
+	calledAssaf = false;
 	constructor(playerName, playerId, points, playerDeck) {
 		this.playerName = playerName;
 		this.playerId = playerId;
@@ -138,13 +140,13 @@ class Card {
 
 // A class for having instances of games
 class Game {
+	match = 1;
 	constructor(playerNamesAndIds, gameDeck) {
 		if (gameDeck) {
 			this.gameDeck = gameDeck;
 		} else {
 			const fullDeck = new Deck();
 			fullDeck.createNewFullDeck();
-			console.log("game construct test 1.5");
 			fullDeck.shuffleDeck();
 			this.gameDeck = fullDeck;
 		}
@@ -191,6 +193,7 @@ class Game {
 
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
+			gameState.match = this.match;
 			return gameState;
 		};
 	}

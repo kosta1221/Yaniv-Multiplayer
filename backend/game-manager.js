@@ -6,13 +6,16 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 	const gameDeck = game.gameDeck;
 	const openCardDeck = game.openCardDeck;
 	const players = game.players;
-
+	players.forEach(player => {
+		player.calledYaniv = false;
+		player.calledAssaf = false;
+	});
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
 		// if (cardPickedFromSet || cardToDiscard.length !== 0) {
 		// 	throw new Error(`Cannot call yaniv and do other things!`);
 		// }
-
+		playerInTurn.calledYaniv = true;
 		let playersRoundPointSum = [];
 		const indexOfPlayerInTurn = players.indexOf(playerInTurn);
 		for (const player of players) {
@@ -42,6 +45,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		// Assaf
 		if (indexOfPlayerWithLowestSum !== indexOfPlayerInTurn) {
 			console.log("In assaf");
+			players[indexOfPlayerWithLowestSum].calledAssaf = true;
 			for (let i = 0; i < playersRoundPointSum.length; i++) {
 				if (i === indexOfPlayerInTurn) {
 					players[i].points += 30 + playersRoundPointSum[i];
@@ -79,6 +83,29 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 				}
 			}
 		}
+		
+		//Finish Match actions
+		game.gameDeck.cards = [];
+		game.gameDeck.createNewFullDeck();
+		game.gameDeck.shuffleDeck();
+		game.openCardDeck.cards = [];
+		game.gameDeck.putFirstCardFromOneDeckToAnother(game.openCardDeck);
+		game.gameDeck.cards.shift();
+		game.turn = 0;
+		game.match++;
+		const newPlayers = [];
+		for(let i = 0; i < game.players.length; i++) {
+			if (game.players[i].didLose) continue;
+			const player = game.players[i]; 
+			player.playerDeck.cards = [];
+			player.giveFiveCardsFromTopOfDeck(game.gameDeck);
+			player.numberOfCards = 5;
+			newPlayers.push(player);
+		}
+		game.players = newPlayers;
+		game.numberOfPlayers = newPlayers.length;
+		game.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
+		////finish yaniv
 	} else {
 		console.log(cardsToDiscard);
 		// When playing cards, the player may discard a single card or a single set of cards, placing them into the openCardDeck. The player must then draw a card from the open cards or draw pile.
@@ -195,17 +222,12 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 				}
 			}
 		}
-		// console.log(gameDeck);
-		// console.log(openCardDeck);
 
-		// console.log(playerInTurn.playerDeck.cards);
-		// console.log(cardsToDiscard, game);
 		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
 		game.amountOfCardsLastPlayerPutInOpenCardDeck = cardsToDiscard.length;
 	}
 	game.turnsSinceStart++;
 	game.playerInTurn = players[(players.indexOf(game.playerInTurn) + 1) % game.numberOfPlayers];
-	console.log(playerInTurn.numberOfCards);
 }
 
 // Utility function for checking object similarity (not by memory)
