@@ -6,7 +6,7 @@ async function onLoad() {
   let id;
   let player;
   let opponents = {};
-  let playerInTurn;
+  let playerInTurn = null;
   let matchNumber = 1;
   let pileDeck = null;
   let allPlayersPoints;
@@ -14,7 +14,7 @@ async function onLoad() {
     cardPickedFromSet: null,
     "selected-cards": new Deck() 
   };
-  const lastDiscardedCards = [];
+  let lastDiscardedCards = [];
 
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
@@ -50,6 +50,7 @@ async function onLoad() {
     await netUtils.startGame(id);
     isGameStarted = true;
     await updateGameState();
+    // await MatchStartAnimation();
     renderAll();
     readyButton.hidden = true;
     placeButton.style.visibility = "visible";
@@ -152,22 +153,30 @@ async function onLoad() {
       if(playerName === state.playerCalledYaniv) opponents[playerName].calledYaniv = true; 
       if(playerName === state.playerCalledAssaf) opponents[playerName].calledAssaf = true; 
     }
+    
     const lastPlayerInturn = playerInTurn;
     playerInTurn = state.playerInTurn;
     const pileDeckLastTurn = pileDeck;
     pileDeck = new Deck(state.openCards.cards);
-    if (!pileDeckLastTurn) return;
-    lastDiscardedCards.splice(0, lastDiscardedCards.length);
-    const openCardsDiff = pileDeck.cards.length - pileDeckLastTurn.cards.length;
+    const isFirstTurn = lastPlayerInturn === null;
+    const isChangeTurn = lastPlayerInturn !== playerInTurn; 
+    
+    if(isFirstTurn || isChangeTurn) {
+    const openCardsDiff = isFirstTurn ? 1 : pileDeck.cards.length - pileDeckLastTurn.cards.length;
+    lastDiscardedCards = [];
     for(let i = pileDeck.cards.length; i > pileDeck.cards.length - openCardsDiff; i--) {
       lastDiscardedCards.unshift( pileDeck.cards[i - 1] );
+    }
+      lastDiscardedCards = utils.getValidCardsFromOpenDeck(lastDiscardedCards);
     }
     console.log("last discarded cards: ");
     console.log(lastDiscardedCards);
     matchNumber = state.match;
   }
-  function MatchStartAnimation() {
+  async function MatchStartAnimation() {
     const tableDeckElement = document.querySelector("#table-deck");
+    const tableDeckBCR = tableDeckElement.getBoundingClientRect();
+    const tableDeckCoords = {x: tableDeckBCR.x, y: tableDeckBCR.y};
     if (matchNumber > 1) {
       if (playerCalledAssaf !== null) {
 
@@ -177,9 +186,37 @@ async function onLoad() {
       //collect all cards to game deck
     }
     //render game deck
+    for (let i = 0; i < 54; i++) {
+      const li = document.createElement("li");
+      const cardElement = utils.createCardElement(null, true);
+      li.appendChild(cardElement);
+      tableDeckElement.appendChild(li);
+    }
+    const allCardElements = Array.from( tableDeckElement.querySelectorAll(".card") );
+    let cardIndex = allCardElements.length - 1;
     //give cards to players
+    const allPlayerElements = Array.from( document.querySelectorAll(".player") );
+    for(const playerElement of allPlayerElements) {
+      const playerElemBCR = playerElement.getBoundingClientRect();
+      const playerCoords = {x: playerElemBCR.x, y: playerElemBCR.y};
+      const vector = {x: playerCoords.x - tableDeckCoords.x, y: playerCoords.y - tableDeckCoords.y};
+      for(let i = 0; i < 5; i++) {
+        const card = allCardElements[cardIndex];
+        card.style.transition = "all 200ms";
+        card.style.transform = `translate(${vector.x}, ${vector.y})`;
+        cardIndex--;
+        await utils.sleep(100);
+      }
+    }
     //place card open
+    const pileElemBCR = document.querySelector("#pile-deck").getBoundingClientRect();
+    const pileElemCoords = {x: pileElemBCR.x, y: pileElemBCR.y};
+    const vector = {x: pileElemCoords.x - tableDeckCoords.x, y: pileElemCoords.y - tableDeckCoords.y};
+    const card = allCardElements[cardIndex];
+    card.style.transition = "all 200ms";
+    card.style.transform = `translate(${vector.x}, ${vector.y})`;
   }
+
   function renderAll() {
     const playerDeckElements = Array.from(document.querySelectorAll(".deck"));
     playerDeckElements.forEach((elem) => (elem.innerHTML = ""));

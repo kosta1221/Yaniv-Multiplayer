@@ -48,44 +48,58 @@ const utils = {
       if (isAllSelectedCardsSameSuit && isCardsConsecutive) return true;
       throw "Cards must be consecutive";
     },
+    getValidCardsFromOpenDeck(discardedCards){
+      if(discardedCards.length === 1) return discardedCards;
+      const isCardsConsecutive = discardedCards.every((card, i, cards)=> {
+        if (i === 0) return true;
+        this.ranks.indexOf(card) === this.ranks.indexOf(cards[i-1].rank) + 1;
+      });
+      if (isCardsConsecutive) return [discardedCards[0], discardedCards[discardedCards.length - 1]];
+      return [discardedCards[discardedCards.length - 1]];
+    },
     getCardValue(card) {
       if (card.isJoker) return 0;
       return Math.min(this.ranks.indexOf(card.rank) + 1, 10);
     },
     getImageName(card) {
-        let imgName = "";
-        if (card.isJoker) return "Black_joker";
-        switch (card.rank) {
-          case "ace":
-            imgName += "A";
-            break;
-          case "jack":
-            imgName += "J";
-            break;
-          case "queen":
-            imgName += "Q";
-            break;
-          case "king":
-            imgName += "K";
-            break;
-          default:
-            imgName += card.rank;
-            break;
-        }
-        switch (card.suit) {
-          case "hearts":
-            imgName += "H";
-            break;
-          case "clubs":
-            imgName += "C";
-            break;
-          case "diamonds":
-            imgName += "D";
-            break;
-          case "spades":
-            imgName += "S";
-            break;
-        }
-        return imgName;
+      let imgName = "";
+      if (card.isJoker) return "Black_joker";
+      switch (card.rank) {
+        case "ace":
+          imgName += "A";
+          break;
+        case "jack":
+          imgName += "J";
+          break;
+        case "queen":
+          imgName += "Q";
+          break;
+        case "king":
+          imgName += "K";
+          break;
+        default:
+          imgName += card.rank;
+          break;
       }
+      switch (card.suit) {
+        case "hearts":
+          imgName += "H";
+          break;
+        case "clubs":
+          imgName += "C";
+          break;
+        case "diamonds":
+          imgName += "D";
+          break;
+        case "spades":
+          imgName += "S";
+          break;
+      }
+      return imgName;
+    },
+    sleep(ms) {
+      return new Promise((resolve, reject) => {
+        setTimeout(()=>{resolve(true)}, ms);
+      });
+    }
 }
