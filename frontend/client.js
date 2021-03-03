@@ -134,6 +134,26 @@ async function onLoad() {
     // sessionStorage.setItem("gameStarted", "true");
   }
   
+  /* Show message, for an amount of time in ms */
+  async function showMessage(message, time) {
+    document.querySelectorAll("body :not(#game-message)").forEach((element) => {
+      element.style.filter = "blur(3px)";
+      document.body.style.background = "#808080";
+    });
+    document.body.style.pointerEvents = "none";
+    document.querySelector("#game-message").style.display = "inline-block";
+    document.querySelector("#game-message").style.innerText = message;
+
+    setTimeout(() => {
+      document.querySelectorAll("body :not(#game-message)").forEach((element) => {
+        element.style.filter = "";
+        document.body.style.background = "";
+      });
+      document.body.style.pointerEvents = "auto";
+      document.querySelector("#game-message").style.display = "none";
+    }, time);
+  }
+
   async function updateGameState() {
     //runs every x seconds and asks for data relevant to player
     const state = await netUtils.getGameStateForPlayer(myName, id);
@@ -178,9 +198,14 @@ async function onLoad() {
     const tableDeckBCR = tableDeckElement.getBoundingClientRect();
     const tableDeckCoords = {x: tableDeckBCR.x, y: tableDeckBCR.y};
     if (matchNumber > 1) {
-      if (playerCalledAssaf !== null) {
+      // SHOW YANIV / ASSAF MESSAGE
+    if (state.playerCalledYaniv) {
+      showMessage("Yaniv!", 3000);
+      if (state.playerCalledAssaf) {
 
+        showMessage("Assaf", 3000);
       }
+    }
       //show Yaniv! on player who called yaniv
       //show Assaf! on player who called assaf
       //collect all cards to game deck

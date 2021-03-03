@@ -171,6 +171,7 @@ class Game {
 		this.turnsSinceStart = 0;
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
+
 		this.getGameState = function (requestingPlayerId) {
 			const gameState = {};
 			gameState.playerCalledYaniv = null;
@@ -184,10 +185,6 @@ class Game {
 				gameState.allPlayersNumberOfCards[player.playerName] = player.numberOfCards;
 				if (player.calledYaniv) gameState.playerCalledYaniv = player.playerName;
 				if (player.calledAssaf) gameState.playerCalledAssaf = player.playerName;
-				// Object.defineProperty(gameState.allPlayersNumberOfCards, player.playerName, {
-				// 	value: player.numberOfCards,
-				// 	writable: false,
-				// });
 
 				if (requestingPlayerId === player.playerId) {
 					gameState.requestingPlayer = player;
