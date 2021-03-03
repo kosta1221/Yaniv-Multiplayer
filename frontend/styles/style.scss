@@ -94,16 +94,14 @@ body[disable-select="true"] {
 }
 
 #player-tag {
-  position: absolute;
-  top: 85vh;
+  // position: absolute;
+  // top: 85vh;
   text-align: center;
   word-wrap: break-word;
   padding-left: 14px;
   padding-right: 14px;
   border-radius: 12px;
   background-color: rgba(245, 222, 179, 0.657);
-  height: 100px;
-  width: 35%;
 }
 
 @media (max-width: 900px) {
@@ -135,11 +133,95 @@ body[disable-select="true"] {
   flex-direction: row;
 }
 .player {
-  margin: 2vmax 2vmax;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+
+  .deck {
+    display: flex;
+    &.horizontal{
+      flex-direction: row;
+    }
+  }
+}
+.active-player {
+  flex-direction: column;
+  .ui {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    #player-tag {
+      margin-top: 5%;
+      width: 80%;
+      max-width: 250px;
+      
+    }
+    .place-button {
+      visibility: hidden;
+      background-color: #118c32;
+      border-radius: 28px;
+      border: 1px solid #18ab29;
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Times New Roman;
+      font-size: 16px;
+      padding: 14px 6px;
+  
+      text-decoration: none;
+      text-shadow: 0px 1px 0px #b1c2ae;
+    
+      &:hover {
+        background-color: #5cbf2a;
+      }
+      &:active {
+        top: 1px;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  
+    .yaniv-button {
+      visibility: hidden;
+      box-shadow: 0px 1px 0px 0px #fff6af;
+      background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+      background-color: #ffec64;
+      border: 1px solid #ffaa22;
+      color: #333333;
+      font-family: Verdana;
+      font-weight: bold;
+      text-shadow: 0px 1px 0px #ffee66;
+      right: unset;
+      border-radius: 28px;
+      display: inline-block;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 14px 6px;
+  
+      text-decoration: none;
+    
+      &:hover {
+        background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+        background-color: #ffab23;
+      }
+      &:active {
+        top: 1px;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+.ui {
+  display: flex;
+  align-items: center;
+  &.horizontal {
+    flex-direction: row;
+    width: 100%;
+  }
 }
 
 h1 {
@@ -260,10 +342,6 @@ $card-width: 100px;
   padding: 2px;
 }
 
-#player-buttons-div {
-  left: 20px;
-}
-
 #opp-name3 {
   position: absolute;
   top: 72%;
@@ -278,6 +356,7 @@ $card-width: 100px;
   background-color: rgba(245, 222, 179, 0.795);
 }
 
+//for opponents
 @media screen and (max-width: 2000px) {
   // #left-opps-names {
   //   position: absolute;
@@ -597,173 +676,9 @@ $card-width: 100px;
   transition-duration: 200ms;
 }
 
-//BUTTONS
-#player-buttons-div {
-  border-radius: 50%;
-  position: relative;
-  width: 10px;
-  height: 200px;
-  .place-button {
-    position: absolute;
-    top: 0;
-    right: 20px;
-    background-color: #118c32;
-    border-radius: 28px;
-    border: 1px solid #18ab29;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-family: Times New Roman;
-    font-size: 16px;
-    padding: 14px 6px;
-    text-decoration: none;
-    text-shadow: 0px 1px 0px #b1c2ae;
-  }
-  .place-button:hover {
-    background-color: #5cbf2a;
-  }
-  .place-button:active {
-    top: 1px;
-  }
-  .place-button:focus {
-    outline: none;
-  }
-  .yaniv-button {
-    position: absolute;
-    right: 0;
-    top: 50px;
-    box-shadow: 0px 1px 0px 0px #fff6af;
-    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-    background-color: #ffec64;
-    border: 1px solid #ffaa22;
-    color: #333333;
-    font-family: Verdana;
-    font-weight: bold;
-    text-shadow: 0px 1px 0px #ffee66;
-    position: absolute;
-    right: -12px;
-    border-radius: 28px;
-    display: inline-block;
-    cursor: pointer;
-    font-size: 12px;
-    padding: 14px 8px;
-    text-decoration: none;
-  }
-  .yaniv-button:hover {
-    background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
-    background-color: #ffab23;
-  }
-  .yaniv-button:active {
-    top: 1px;
-  }
-  .yaniv-button:focus {
-    outline: none;
-  }
 
 
-}
-#player-buttons-mobile {
-  display: none;
-}
 
-@media screen and (max-width: 1100px) {
-  #player-buttons-div {
-    display: none;
-  }
-  //MOBILE BUTTONS
-  #player-buttons-mobile {
-    display: flex;
-    justify-content: space-between;
-    margin: auto;
-    width: 62vw;
-    padding-top: 1%;
-    .place-button {
-      position: relative;
-      top: unset;
-      right: unset;
-      background-color: #118c32;
-      border-radius: 28px;
-      border: 1px solid #18ab29;
-      display: inline-block;
-      cursor: pointer;
-      color: #ffffff;
-      font-family: Times New Roman;
-      font-size: 16px;
-      padding: 14px 6px;
-
-      text-decoration: none;
-      text-shadow: 0px 1px 0px #b1c2ae;
-    }
-    .place-button:hover {
-      background-color: #5cbf2a;
-    }
-    .place-button:active {
-      top: 1px;
-    }
-    .place-button:focus {
-      outline: none;
-    }
-
-    .yaniv-button {
-      position: relative;
-      right: unset;
-      top: unset;
-      box-shadow: 0px 1px 0px 0px #fff6af;
-      background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-      background-color: #ffec64;
-      border: 1px solid #ffaa22;
-      color: #333333;
-      font-family: Verdana;
-      font-weight: bold;
-      text-shadow: 0px 1px 0px #ffee66;
-      right: unset;
-      border-radius: 28px;
-      display: inline-block;
-      cursor: pointer;
-      font-size: 12px;
-      padding: 14px 6px;
-
-      text-decoration: none;
-    }
-    .yaniv-button:hover {
-      background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
-      background-color: #ffab23;
-    }
-    .yaniv-button:active {
-      top: 1px;
-    }
-    .yaniv-button:focus {
-      outline: none;
-    }
-
-    .assaf-button {
-      background-color: #d35603;
-      border: 1px solid #b45b08;
-      color: #ffffff;
-      text-shadow: 0px 1px 0px #850d0d;
-      position: relative;
-      right: unset;
-      top: unset;
-      font-family: Verdana;
-      font-weight: bold;
-      border-radius: 28px;
-      display: inline-block;
-      cursor: pointer;
-      font-size: 10px;
-      padding: 10px 3px;
-      text-decoration: none;
-      &:hover {
-        background-color: #e67845;
-      }
-      &:active {
-        top: 76px;
-      }
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-}
 .shimmer-table li:first-child > img {
   background-color: #ccc;
   animation: glow 1s infinite alternate;

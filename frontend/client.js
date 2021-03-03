@@ -19,8 +19,8 @@ async function onLoad() {
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
   const readyButton = document.querySelector("#ready-button");
-  const playerButtons = document.querySelector("#player-buttons-div");
-  const playerButtonsMobile = document.querySelector("#player-buttons-mobile");
+  const placeButton = document.querySelector("#place-button");
+  const yanivButton = document.querySelector("#yaniv-button");
   const oppNames = document.querySelectorAll(".opp-name");
   const body = document.getElementsByTagName("BODY")[0];
   const input = document.querySelector("#login");
@@ -52,8 +52,8 @@ async function onLoad() {
     await updateGameState();
     renderAll();
     readyButton.hidden = true;
-    playerButtons.style.visibility = "visible";
-    playerButtonsMobile.style.visibility = "visible";
+    placeButton.style.visibility = "visible";
+    yanivButton.style.visibility = "visible";
     oppNames.forEach((name) => {
       name.style.display = "unset";
     });
@@ -64,16 +64,8 @@ async function onLoad() {
     collectMoveData(clickedCard);
   });
 
-  playerButtons.addEventListener("click", (e) => {
-    const clickedBtn = e.target;
-    if(clickedBtn.tagName !== "BUTTON") return;
-    executeMove(clickedBtn.innerText);
-  });
-  playerButtonsMobile.addEventListener("click", (e) => {
-    const clickedBtn = e.target;
-    if(clickedBtn.tagName !== "BUTTON") return;
-    executeMove(clickedBtn.innerText);
-  });
+  placeButton.addEventListener( "click", (e) => executeMove("Place") );
+  yanivButton.addEventListener( "click", (e) => executeMove("Yaniv!") );
 
   document.querySelector("#pile-deck").addEventListener("click", (e) => {
     // if (lastDiscardedCards.length === 0) return;
@@ -126,8 +118,8 @@ async function onLoad() {
   }, 4000);
 
   input.focus();
-  playerButtons.style.visibility = "hidden";
-  playerButtonsMobile.style.visibility = "hidden";
+  placeButton.style.visibility = "hidden";
+  yanivButton.style.visibility = "hidden";
   const STARTFAST = false; //change to false for full join sequence
   if (STARTFAST) {
     document.querySelector("#login").value = "fast-name";
@@ -175,7 +167,11 @@ async function onLoad() {
     matchNumber = state.match;
   }
   function MatchStartAnimation() {
-    if(matchNumber > 1) {
+    const tableDeckElement = document.querySelector("#table-deck");
+    if (matchNumber > 1) {
+      if (playerCalledAssaf !== null) {
+
+      }
       //show Yaniv! on player who called yaniv
       //show Assaf! on player who called assaf
       //collect all cards to game deck
@@ -185,29 +181,27 @@ async function onLoad() {
     //place card open
   }
   function renderAll() {
-    const playersElements = Array.from(document.querySelectorAll(".player"));
-    playersElements.forEach((elem) => (elem.innerHTML = ""));
+    const playerDeckElements = Array.from(document.querySelectorAll(".deck"));
+    playerDeckElements.forEach((elem) => (elem.innerHTML = ""));
     const stacks = Array.from(document.querySelectorAll(".stack"));
     stacks.forEach((elem) => (elem.innerHTML = ""));
     document.querySelector("#pile-selection").innerHTML = "";
-    const playerBox = document.createElement("div");
+    const playerBox = document.querySelector("#player-tag");
+    playerBox.innerHTML = "";
     const playerInfo = document.createElement("p");
     const lineBreak = document.createElement("BR");
-    // const playersStatus = netUtils.getPlayersStatus();
-    // let isAllReady = true;
-    // for (const name in playersStatus) {
-    //   isAllReady = isAllReady && playersStatus[name];
-    // }
-    // if (!isAllReady) return;
+ 
     //RENDER PLAYER
+    console.log("showing player info");
+    const playerDeckElement = playerElement.querySelector(".deck");
+    playerDeckElement.classList.add("deck", "horizontal");
     for (const card of player.playerDeck.cards) {
       const cardElement = utils.createCardElement(card);
       const cardSelectability =
         playerInTurn === myName ? "selectable" : "unselectable";
       cardElement.classList.add(cardSelectability);
-      playerElement.appendChild(cardElement);
+      playerDeckElement.appendChild(cardElement);
     }
-    playerBox.setAttribute("id", "player-tag");
     playerInfo.setAttribute("id", "my-name");
     playerInfo.appendChild(document.createTextNode(`Name: ${myName}`));
     playerInfo.appendChild(lineBreak);
@@ -215,25 +209,25 @@ async function onLoad() {
       document.createTextNode(`Points: ${allPlayersPoints[myName]}`)
     );
     playerBox.appendChild(playerInfo);
-    playerElement.appendChild(playerBox);
 
     //RENDER OPPONENTS
     const opponentsElements = document.querySelectorAll(".opponent");
     let j = 0;
+    opponentsElements[1].classList.add("flip");
+    opponentsElements[2].classList.add("flip");
     for (const opponentName in opponents) {
-      const opponentNameTag = document.querySelector(`#opp-name${j + 1}`);
       const opponentElement = opponentsElements.item(j);
       const pointsSpan = document.createElement("span");
-      opponentsElements[1].classList.add("flip");
-      opponentsElements[2].classList.add("flip");
+      const opponentNameTag = document.querySelector(`#opp-name${j + 1}`);
       opponentNameTag.appendChild(pointsSpan);
       opponentNameTag.innerHTML = `${opponentName}, <span id="point-span">Points: ${allPlayersPoints[opponentName]}</span>`;
       opponentNameTag.hidden = false;
       j++;
       const opponent = opponents[opponentName];
+      const opponentDeck = opponentElement.querySelector(".deck"); 
       for (let i = 0; i < opponent.numberOfCards; i++) {
         const cardElement = utils.createCardElement(null, true);
-        opponentElement.appendChild(cardElement);
+        opponentDeck.appendChild(cardElement);
       }
     }
     //RENDER PILE
@@ -284,7 +278,7 @@ async function onLoad() {
     console.log('after click front');
     console.log(activePlayerMove);
 
-    const allPlayerCards = document.querySelectorAll("#active-player > .card");
+    const allPlayerCards = document.querySelectorAll("#active-player > .deck > .card");
     for (const cardElement of allPlayerCards) {
       if (cardElement.classList.contains("selected")) continue;
       const suit = cardElement.getAttribute("suit");

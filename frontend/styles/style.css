@@ -105,16 +105,12 @@ body[disable-select="true"] #player-buttons-mobile * {
 }
 
 #player-tag {
-  position: absolute;
-  top: 85vh;
   text-align: center;
   word-wrap: break-word;
   padding-left: 14px;
   padding-right: 14px;
   border-radius: 12px;
   background-color: rgba(245, 222, 179, 0.657);
-  height: 100px;
-  width: 35%;
 }
 
 @media (max-width: 900px) {
@@ -165,7 +161,6 @@ body[disable-select="true"] #player-buttons-mobile * {
 }
 
 .player {
-  margin: 2vmax 2vmax;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -179,6 +174,124 @@ body[disable-select="true"] #player-buttons-mobile * {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+}
+
+.player .deck {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.player .deck.horizontal {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.active-player {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.active-player .ui {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.active-player .ui #player-tag {
+  margin-top: 5%;
+  width: 80%;
+  max-width: 250px;
+}
+
+.active-player .ui .place-button {
+  visibility: hidden;
+  background-color: #118c32;
+  border-radius: 28px;
+  border: 1px solid #18ab29;
+  display: inline-block;
+  cursor: pointer;
+  color: #ffffff;
+  font-family: Times New Roman;
+  font-size: 16px;
+  padding: 14px 6px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #b1c2ae;
+}
+
+.active-player .ui .place-button:hover {
+  background-color: #5cbf2a;
+}
+
+.active-player .ui .place-button:active {
+  top: 1px;
+}
+
+.active-player .ui .place-button:focus {
+  outline: none;
+}
+
+.active-player .ui .yaniv-button {
+  visibility: hidden;
+  -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
+          box-shadow: 0px 1px 0px 0px #fff6af;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffec64), to(#ffab23));
+  background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
+  background-color: #ffec64;
+  border: 1px solid #ffaa22;
+  color: #333333;
+  font-family: Verdana;
+  font-weight: bold;
+  text-shadow: 0px 1px 0px #ffee66;
+  right: unset;
+  border-radius: 28px;
+  display: inline-block;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 14px 6px;
+  text-decoration: none;
+}
+
+.active-player .ui .yaniv-button:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffab23), to(#ffec64));
+  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
+  background-color: #ffab23;
+}
+
+.active-player .ui .yaniv-button:active {
+  top: 1px;
+}
+
+.active-player .ui .yaniv-button:focus {
+  outline: none;
+}
+
+.ui {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.ui.horizontal {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  width: 100%;
 }
 
 h1 {
@@ -311,10 +424,6 @@ h1 {
   font-family: roboto;
   font-size: 14px;
   padding: 2px;
-}
-
-#player-buttons-div {
-  left: 20px;
 }
 
 #opp-name3 {
@@ -598,185 +707,6 @@ h1 {
   top: -20%;
   -webkit-transition-duration: 200ms;
           transition-duration: 200ms;
-}
-
-#player-buttons-div {
-  border-radius: 50%;
-  position: relative;
-  width: 10px;
-  height: 200px;
-}
-
-#player-buttons-div .place-button {
-  position: absolute;
-  top: 0;
-  right: 20px;
-  background-color: #118c32;
-  border-radius: 28px;
-  border: 1px solid #18ab29;
-  display: inline-block;
-  cursor: pointer;
-  color: #ffffff;
-  font-family: Times New Roman;
-  font-size: 16px;
-  padding: 14px 6px;
-  text-decoration: none;
-  text-shadow: 0px 1px 0px #b1c2ae;
-}
-
-#player-buttons-div .place-button:hover {
-  background-color: #5cbf2a;
-}
-
-#player-buttons-div .place-button:active {
-  top: 1px;
-}
-
-#player-buttons-div .place-button:focus {
-  outline: none;
-}
-
-#player-buttons-div .yaniv-button {
-  position: absolute;
-  right: 0;
-  top: 50px;
-  -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
-          box-shadow: 0px 1px 0px 0px #fff6af;
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffec64), to(#ffab23));
-  background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-  background-color: #ffec64;
-  border: 1px solid #ffaa22;
-  color: #333333;
-  font-family: Verdana;
-  font-weight: bold;
-  text-shadow: 0px 1px 0px #ffee66;
-  position: absolute;
-  right: -12px;
-  border-radius: 28px;
-  display: inline-block;
-  cursor: pointer;
-  font-size: 12px;
-  padding: 14px 8px;
-  text-decoration: none;
-}
-
-#player-buttons-div .yaniv-button:hover {
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffab23), to(#ffec64));
-  background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
-  background-color: #ffab23;
-}
-
-#player-buttons-div .yaniv-button:active {
-  top: 1px;
-}
-
-#player-buttons-div .yaniv-button:focus {
-  outline: none;
-}
-
-#player-buttons-mobile {
-  display: none;
-}
-
-@media screen and (max-width: 1100px) {
-  #player-buttons-div {
-    display: none;
-  }
-  #player-buttons-mobile {
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-pack: justify;
-        -ms-flex-pack: justify;
-            justify-content: space-between;
-    margin: auto;
-    width: 62vw;
-    padding-top: 1%;
-  }
-  #player-buttons-mobile .place-button {
-    position: relative;
-    top: unset;
-    right: unset;
-    background-color: #118c32;
-    border-radius: 28px;
-    border: 1px solid #18ab29;
-    display: inline-block;
-    cursor: pointer;
-    color: #ffffff;
-    font-family: Times New Roman;
-    font-size: 16px;
-    padding: 14px 6px;
-    text-decoration: none;
-    text-shadow: 0px 1px 0px #b1c2ae;
-  }
-  #player-buttons-mobile .place-button:hover {
-    background-color: #5cbf2a;
-  }
-  #player-buttons-mobile .place-button:active {
-    top: 1px;
-  }
-  #player-buttons-mobile .place-button:focus {
-    outline: none;
-  }
-  #player-buttons-mobile .yaniv-button {
-    position: relative;
-    right: unset;
-    top: unset;
-    -webkit-box-shadow: 0px 1px 0px 0px #fff6af;
-            box-shadow: 0px 1px 0px 0px #fff6af;
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffec64), to(#ffab23));
-    background: linear-gradient(to bottom, #ffec64 5%, #ffab23 100%);
-    background-color: #ffec64;
-    border: 1px solid #ffaa22;
-    color: #333333;
-    font-family: Verdana;
-    font-weight: bold;
-    text-shadow: 0px 1px 0px #ffee66;
-    right: unset;
-    border-radius: 28px;
-    display: inline-block;
-    cursor: pointer;
-    font-size: 12px;
-    padding: 14px 6px;
-    text-decoration: none;
-  }
-  #player-buttons-mobile .yaniv-button:hover {
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #ffab23), to(#ffec64));
-    background: linear-gradient(to bottom, #ffab23 5%, #ffec64 100%);
-    background-color: #ffab23;
-  }
-  #player-buttons-mobile .yaniv-button:active {
-    top: 1px;
-  }
-  #player-buttons-mobile .yaniv-button:focus {
-    outline: none;
-  }
-  #player-buttons-mobile .assaf-button {
-    background-color: #d35603;
-    border: 1px solid #b45b08;
-    color: #ffffff;
-    text-shadow: 0px 1px 0px #850d0d;
-    position: relative;
-    right: unset;
-    top: unset;
-    font-family: Verdana;
-    font-weight: bold;
-    border-radius: 28px;
-    display: inline-block;
-    cursor: pointer;
-    font-size: 10px;
-    padding: 10px 3px;
-    text-decoration: none;
-  }
-  #player-buttons-mobile .assaf-button:hover {
-    background-color: #e67845;
-  }
-  #player-buttons-mobile .assaf-button:active {
-    top: 76px;
-  }
-  #player-buttons-mobile .assaf-button:focus {
-    outline: none;
-  }
 }
 
 .shimmer-table li:first-child > img {

@@ -21,12 +21,16 @@
     <div id="right-opps-names">
       <p id="opp-name3" hidden="true"></p>
     </div>
+    <!-- grid containing the game elements -->
     <div class="game-board">
-      <div class="box">
-      </div>
-      <div class="box player opponent"></div>
       <div class="box"></div>
-      <div class="box player opponent"></div>
+      <div class="box player opponent">
+        <div class = "deck horizontal"></div>
+    </div>
+      <div class="box"></div>
+      <div class="box player opponent">
+        <div class = "deck flip"></div>
+      </div>
       <div class="box game-field">
         <input type="text" id="login" placeholder="Enter name" />
         <button id="join-button">Join Game</button>
@@ -35,20 +39,27 @@
         <ol id="pile-deck" class="stack"></ol>
         <div id = "pile-selection" expanded = "false"></div>
       </div>
-      <div class="box player opponent"></div>
+      <div class="box player opponent">
+        <div class = "deck flip"></div>
+      </div>
       <div class="box"></div>
-      <div class="box player active-player" id="active-player"></div>
+      <div class="box player active-player" id="active-player">
+        <div class = "deck horizontal"></div>
+        <div class = "ui horizontal">
+          <button id = "place-button" class="place-button">Place</button>
+          <div id = "player-tag"></div>
+          <button id = "yaniv-button" class="yaniv-button">Yaniv!</button>
+        </div>
+      </div>
       
-      <div class="box" id="player-buttons-div" hidden>
+      <!-- <div class="box" id="player-buttons-div">
         <button class="place-button">Place</button>
         <button class="yaniv-button">Yaniv!</button>
-        <!-- <button class="assaf-button">Assaf!</button> -->
       </div>
     </div>
-    <div class="box" id="player-buttons-mobile" hidden>
+    <div class="box" id="player-buttons-mobile">
       <button class="place-button">Place</button>
       <button class="yaniv-button">Yaniv!</button>
-      <!-- <button class="assaf-button">Assaf!</button> -->
-    </div>
+    </div> -->
   </body>
 </html>
