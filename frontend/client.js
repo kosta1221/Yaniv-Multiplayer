@@ -65,7 +65,7 @@ async function onLoad() {
 
   playerButtons.addEventListener("click", (e) => {
     let clickedBtn = e.target;
-    if(clickedBtn.tagName !== "BUTTON") {
+    if(clickedBtn.tagName === "BUTTON") {
       clickedBtn = playerButtons;
       clickedBtn.childNodes.forEach((elem) => {
         if (elem.tagName === "BUTTON" && elem.innerHTML === "Place") {
@@ -73,11 +73,11 @@ async function onLoad() {
         }
       })
     }
-    executeMove(clickedBtn.innerHTML);
+    executeMove(clickedBtn.innerText);
   });
   playerButtonsMobile.addEventListener("click", (e) => {
     let clickedBtn = e.target;
-    if(clickedBtn.tagName !== "BUTTON") {
+    if(clickedBtn.tagName === "BUTTON") {
       clickedBtn = playerButtonsMobile;
       clickedBtn.childNodes.forEach((elem) => {
         if (elem.tagName === "BUTTON" && elem.innerHTML === "Yaniv!") {
@@ -85,7 +85,7 @@ async function onLoad() {
         }
       })
     }
-    executeMove(clickedBtn.innerHTML);
+    executeMove(clickedBtn.innerText);
   });
 
   document.querySelector("#pile-deck").addEventListener("click", (e) => {

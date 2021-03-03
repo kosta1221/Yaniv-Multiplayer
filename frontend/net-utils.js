@@ -18,7 +18,7 @@ const netUtils = {
 		const id = body.playerId;
 		setInterval(()=>{
 		  fetch(`${this.URL}/ping/${id}`);
-		}, 20000);
+		}, 5000);
 		console.log("join request responded with:");
 		console.log(body);
 		return id;

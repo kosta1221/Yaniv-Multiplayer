@@ -7,7 +7,7 @@ const classes = require("./classes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const PLAYER_TIMEOUT = 30 * 1000; // 30 seconds
+const PLAYER_TIMEOUT = 3 * 60 * 1000; // 3 minutes
 const TIMEOUT_CHECKING_TIME = 10 * 1000; // 10 seconds
 
 let gameId;
