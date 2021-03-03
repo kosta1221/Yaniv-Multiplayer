@@ -8,12 +8,12 @@ async function onLoad() {
   let opponents = {};
   let playerInTurn;
   let matchNumber;
-  let pileDeck;
+  let pileDeck = null;
   let allPlayersPoints;
   const activePlayerMove = { 
     "selected-cards": new Deck() 
   };
-  const lastDiscardedCards = [new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
+  const lastDiscardedCards = [];//[new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
 
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
@@ -174,8 +174,9 @@ async function onLoad() {
     const pileDeckLastTurn = pileDeck;
     pileDeck = new Deck(state.openCards.cards);
     playerInTurn = state.playerInTurn;
-    const openCardsDiff = pileDeck.cards.length - pileDeckLastTurn.cards.length;
+    if (!pileDeckLastTurn) return;
     lastDiscardedCards.splice(0, lastDiscardedCards.length);
+    const openCardsDiff = pileDeck.cards.length - pileDeckLastTurn.cards.length;
     for(let i = pileDeck.cards.length; i > pileDeck.cards.length - openCardsDiff; i--) {
       lastDiscardedCards.unshift( pileDeck.cards[i - 1] );
     }
