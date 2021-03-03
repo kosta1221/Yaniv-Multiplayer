@@ -147,6 +147,12 @@ async function onLoad() {
     });
     document.body.style.pointerEvents = "none";
     document.querySelector("#game-message").style.display = "inline-block";
+
+    if (message === "Yaniv") {
+      document.querySelector("#yaniv-audio").play();
+    } else if (message === "Assaf") {
+      document.querySelector("#assaf-audio").play();
+    }
     
     return new Promise(resolve => {
         setTimeout(() => {
@@ -156,6 +162,8 @@ async function onLoad() {
         });
         document.body.style.pointerEvents = "auto";
         document.querySelector("#game-message").style.display = "none";
+
+        
         
         resolve();
       }, time)
