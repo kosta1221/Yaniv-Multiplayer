@@ -24,6 +24,19 @@ const utils = {
     const isJoker = cardElement.getAttribute("is-joker") === "true" ? true : false;
     return new Card(suit, rank, isJoker);
     },
+    isPlayValid(play) {
+      // move: "place",
+      // cards: activePlayerMove["selected-cards"],
+      // isCardToGetFromGameDeck,
+      // cardPickedFromSet: activePlayerMove.cardToTake
+      const selectedCards = play.cards.cards;
+      if(selectedCards.length < 1 && play.move === "place") return false;
+      const isAllSelectedCardsSameRank = selectedCards.every((card, i, cards) => cards[0].rank === card.rank);
+      if(isAllSelectedCardsSameRank) return true;
+      const isAllSelectedCardsSameSuit = selectedCards.every((card, i, cards) => cards[0].suit === card.suit);
+      selectedCards.reduce((prevCard, curCard)=> this.ranks.indexOf(prevCard) === this.ranks.indexOf(curCard) - 1);
+
+    },
     getImageName(card) {
         let imgName = "";
         if (card.isJoker) return "Black_joker";
