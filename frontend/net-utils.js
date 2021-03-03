@@ -59,33 +59,28 @@ const netUtils = {
 	async play(move, id) {
 		// mocks.executeMove(move);
 		// return;
-		let body;
 		console.log(move.move);
 		const isYaniv = move.move === "yaniv";
-		if (!isYaniv) {
-			const cards = move.cards.cards;
-			body = JSON.stringify({
-				callYaniv: false,
-				cardsToDiscard: cards,
-				isCardToGetFromGameDeck: true,
-				cardPickedFromSet: null,
-			});
-		} else {
-			body = JSON.stringify({
-				callYaniv: true
-			});
-		}
+		const cardsToDiscard = move.cards.cards;
+		const {cardPickedFromSet, isCardToGetFromGameDeck} = move;
+		const playObj = {
+			callYaniv: isYaniv,
+			cardsToDiscard,
+			isCardToGetFromGameDeck,
+			cardPickedFromSet
+		};
+		
 		const init = {
 			method: "PUT",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: body,
+			body: JSON.stringify(playObj),
 		};
 		console.log("sending move request:");
 		console.log(JSON.parse(init.body));
 		await fetch(`${this.URL}/game/play/${id}`, init)
-			.catch(err => console.log(err));
+			.catch(err => console.log(err, err.message));
 	},
 };
 // body.callYaniv,

@@ -667,7 +667,7 @@ h1 {
 }
 
 #player-buttons-div .yaniv-button:active {
-  top: 36px;
+  top: 1px;
 }
 
 #player-buttons-div .yaniv-button:focus {
@@ -746,7 +746,7 @@ h1 {
     background-color: #ffab23;
   }
   #player-buttons-mobile .yaniv-button:active {
-    top: 36px;
+    top: 1px;
   }
   #player-buttons-mobile .yaniv-button:focus {
     outline: none;

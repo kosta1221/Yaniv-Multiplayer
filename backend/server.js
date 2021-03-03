@@ -57,8 +57,8 @@ app.use(express.json());
 
 // middleware for waiting 0.01 seconds between server requests
 app.use(function (req, res, next) {
-	console.log("Time:", Date.now());
-	console.log("Request Type:", req.method);
+	// console.log("Time:", Date.now());
+	// console.log("Request Type:", req.method);
 	setTimeout(next, 10);
 });
 
@@ -84,7 +84,7 @@ app.get("/ping/:playerId", (req, res) => {
 				player.lastPinged = currentTime;
 			}
 		}
-		console.log(`Ping time: ${currentTime}, by player id: ${pingingPlayerId}`);
+		// console.log(`Ping time: ${currentTime}, by player id: ${pingingPlayerId}`);
 		res.send("Pong " + pingingPlayerId);
 	}
 });
@@ -108,7 +108,7 @@ app.get("/game/state/:playerId", (req, res) => {
 			message: `Unauthorized request to get game state, player with id ${requestingPlayerId} is not recognized!`,
 		});
 	} else {
-		console.log(`Game state for player id: ${requestingPlayerId} of game with id:${gameId}:`);
+		// console.log(`Game state for player id: ${requestingPlayerId} of game with id:${gameId}:`);
 		res.send(game.getGameState(requestingPlayerId));
 	}
 });
@@ -209,14 +209,19 @@ app.put("/game/play/:playerId", (req, res) => {
 		try {
 			console.log("hi");
 			console.log(body);
+			const play = convertPlayRequest(body);
 			gameManager.makeTurn(
 				game,
-				body.callYaniv,
-				body.cardsToDiscard,
-				body.isCardToGetFromGameDeck,
-				body.cardPickedFromSet
+				play.callYaniv,
+				play.cardsToDiscard,
+				play.isCardToGetFromGameDeck,
+				play.cardPickedFromSet
 			);
+			res.status(200).json({
+				message: `move executed successfully`,
+			});
 		} catch (error) {
+			console.log(error);
 			res.status(500).send(error);
 		}
 	}
@@ -225,3 +230,17 @@ app.put("/game/play/:playerId", (req, res) => {
 app.listen(PORT, () => {
 	console.log(`Server started on port ${PORT}`);
 });
+
+function convertPlayRequest(body) {
+	const callYaniv = body.callYaniv;
+	const cardsToDiscard = body.cardsToDiscard === null ? null : body.cardsToDiscard.map(cardLike => new classes.Card(cardLike.suit,cardLike.rank,cardLike.isJoker));
+	const isCardToGetFromGameDeck = body.isCardToGetFromGameDeck;
+	const cardPickedFromSet = body.cardPickedFromSet === null ? null : new classes.Card(body.cardPickedFromSet.suit,body.cardPickedFromSet.rank,body.cardPickedFromSet.isJoker); 
+	const play = {
+		callYaniv,
+		cardsToDiscard,
+		isCardToGetFromGameDeck,
+		cardPickedFromSet 
+	}
+	return play;
+}

@@ -25,9 +25,12 @@ const utils = {
     return new Card(suit, rank, isJoker);
     },
     isPlayValid(play, playerDeck) {
-      const playerCardsValueSum = playerDeck.cards.reduce((card, nextCard) => {
-        return this.getCardValue(card) + this.getCardValue(nextCard)
+      console.log("in isPlayValid");
+      console.log(play, playerDeck);
+      const playerCardsValueSum = playerDeck.cards.reduce((sum, card) => {
+        return sum + this.getCardValue(card)
       }, 0);
+      console.log("sum of cards: " + playerCardsValueSum);
       if (play.move === "yaniv" && playerCardsValueSum <= 7) return true;
       if (play.move === "yaniv" && playerCardsValueSum > 7) throw "Sum of cards values must be less than 7";
       const selectedCards = play.cards.cards;
@@ -46,6 +49,7 @@ const utils = {
       throw "Cards must be consecutive";
     },
     getCardValue(card) {
+      if (card.isJoker) return 0;
       return Math.min(this.ranks.indexOf(card.rank) + 1, 10);
     },
     getImageName(card) {

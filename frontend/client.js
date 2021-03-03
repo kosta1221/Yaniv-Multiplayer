@@ -11,6 +11,7 @@ async function onLoad() {
   let pileDeck = null;
   let allPlayersPoints;
   const activePlayerMove = { 
+    cardPickedFromSet: null,
     "selected-cards": new Deck() 
   };
   const lastDiscardedCards = [];//[new Card("clubs", "5", false), new Card("clubs", "6", false), new Card("clubs", "7", false)];
@@ -81,7 +82,7 @@ async function onLoad() {
     pileSelection.innerHTML = "";
     if (pileSelection.getAttribute("expanded") === "true") {
       pileSelection.setAttribute("expanded", "false");
-      activePlayerMove.cardToTake = null;
+      activePlayerMove.cardPickedFromSet = null;
       return;
     }
     pileSelection.setAttribute("expanded", "true");
@@ -101,16 +102,16 @@ async function onLoad() {
     if ( cardElement.classList.contains("unselectable") ) return;
     const card = utils.getCardFromElement(cardElement);
     if ( cardElement.classList.contains("selected") ) {
-      activePlayerMove.cardToTake = null;
+      activePlayerMove.cardPickedFromSet = null;
       cardElement.classList.remove("selected");
     } else {
-      activePlayerMove.cardToTake = card;
+      activePlayerMove.cardPickedFromSet = card;
       cardElement.classList.add("selected");
     }
     const openCards = Array.from(document.querySelector("#pile-selection").querySelectorAll(".card"));
     for(const openCardElement of openCards) {
       if(openCardElement === cardElement) continue;
-      if(activePlayerMove.cardToTake !== null) {
+      if(activePlayerMove.cardPickedFromSet !== null) {
         openCardElement.classList.replace("selectable", "unselectable");
       } else {
         openCardElement.classList.replace("unselectable", "selectable");
@@ -316,16 +317,16 @@ async function onLoad() {
     //looks at move player is trying to make and asks gameManager to perform
     const selectedCards = activePlayerMove["selected-cards"];
     try {
-      const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
+      const isCardToGetFromGameDeck = activePlayerMove.cardPickedFromSet === null;
       const moveName = move === "Place" ? "place" : move === "Yaniv!" ? "yaniv" : null; 
       const playObject = {
         move: moveName,
         cards: selectedCards,
         isCardToGetFromGameDeck,
-        cardPickedFromSet: activePlayerMove.cardToTake
+        cardPickedFromSet: activePlayerMove.cardPickedFromSet
       };
       if ( utils.isPlayValid(playObject, player.playerDeck) ) {
-        netUtils.play(playObject, id);
+        await netUtils.play(playObject, id);
       }
     } catch (error) {
       Swal.fire({
@@ -335,45 +336,11 @@ async function onLoad() {
         toast: true,
       });
     }
-    // switch (move) {
-    //   case "Place": {
-    //     if (selectedPlayerCards.length < 1) {
-    //       Swal.fire({
-    //         icon: "info",
-    //         title: "Oops...",
-    //         text: "You must pick a card!",
-    //         toast: true,
-    //       });
-    //     } else {
-    //       const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
-    //       const playObject = {
-    //         move: "place",
-    //         cards: activePlayerMove["selected-cards"],
-    //         isCardToGetFromGameDeck,
-    //         cardPickedFromSet: activePlayerMove.cardToTake
-    //       };
-    //       if ( utils.isPlayValid(play, player.playerDeck) ) netUtils.play(playObject, id);
-    //       console.log("you placed the following cards:");
-    //       console.log(activePlayerMove["selected-cards"]);
-    //     }
-    //     break;
-    //   }
-    //   case "Yaniv!": {
-    //     console.log('you called yaniv');
-    //     const playObject = {
-    //       move: "yaniv",
-    //       cards: null,
-    //     };
-    //     if (netUtils.isPlayValid(playObject))
-    //     netUtils.play(playObject, id);
-    //     break;
-    //   }
-    // }
     activePlayerMove["selected-cards"].cards = [];
-    activePlayerMove.cardToTake = null;
-    await setTimeout(()=>console.log("rerendering after move execution in a few moments"), 1000);
+    activePlayerMove.cardPickedFromSet = null;
+    console.log("rerendering after move execution in a few moments");
     playerInTurn = null;
-    await updateGameState;
+    await updateGameState();
     renderAll();
   }
   

@@ -9,9 +9,9 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
-		if (isCardToGetFromGameDeck !== undefined || cardPickedFromSet || cardsToDiscard) {
-			throw new Error(`Cannot call yaniv and do other things!`);
-		}
+		// if (cardPickedFromSet || cardToDiscard.length !== 0) {
+		// 	throw new Error(`Cannot call yaniv and do other things!`);
+		// }
 
 		let playersRoundPointSum = [];
 		const indexOfPlayerInTurn = players.indexOf(playerInTurn);
@@ -170,9 +170,9 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			} else {
 				let areRanksSame = true;
 				let indexOfCardPickedFromSet;
-				const iterationStart = openCardDeck.lengh - game.amountOfCardsLastPlayerPutInOpenCardDeck;
+				const iterationStart = openCardDeck.length - game.amountOfCardsLastPlayerPutInOpenCardDeck;
 
-				for (let i = iterationStart; i < openCardDeck.lengh; i++) {
+				for (let i = iterationStart; i < openCardDeck.length; i++) {
 					if (openCardDeck[iterationStart].rank !== openCardDeck[i].rank) {
 						areRanksSame = false;
 					}
@@ -198,7 +198,8 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		// console.log(gameDeck);
 		// console.log(openCardDeck);
 
-		// console.log(playerInTurn);
+		// console.log(playerInTurn.playerDeck.cards);
+		// console.log(cardsToDiscard, game);
 		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
 		game.amountOfCardsLastPlayerPutInOpenCardDeck = cardsToDiscard.length;
 	}
