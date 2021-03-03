@@ -1,6 +1,8 @@
 "use strict";
 document.addEventListener("DOMContentLoaded", onLoad);
 async function onLoad() {
+
+  
   let isGameStarted = false;
   let myName;
   let id;
@@ -15,6 +17,7 @@ async function onLoad() {
     "selected-cards": new Deck() 
   };
   let lastDiscardedCards = [];
+  let timesMessageShowed = 0;
 
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
@@ -25,7 +28,8 @@ async function onLoad() {
   const body = document.getElementsByTagName("BODY")[0];
   const input = document.querySelector("#login");
 
-  
+  document.querySelector("#game-message").style.display = "none";
+
   joinButton.addEventListener("click", async () => {
     const userName = input.value;
     if (!userName) {
@@ -135,10 +139,10 @@ async function onLoad() {
   }
   
   /* Show message, for an amount of time in ms */
-  async function showMessage(message, time) {
+  async function showMessage(message, time, color) {
     document.querySelectorAll("body :not(#game-message)").forEach((element) => {
       element.style.filter = "blur(3px)";
-      document.body.style.background = "#808080";
+      document.body.style.background = color;
     });
     document.body.style.pointerEvents = "none";
     document.querySelector("#game-message").style.display = "inline-block";
@@ -192,20 +196,25 @@ async function onLoad() {
     console.log("last discarded cards: ");
     console.log(lastDiscardedCards);
     matchNumber = state.match;
+    console.log(matchNumber);
+    console.log(matchNumber === timesMessageShowed);
+    // SHOW YANIV / ASSAF MESSAGE
+    if (state.playerCalledYaniv && matchNumber === timesMessageShowed + 2) {
+      showMessage("Yaniv!", 3000,  "#d90000");
+      if (state.playerCalledAssaf) {
+
+        showMessage("Assaf", 3000 , "#0080cd");
+      }
+      timesMessageShowed++;
+    }
   }
   async function MatchStartAnimation() {
     const tableDeckElement = document.querySelector("#table-deck");
     const tableDeckBCR = tableDeckElement.getBoundingClientRect();
     const tableDeckCoords = {x: tableDeckBCR.x, y: tableDeckBCR.y};
     if (matchNumber > 1) {
-      // SHOW YANIV / ASSAF MESSAGE
-    if (state.playerCalledYaniv) {
-      showMessage("Yaniv!", 3000);
-      if (state.playerCalledAssaf) {
-
-        showMessage("Assaf", 3000);
-      }
-    }
+      
+    
       //show Yaniv! on player who called yaniv
       //show Assaf! on player who called assaf
       //collect all cards to game deck
@@ -243,6 +252,7 @@ async function onLoad() {
   }
 
   function renderAll() {
+    
     const playerDeckElements = Array.from(document.querySelectorAll(".deck"));
     playerDeckElements.forEach((elem) => (elem.innerHTML = ""));
     const stacks = Array.from(document.querySelectorAll(".stack"));
