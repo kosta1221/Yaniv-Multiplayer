@@ -339,7 +339,6 @@ async function onLoad() {
             toast: true,
           });
         } else {
-          if(activePlayerMove["selected-cards"].cards)
           const isCardToGetFromGameDeck = activePlayerMove.cardToTake !== null;
           netUtils.play({
             move: "place",

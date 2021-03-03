@@ -152,7 +152,7 @@ $card-width: 100px;
   justify-content: left;
   list-style: none;
   width: $card-width;
-  height: calc(#{$card-width} * 1.4);
+  height: calc($card-width * 1.4);
   li {
     width: 0.2px;
   }
@@ -160,7 +160,7 @@ $card-width: 100px;
 
 .card {
   width: $card-width;
-  height: calc(#{$card-width} * 1.4);
+  height: calc($card-width * 1.4);
   position: relative;
   top: 0;
   transition-duration: 200ms;
@@ -371,7 +371,7 @@ $card-width: 100px;
   $card-width: 60px;
   .card {
     width: $card-width;
-    height: calc(#{$card-width} * 1.4);
+    height: calc($card-width * 1.4);
   }
   .flip > .card {
     transform: rotate(90deg);
