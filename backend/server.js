@@ -171,8 +171,10 @@ app.post("/game/new/:playerId", (req, res) => {
 			const body = req.body;
 			gameId = uuid.v4();
 			body.gameId = gameId;
-
-			game = new classes.Game(players);
+			/////riggedDeck/////
+			const rigDeck = createDemoDeck();
+			////////////////////
+			game = new classes.Game(players, rigDeck);
 
 			console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
 			res.status(201).json(body);
@@ -244,3 +246,32 @@ function convertPlayRequest(body) {
 	}
 	return play;
 }
+
+
+///////FOR DEMO////////
+function createDemoDeck() {
+	// let suits = ["clubs", "diamonds", "hearts", "spades"];
+	// 	let ranks = ["ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "jack", "queen", "king"];
+	const deck = new classes.Deck();
+	deck.createNewFullDeck();
+	const cards = deck.cards;
+	cards[0] = new classes.Card("clubs", "6", false);
+	cards[1] =new classes.Card("hearts", "2", false);
+	cards[2] =new classes.Card("hearts", "6", false);
+	cards[3] =new classes.Card("spades", "3", false);
+	cards[4] =new classes.Card("diamonds", "3", false);
+	cards[5] =new classes.Card("diamonds", "2", false);
+	cards[6] =new classes.Card("spades", "4", false);
+	cards[7] =new classes.Card("clubs", "4", false);
+	cards[8] =new classes.Card("hearts", "ace", false);
+	cards[9] =new classes.Card("spades", "3", false);
+	cards[10] =new classes.Card("hearts", "queen", false);
+	cards[11] = new classes.Card(null, null, true);
+	cards[12] = new classes.Card("spades", "2", false);
+	cards[13] = new classes.Card("hearts", "ace", false);
+	cards[14] = new classes.Card("clubs", "ace", false);
+	cards[15] =new classes.Card("diamonds", "ace", false);
+	cards[16] = new classes.Card(null, null, true);
+	return deck;
+}
+///////////////////////
