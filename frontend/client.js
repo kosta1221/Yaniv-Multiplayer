@@ -32,12 +32,25 @@ async function onLoad() {
 
   joinButton.addEventListener("click", async () => {
     const userName = input.value;
-    if (!userName) {
+    /* if (!userName) {
+      input.focus();
+      return;
+    } */
+    myName = userName;
+    try {
+      await joinGame();
+      
+    } catch (error) {
+      console.log(error);
+      Swal.fire({
+        icon: "info",
+        title: "Oops...",
+        text: error,
+        toast: true,
+      });
       input.focus();
       return;
     }
-    myName = userName;
-    await joinGame();
     joinButton.hidden = true;
     input.hidden = true;
     readyButton.hidden = false;

@@ -15,14 +15,22 @@ const netUtils = {
 		console.log("trying to join with name: " + userName);
 		const response = await fetch(this.URL + "/join", init);
 		const body = await response.json();
+
+		if(body.error) {
+			console.log(body);
+			throw new Error(body.error);
+		}
+
 		const id = body.playerId;
 		setInterval(()=>{
-		  fetch(`${this.URL}/ping/${id}`);
+			fetch(`${this.URL}/ping/${id}`);
 		}, 5000);
 		console.log("join request responded with:");
 		console.log(body);
 		return id;
+			
 	},
+
 	ready(playerIdentity) {
 		// mocks.setReady(playerIdentity);
 		return;
