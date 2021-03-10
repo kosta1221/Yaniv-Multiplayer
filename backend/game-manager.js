@@ -6,15 +6,18 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 	const gameDeck = game.gameDeck;
 	const openCardDeck = game.openCardDeck;
 	const players = game.players;
-	players.forEach(player => {
+	players.forEach((player) => {
 		player.calledYaniv = false;
 		player.calledAssaf = false;
 	});
 	// Players have two options for their turn: They may either play one or more cards or call "Yaniv!"
 	if (callYaniv) {
-		// if (cardPickedFromSet || cardToDiscard.length !== 0) {
-		// 	throw new Error(`Cannot call yaniv and do other things!`);
-		// }
+		if (cardPickedFromSet || cardsToDiscard.length !== 0) {
+			const turnError = new Error(`Cannot call yaniv and do other things!`);
+			turnError.name = "TurnError";
+			throw turnError;
+		}
+
 		playerInTurn.calledYaniv = true;
 		let playersRoundPointSum = [];
 		const indexOfPlayerInTurn = players.indexOf(playerInTurn);
@@ -83,7 +86,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 				}
 			}
 		}
-		
+
 		//Finish Match actions
 		game.gameDeck.cards = [];
 		game.gameDeck.createNewFullDeck();
@@ -94,9 +97,9 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		game.turn = 0;
 		game.match++;
 		const newPlayers = [];
-		for(let i = 0; i < game.players.length; i++) {
+		for (let i = 0; i < game.players.length; i++) {
 			if (game.players[i].didLose) continue;
-			const player = game.players[i]; 
+			const player = game.players[i];
 			player.playerDeck.cards = [];
 			player.giveFiveCardsFromTopOfDeck(game.gameDeck);
 			player.numberOfCards = 5;
@@ -116,17 +119,22 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 			const cardToDiscard = cardsToDiscard[0];
 			// the discarded card has to be from player's cards.
 			if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
-				console.log("error1");
-				console.log(playerInTurn.playerDeck.cards);
-				throw new Error(`Discarded card has to be in ${playerInTurn.playerName}s cards!`);
+				const turnError = new Error(
+					`Discarded card has to be in ${playerInTurn.playerName}s cards!`
+				);
+				turnError.name = "TurnError";
+				throw turnError;
 			}
 		} else if (cardsToDiscard.length > 1) {
 			// the discarded cards have to be from player's cards.
 			cardsToDiscard.forEach((cardToDiscard) => {
 				console.log(cardToDiscard);
 				if (!playerInTurn.playerDeck.cards.some((card) => card.cardEquals(cardToDiscard))) {
-					console.log("error2");
-					throw new Error(`Discarded cards have to be in ${playerInTurn.playerName}s cards!`);
+					const turnError = new Error(
+						`Discarded cards have to be in ${playerInTurn.playerName}s cards!`
+					);
+					turnError.name = "TurnError";
+					throw turnError;
 				}
 			});
 			// true if the rank of even one card in cardsToDiscard isn't the same as the rank of the other cards.
@@ -134,15 +142,21 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 				// If trying to discard a set of 2 cards which don't have the same rank, throw an error!
 				if (cardsToDiscard.length === 2) {
 					console.log("error3");
-					throw new Error(`Illegal set of 2 cards, can't throw 2 cards with consecutive order!`);
+					const turnError = new Error(
+						`Illegal set of 2 cards, can't throw 2 cards with consecutive order!`
+					);
+					turnError.name = "TurnError";
+					throw turnError;
 				}
 				// true if the suit of even one card in cardsToDiscard isn't the same as the suit of the other cards.
 				if (!cardsToDiscard.every((card) => card.suit === cardsToDiscard[0].suit)) {
 					console.log("error4");
 					// Throws error when: trying to discard multiple cards, which are not all the same rank and also not all the same suit.
-					throw new Error(
+					const turnError = new Error(
 						`Illegal set of ${cardsToDiscard.length} cards, they have to be of the same rank or suit!`
 					);
+					turnError.name = "TurnError";
+					throw turnError;
 				}
 				// true if the suit of every card in cardsToDiscard is the same.
 				else {
@@ -152,31 +166,30 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 						if (cardsToDiscard[i + 1].rankIndex - cardsToDiscard[i].rankIndex !== 1) {
 							console.log("error5");
 							// Throws error when: trying to discard multiple cards, which are not all the same rank, but do have the same suit, but aren't in order.
-							throw new Error(
+							const turnError = new Error(
 								`Illegal set of ${cardsToDiscard.length} cards of the ${cardsToDiscard[0].suit} suit, they are not in order!`
 							);
+							turnError.name = "TurnError";
+							throw turnError;
 						}
 					}
 				}
 			}
 		}
 
-		// console.log(playerInTurn.numberOfCards);
-		// console.log(gameDeck);
-		// console.log(openCardDeck);
 		if (isCardToGetFromGameDeck) {
 			// If the player chooses to draw the card from the gameDeck, he cannot pick a card from set.
 			if (cardPickedFromSet) {
 				console.log("error6");
-				throw new Error(`Can only pick from a set of cards from the openCardDeck!`);
+				const turnError = new Error(
+					`Can't pick from the game-deck and open-cards-deck at the same time!`
+				);
+				turnError.name = "TurnError";
+				throw turnError;
 			}
 
 			// Draw a card from the draw pile (game deck)
 			playerInTurn.giveFirstCardFromDeck(gameDeck);
-
-			/* for (let i = 0; i < 34; i++) {
-				playerInTurn.giveFirstCardFromDeck(gameDeck);
-			} */
 
 			// If the drawing deck is empty and no one has yet called "Yaniv!", then all cards of the free stack, excluding the last player's drop, are shuffled and placed face down as a new deck.
 			if (gameDeck.cards.length === 0) {
@@ -215,9 +228,11 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 						playerInTurn.giveLastCardFromDeck(openCardDeck);
 					} else {
 						console.log("error7");
-						throw new Error(
+						const turnError = new Error(
 							`Trying to pick an illegal card, with rank ${cardPickedFromSet.rank} which is not part of the set that the last player put in the open card deck!`
 						);
+						turnError.name = "TurnError";
+						throw turnError;
 					}
 				}
 			}

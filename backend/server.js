@@ -210,8 +210,6 @@ app.put("/game/play/:playerId", (req, res, next) => {
 	}
 
 	try {
-		console.log("req.body:");
-		console.log(body);
 		const play = convertPlayRequest(body);
 		gameManager.makeTurn(
 			game,
@@ -220,6 +218,7 @@ app.put("/game/play/:playerId", (req, res, next) => {
 			play.isCardToGetFromGameDeck,
 			play.cardPickedFromSet
 		);
+		console.log(req.body);
 		res.status(200).json({
 			message: `move executed successfully`,
 		});
@@ -229,10 +228,11 @@ app.put("/game/play/:playerId", (req, res, next) => {
 });
 
 const errorHandler = (error, request, response, next) => {
+	console.log(error.name);
 	console.error(error.message);
 
-	if (error.name === "CastError") {
-		return response.status(400).send({ error: "invalid id format!" });
+	if (error.name === "TurnError") {
+		return response.status(400).json({ error: error.message });
 	} else if (error.name === "ValidationError") {
 		return response.status(400).json({ error: error.message });
 	}
