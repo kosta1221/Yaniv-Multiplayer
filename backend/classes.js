@@ -141,7 +141,7 @@ class Card {
 // A class for having instances of games
 class Game {
 	match = 1;
-	constructor(playerNamesAndIds, gameDeck) {
+	constructor(playerNamesAndIds, gameId, gameDeck) {
 		if (gameDeck) {
 			this.gameDeck = gameDeck;
 		} else {
@@ -160,6 +160,8 @@ class Game {
 
 		this.turn = 0;
 		this.playerInTurn = this.players[0];
+
+		this.gameId = gameId;
 
 		this.openCardDeck = new Deck();
 
@@ -195,6 +197,7 @@ class Game {
 			// Can get whole player object if needed
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
 			gameState.match = this.match;
+			gameState.gameId = this.gameId;
 			return gameState;
 		};
 	}

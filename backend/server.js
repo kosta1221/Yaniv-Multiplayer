@@ -158,7 +158,7 @@ app.post("/join", (req, res) => {
 
 // socket.io connection event listener
 io.on("connection", (socket) => {
-	console.log(socket);
+	console.log(socket.id);
 
 	socket.on("playerJoin", (joinedPlayerName) => {
 		if (!joinedPlayerName) {
@@ -177,7 +177,43 @@ io.on("connection", (socket) => {
 		console.log(players);
 
 		console.log(`new player joined with name ${joinedPlayerName}`);
+
+		socket.broadcast.emit("otherPlayerCreated", {
+			playerName: newPlayer.playerName,
+		});
+		socket.emit("playerCreated", {
+			playerName: newPlayer.playerName,
+			playerId: newPlayer.playerId,
+		});
 	});
+
+	// create a new game
+	socket.on("newGame", (requestingPlayerId) => {
+		const requestingPlayer = players.find((player) => player.playerId === requestingPlayerId);
+
+		if (!requestingPlayer.isHost) {
+			console.log("123");
+			return socket.emit(
+				"error",
+				`Unauthorized request to get create new game, player with id ${requestingPlayerId} is not recognized!`
+			);
+		}
+
+		if (game || gameId) {
+			console.log("4567");
+			return socket.emit("error", `Game already running!`);
+		}
+
+		gameId = uuid.v4();
+		game = new classes.Game(players, gameId);
+
+		console.log(`Created new game with id: ${gameId}, number of players: ${game.players.length}`);
+
+		for (const player of players) {
+			player.socket.emit("gameCreated", game.getGameState(player.playerId));
+		}
+	});
+
 	socket.on("disconnect", () => {
 		console.log("a player disconnected");
 	});
