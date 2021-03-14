@@ -1,34 +1,10 @@
 "use strict";
-
+const socket = io();
 const netUtils = {
+	
 	URL: "",
 	async joinGame(userName) {
-		// mocks.joinGame(userName);
-		// return;
-		const init = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify({ playerName: userName }),
-		};
-		console.log("trying to join with name: " + userName);
-		const response = await fetch(this.URL + "/join", init);
-		const body = await response.json();
-
-		if(body.error) {
-			console.log(body);
-			throw new Error(body.error);
-		}
-
-		const id = body.playerId;
-		setInterval(()=>{
-			fetch(`${this.URL}/ping/${id}`);
-		}, 5000);
-		console.log("join request responded with:");
-		console.log(body);
-		return id;
-			
+		socket.emit("playerJoin", userName);
 	},
 
 	ready(playerIdentity) {
@@ -36,18 +12,23 @@ const netUtils = {
 		return;
 	},
 	async startGame(id) {
-		// return;
-		const init = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-			},
+		socket.emit("newGame", id);
+	},
+	convertState(rawState) {
+		const state = {
+			allPlayersNames: rawState.allPlayersNames,
+			allPlayersPoints: rawState.allPlayersPoints,
+			allPlayersNumberOfCards: rawState.allPlayersNumberOfCards,
+			playerDeck: rawState.requestingPlayer.playerDeck,
+			openCards: rawState.openCards,
+			playerInTurn: rawState.nameOfPlayerInTurn,
+			match: rawState.match,
+			playerCalledYaniv: rawState.playerCalledYaniv,
+			playerCalledAssaf: rawState.playerCalledAssaf
 		};
-		await fetch(`${this.URL}/game/new/${id}`, init);
+		return state;
 	},
-	getPlayersStatus() {
-		// return; mocks.playersReady();
-	},
+
 	async getGameStateForPlayer(playerIdentity, id) {
 		// return mocks.state(playerIdentity);
 		const response = await fetch(`${this.URL}/game/state/${id}`);
@@ -75,23 +56,13 @@ const netUtils = {
 		const cardsToDiscard = move.cards.cards;
 		const {cardPickedFromSet, isCardToGetFromGameDeck} = move;
 		const playObj = {
+			playerId: id,
 			callYaniv: isYaniv,
 			cardsToDiscard,
 			isCardToGetFromGameDeck,
 			cardPickedFromSet
 		};
-		
-		const init = {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-			},
-			body: JSON.stringify(playObj),
-		};
-		console.log("sending move request:");
-		console.log(JSON.parse(init.body));
-		await fetch(`${this.URL}/game/play/${id}`, init)
-			.catch(err => console.log(err, err.message));
+		socket.emit("makeTurn", playObj);
 	},
 };
 // body.callYaniv,
