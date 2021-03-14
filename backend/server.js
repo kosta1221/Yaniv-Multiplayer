@@ -174,5 +174,5 @@ function convertPlayRequest(moveData) {
 		isCardToGetFromGameDeck,
 		cardPickedFromSet,
 	};
-	return moveData;
+	return play;
 }

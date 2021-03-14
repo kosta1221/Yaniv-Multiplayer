@@ -16,6 +16,7 @@ const netUtils = {
 	},
 	convertState(rawState) {
 		const state = {
+			turnsSinceMatchStart: rawState.turnsSinceMatchStart,
 			allPlayersNames: rawState.allPlayersNames,
 			allPlayersPoints: rawState.allPlayersPoints,
 			allPlayersNumberOfCards: rawState.allPlayersNumberOfCards,

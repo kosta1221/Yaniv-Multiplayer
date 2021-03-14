@@ -697,6 +697,15 @@ $card-width: 100px;
   animation: glow 1s infinite alternate;
 }
 
+#pile-selection {
+  .card {
+    &.selected {
+      background-color: #ccc;
+      animation: glow 1s infinite alternate;
+    }
+  }
+}
+
 @keyframes glow {
   from {
     box-shadow: 0 0 10px -10px #aef4af;
@@ -705,3 +714,5 @@ $card-width: 100px;
     box-shadow: 0 0 10px 10px #aef4af;
   }
 }
+
+

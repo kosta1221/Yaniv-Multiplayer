@@ -68,8 +68,6 @@ async function onLoad() {
   yanivButton.addEventListener( "click", (e) => executeMove("Yaniv!") );
   
   document.querySelector("#pile-deck").addEventListener("click", (e) => {
-    // if (lastDiscardedCards.length === 0) return;
-    // if (activePlayerMove["selected-cards"].cards.length === 0) return;
     const pileSelection = document.querySelector("#pile-selection");
     pileSelection.innerHTML = "";
     if (pileSelection.getAttribute("expanded") === "true") {
@@ -78,28 +76,27 @@ async function onLoad() {
       return;
     }
     pileSelection.setAttribute("expanded", "true");
-    const bottomCard = utils.createCardElement(lastDiscardedCards[0]);
-    const cardSelectability = playerInTurn === myName ? "selectable" : "unselectable";
-    bottomCard.classList.add(cardSelectability);
-    pileSelection.appendChild(bottomCard);
-    if (lastDiscardedCards.length > 1) {
-      const topCard = utils.createCardElement(lastDiscardedCards[lastDiscardedCards.length-1]);
-      topCard.classList.add(cardSelectability);
-      pileSelection.appendChild(topCard);
+    const cardElements = lastDiscardedCards.map( card => utils.createCardElement(card) );
+    for (const cardElement of cardElements) {
+      cardElement.classList.add("selectable");
+      pileSelection.appendChild(cardElement);
     }
   });
+
   document.querySelector("#pile-selection").addEventListener("click", (e) => {
     const cardElement = e.target; 
     if ( !cardElement.classList.contains("card") ) return;
     if ( cardElement.classList.contains("unselectable") ) return;
-    const card = utils.getCardFromElement(cardElement);
+    //select unselect card
     if ( cardElement.classList.contains("selected") ) {
       activePlayerMove.cardPickedFromSet = null;
       cardElement.classList.remove("selected");
     } else {
+      const card = utils.getCardFromElement(cardElement);
       activePlayerMove.cardPickedFromSet = card;
       cardElement.classList.add("selected");
     }
+    //check other cards selectability
     const openCards = Array.from(document.querySelector("#pile-selection").querySelectorAll(".card"));
     for(const openCardElement of openCards) {
       if(openCardElement === cardElement) continue;
@@ -174,6 +171,9 @@ async function onLoad() {
   }
 
   async function updateGameState(state) {
+    console.log("game state:");
+    console.log(JSON.stringify(state));
+    playerInTurn = state.playerInTurn;
     allPlayersPoints = state.allPlayersPoints;
     player = new Player(
       myName,
@@ -190,22 +190,22 @@ async function onLoad() {
       if(playerName === state.playerCalledYaniv) opponents[playerName].calledYaniv = true; 
       if(playerName === state.playerCalledAssaf) opponents[playerName].calledAssaf = true; 
     }
-    
-    const lastPlayerInturn = playerInTurn;
-    playerInTurn = state.playerInTurn;
+
     const pileDeckLastTurn = pileDeck;
-    pileDeck = new Deck(state.openCards.cards);
-    const isFirstTurn = lastPlayerInturn === null;
-    const isChangeTurn = lastPlayerInturn !== playerInTurn; 
-    
-    if(isFirstTurn || isChangeTurn) {
-    const openCardsDiff = isFirstTurn ? 1 : pileDeck.cards.length - pileDeckLastTurn.cards.length;
-    lastDiscardedCards = [];
-    for(let i = pileDeck.cards.length; i > pileDeck.cards.length - openCardsDiff; i--) {
-      lastDiscardedCards.unshift( pileDeck.cards[i - 1] );
+    pileDeck = state.openCards;
+
+    //figure out what cards from open pile are selectable
+    if (state.turnsSinceMatchStart === 0) {
+      lastDiscardedCards = pileDeck.cards;
+    } else {
+      const openCardsDiff = pileDeck.cards.length - pileDeckLastTurn.cards.length;
+      let cardsPlacedLastTurn = pileDeck.cards.filter( (card, i) => i >= pileDeck.cards.length - openCardsDiff);
+      if(openCardsDiff === 0) cardsPlacedLastTurn = [ pileDeck.cards[pileDeck.cards.length - 1] ];
+      const sameRank = cardsPlacedLastTurn.every((card, i, cards) => cards[0].rank === card.rank);
+      if(cardsPlacedLastTurn.length >= 3 && !sameRank) lastDiscardedCards = [cardsPlacedLastTurn[0], cardsPlacedLastTurn.pop()];
+      else lastDiscardedCards = [cardsPlacedLastTurn.pop()];
     }
-      lastDiscardedCards = utils.getValidCardsFromOpenDeck(lastDiscardedCards);
-    }
+
     matchNumber = state.match;
     // SHOW YANIV / ASSAF MESSAGE
     if (state.playerCalledYaniv && matchNumber === timesMessageShowed + 2) {
