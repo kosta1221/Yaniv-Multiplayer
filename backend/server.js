@@ -90,12 +90,12 @@ io.on("connection", (socket) => {
 	});
 
 	// event listener for making a new turn
-	socket.on("makeTurn", (turnData) => {
-		console.log(turnData);
-
-		const requestingPlayerId = turnData.playerId;
+	socket.on("makeTurn", (rawMoveData) => {
+		console.log(rawMoveData);
+		const moveData = convertPlayRequest(rawMoveData);
+		const requestingPlayerId = moveData.playerId;
 		const requestingPlayer = players.find((player) => player.playerId === requestingPlayerId);
-		console.log(turnData);
+		console.log(moveData);
 
 		console.log(requestingPlayerId);
 		console.log(game.playerInTurn.playerId);
@@ -113,10 +113,10 @@ io.on("connection", (socket) => {
 		try {
 			gameManager.makeTurn(
 				game,
-				turnData.callYaniv,
-				turnData.cardsToDiscard,
-				turnData.isCardToGetFromGameDeck,
-				turnData.cardPickedFromSet
+				moveData.callYaniv,
+				moveData.cardsToDiscard,
+				moveData.isCardToGetFromGameDeck,
+				moveData.cardPickedFromSet
 			);
 
 			for (const player of players) {
@@ -152,3 +152,27 @@ app.use(errorHandler);
 http.listen(PORT, () => {
 	console.log(`Server started on port ${PORT}`);
 });
+
+function convertPlayRequest(moveData) {
+	const playerId = moveData.playerId;
+	const callYaniv = moveData.callYaniv;
+	const cardsToDiscard = !moveData.cardsToDiscard 
+	? null 
+	: moveData.cardsToDiscard.map((cardLike) => new classes.Card(cardLike.suit, cardLike.rank, cardLike.isJoker));
+	const isCardToGetFromGameDeck = moveData.isCardToGetFromGameDeck;
+	const cardPickedFromSet = !moveData.cardPickedFromSet 
+	? null
+	: new classes.Card(
+		moveData.cardPickedFromSet.suit,
+		moveData.cardPickedFromSet.rank,
+		moveData.cardPickedFromSet.isJoker
+	);
+	const play = {
+		playerId,
+		callYaniv,
+		cardsToDiscard,
+		isCardToGetFromGameDeck,
+		cardPickedFromSet,
+	};
+	return moveData;
+}

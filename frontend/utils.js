@@ -26,24 +26,30 @@ const utils = {
     },
     isPlayValid(play, playerDeck) {
       console.log("in isPlayValid");
-      console.log(play, playerDeck);
-      const playerCardsValueSum = playerDeck.cards.reduce((sum, card) => {
-        return sum + this.getCardValue(card)
-      }, 0);
+      console.log(JSON.stringify(play));
+      console.log(JSON.stringify(playerDeck));
+      //sum
+      const playerCardsValueSum = playerDeck.cards.reduce((sum, card) => sum + this.getCardValue(card), 0);
       console.log("sum of cards: " + playerCardsValueSum);
+      //Yaniv
       if (play.move === "yaniv" && playerCardsValueSum <= 7) return true;
       if (play.move === "yaniv" && playerCardsValueSum > 7) throw "Sum of cards values must be less than 7";
+
       const selectedCards = play.cards.cards;
+      //no cards selected
       if (selectedCards.length < 1 && play.move === "place") throw "You must pick a card!";
+      //one card selected
       if (selectedCards.length === 1) return true;
+      //same rank
       const isAllSelectedCardsSameRank = selectedCards.every((card, i, cards) => cards[0].rank === card.rank);
       if (isAllSelectedCardsSameRank) return true;
+      //consecutive series
       if (selectedCards.length < 3) throw "You must discard at least 3 of same suit";
-      const isAllSelectedCardsSameSuit = selectedCards.every((card, i, cards) => cards[0].suit === card.suit);
-      selectedCards.sort((a,b) => this.ranks.indexOf(a) - this.ranks.indexOf(b));
-      const isCardsConsecutive = selectedCards.every((card, i, cards)=> {
+      const isAllSelectedCardsSameSuit = selectedCards.every(card => selectedCards[0].suit === card.suit);
+      selectedCards.sort( (a,b) => a.rankIndex - b.rankIndex );
+      const isCardsConsecutive = selectedCards.every((card, i) => {
         if(i === 0) return true;
-        this.ranks.indexOf(card) === this.ranks.indexOf(cards[i-1].rank) + 1;
+        return card.rankIndex === selectedCards[i-1].rankIndex + 1;
       });
       if (isAllSelectedCardsSameSuit && isCardsConsecutive) return true;
       throw "Cards must be consecutive";

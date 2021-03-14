@@ -134,7 +134,7 @@ async function onLoad() {
     await updateGameState(state);
     renderAll();
   });
-
+  socket.on("error", err => console.log(err));
   
   function joinGame(name) {
     if(!name) throw "must enter a name";
@@ -347,7 +347,7 @@ async function onLoad() {
     if (!clickedCard.classList.contains("selectable")) return;
 
     const card = utils.getCardFromElement(clickedCard);
-
+    console.log("card created from Element");
     if (clickedCard.classList.contains("selected")) {
       clickedCard.classList.remove("selected");
       activePlayerMove["selected-cards"].removeCards([card]);
@@ -355,8 +355,8 @@ async function onLoad() {
       clickedCard.classList.add("selected");
       activePlayerMove["selected-cards"].addCard(card);
     }
-    console.log('after click front');
-    console.log(activePlayerMove);
+    console.log('after card clicked');
+    console.log( JSON.stringify(activePlayerMove) );
 
     const allPlayerCards = document.querySelectorAll("#active-player > .deck > .card");
     for (const cardElement of allPlayerCards) {
