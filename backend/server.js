@@ -156,6 +156,34 @@ app.post("/join", (req, res) => {
 	});
 });
 
+// socket.io connection event listener
+io.on("connection", (socket) => {
+	console.log(socket);
+
+	socket.on("playerJoin", (joinedPlayerName) => {
+		if (!joinedPlayerName) {
+			socket.emit("error", "New player must have a name!");
+		}
+
+		// create 36 char id for player
+		const id = uuid.v4();
+		const newPlayer = new classes.Player(joinedPlayerName, id);
+
+		if (players.length === 0) newPlayer.isHost = true;
+		else newPlayer.isHost = false;
+
+		newPlayer.socket = socket;
+		players.push(newPlayer);
+		console.log(players);
+
+		console.log(`new player joined with name ${joinedPlayerName}`);
+	});
+	socket.on("disconnect", () => {
+		console.log("a player disconnected");
+	});
+	console.log("a player connected");
+});
+
 // EXAMPLE CREATE NEW GAME REQUEST (POST):
 /* createGameRequest = {
     URL: "/game/new + playerId",
