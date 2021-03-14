@@ -22,7 +22,7 @@ morgan.token("reqbody", (req) => {
 
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms :reqbody"));
 
-app.use(express.static("../frontend"));
+app.use(express.static("frontend"));
 app.use(cors());
 // turning request into JSON
 app.use(express.json());
