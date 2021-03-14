@@ -2,7 +2,6 @@
 document.addEventListener("DOMContentLoaded", onLoad);
 async function onLoad() {
 
-  
   let isGameStarted = false;
   let myName;
   let id;
@@ -18,7 +17,7 @@ async function onLoad() {
   };
   let lastDiscardedCards = [];
   let timesMessageShowed = 0;
-
+  
   const playerElement = document.querySelector(".active-player");
   const joinButton = document.querySelector("#join-button");
   const readyButton = document.querySelector("#ready-button");
@@ -27,18 +26,13 @@ async function onLoad() {
   const oppNames = document.querySelectorAll(".opp-name");
   const body = document.getElementsByTagName("BODY")[0];
   const input = document.querySelector("#login");
-
+  
   document.querySelector("#game-message").style.display = "none";
-
+  
   joinButton.addEventListener("click", async () => {
     const userName = input.value;
-    /* if (!userName) {
-      input.focus();
-      return;
-    } */
-    myName = userName;
     try {
-      await joinGame();
+      joinGame(userName);
       
     } catch (error) {
       console.log(error);
@@ -51,40 +45,28 @@ async function onLoad() {
       input.focus();
       return;
     }
-    joinButton.hidden = true;
-    input.hidden = true;
-    readyButton.hidden = false;
+    
   });
-
+  
   input.addEventListener("keydown", (event) => {
     if (event.keyCode == 13 || event.which == 13) {
       joinButton.click();
     }
   });
-
+  
   readyButton.addEventListener("click", async () => {
-    // netUtils.ready(myName);
-    await netUtils.startGame(id);
-    isGameStarted = true;
-    await updateGameState();
-    // await MatchStartAnimation();
-    renderAll();
-    readyButton.hidden = true;
-    placeButton.style.visibility = "visible";
-    yanivButton.style.visibility = "visible";
-    oppNames.forEach((name) => {
-      name.style.display = "unset";
-    });
+    netUtils.startGame(id);
+
   });
   
   playerElement.addEventListener("click", (e) => {
     let clickedCard = e.target;
     collectMoveData(clickedCard);
   });
-
+  
   placeButton.addEventListener( "click", (e) => executeMove("Place") );
   yanivButton.addEventListener( "click", (e) => executeMove("Yaniv!") );
-
+  
   document.querySelector("#pile-deck").addEventListener("click", (e) => {
     // if (lastDiscardedCards.length === 0) return;
     // if (activePlayerMove["selected-cards"].cards.length === 0) return;
@@ -128,29 +110,37 @@ async function onLoad() {
       }
     }
   });
-
-  setInterval(async () => {
-    if (playerInTurn === myName || !isGameStarted) return;
-    await updateGameState();
-    renderAll();
-  }, 4000);
-
-  input.focus();
-  placeButton.style.visibility = "hidden";
-  yanivButton.style.visibility = "hidden";
-  const STARTFAST = false; //change to false for full join sequence
-  if (STARTFAST) {
-    document.querySelector("#login").value = "fast-name";
-    joinButton.click();
-    await setTimeout(()=>{}, 1000);
-    readyButton.click();
-  }
-
-  async function joinGame() {
-    id = await netUtils.joinGame(myName);
-    // sessionStorage.setItem("gameStarted", "true");
-  }
   
+  socket.on("playerCreated", (data) => {
+    id = data.playerId;
+    joinButton.hidden = true;
+    input.hidden = true;
+    readyButton.hidden = false;
+  });
+  socket.on("otherPlayerCreated", () => {});
+  socket.on("gameCreated", async rawState => {
+    readyButton.hidden = true;
+    placeButton.style.visibility = "visible";
+    yanivButton.style.visibility = "visible";
+    oppNames.forEach((name) => {
+      name.style.display = "unset";
+    });
+    const state = netUtils.convertState(rawState);
+    await updateGameState(state);
+    renderAll();
+  });
+  socket.on("update", async rawState => {
+    const state = netUtils.convertState(rawState);
+    await updateGameState(state);
+    renderAll();
+  });
+
+  
+  function joinGame(name) {
+    if(!name) throw "must enter a name";
+    myName = name;
+    netUtils.joinGame(myName);
+  }
   /* Show message, for an amount of time in ms */
   async function showMessage(message, time, color) {
     document.querySelector("#game-message").innerText = message;
@@ -183,9 +173,7 @@ async function onLoad() {
     })
   }
 
-  async function updateGameState() {
-    //runs every x seconds and asks for data relevant to player
-    const state = await netUtils.getGameStateForPlayer(myName, id);
+  async function updateGameState(state) {
     allPlayersPoints = state.allPlayersPoints;
     player = new Player(
       myName,
@@ -218,11 +206,7 @@ async function onLoad() {
     }
       lastDiscardedCards = utils.getValidCardsFromOpenDeck(lastDiscardedCards);
     }
-    console.log("last discarded cards: ");
-    console.log(lastDiscardedCards);
     matchNumber = state.match;
-    console.log(matchNumber);
-    console.log(matchNumber === timesMessageShowed);
     // SHOW YANIV / ASSAF MESSAGE
     if (state.playerCalledYaniv && matchNumber === timesMessageShowed + 2) {
       await showMessage("Yaniv", 3000,  "#d90000");
@@ -442,10 +426,6 @@ async function onLoad() {
     }
     activePlayerMove["selected-cards"].cards = [];
     activePlayerMove.cardPickedFromSet = null;
-    console.log("rerendering after move execution in a few moments");
-    playerInTurn = null;
-    await updateGameState();
-    renderAll();
   }
   
   function makeShiny(bool) {
