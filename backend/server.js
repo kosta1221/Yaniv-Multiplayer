@@ -33,6 +33,7 @@ io.on("connection", (socket) => {
 
 	socket.on("playerJoin", (joinedPlayerName) => {
 		if (!joinedPlayerName) {
+			console.log("error", "New player must have a name!");
 			socket.emit("error", "New player must have a name!");
 		}
 
@@ -63,7 +64,10 @@ io.on("connection", (socket) => {
 		const requestingPlayer = players.find((player) => player.playerId === requestingPlayerId);
 
 		if (!requestingPlayer.isHost) {
-			console.log("123");
+			console.log(
+				"error",
+				`Unauthorized request to get create new game, player with id ${requestingPlayerId} is not recognized!`
+			);
 			return socket.emit(
 				"error",
 				`Unauthorized request to get create new game, player with id ${requestingPlayerId} is not recognized!`
@@ -71,7 +75,7 @@ io.on("connection", (socket) => {
 		}
 
 		if (game || gameId) {
-			console.log("4567");
+			console.log("error", `Game already running!`);
 			return socket.emit("error", `Game already running!`);
 		}
 
@@ -96,6 +100,10 @@ io.on("connection", (socket) => {
 		console.log(requestingPlayerId);
 		console.log(game.playerInTurn.playerId);
 		if (requestingPlayerId !== game.playerInTurn.playerId) {
+			console.log(
+				"error",
+				`Unauthorized request to make turn, it is not ${requestingPlayer.playerName}'s turn!`
+			);
 			return socket.emit(
 				"error",
 				`Unauthorized request to make turn, it is not ${requestingPlayer.playerName}'s turn!`
@@ -115,6 +123,7 @@ io.on("connection", (socket) => {
 				player.socket.emit("update", game.getGameState(player.playerId));
 			}
 		} catch (error) {
+			console.log(error);
 			return socket.emit("error", error.message);
 		}
 	});
