@@ -94,7 +94,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		game.openCardDeck.cards = [];
 		game.gameDeck.putFirstCardFromOneDeckToAnother(game.openCardDeck);
 		game.gameDeck.cards.shift();
-		game.turn = 0;
+		game.turnsSinceMatchStart = 0;
 		game.match++;
 		const newPlayers = [];
 		for (let i = 0; i < game.players.length; i++) {
@@ -205,7 +205,7 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 		// Draw a card from the open cards deck instead
 		else {
 			// If it's the first turn of the game just give him the card that is open
-			if (game.turnsSinceStart === 0) {
+			if (game.turnsSinceMatchStart === 0) {
 				playerInTurn.giveLastCardFromDeck(openCardDeck);
 			} else {
 				let areRanksSame = true;
@@ -240,8 +240,9 @@ function makeTurn(game, callYaniv, cardsToDiscard, isCardToGetFromGameDeck, card
 
 		playerInTurn.moveCardsFromPlayerDeckToOpenCards(cardsToDiscard, game);
 		game.amountOfCardsLastPlayerPutInOpenCardDeck = cardsToDiscard.length;
+
+		game.turnsSinceMatchStart++;
 	}
-	game.turnsSinceStart++;
 	game.playerInTurn = players[(players.indexOf(game.playerInTurn) + 1) % game.numberOfPlayers];
 }
 

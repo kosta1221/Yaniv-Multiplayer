@@ -158,7 +158,6 @@ class Game {
 			player.giveFiveCardsFromTopOfDeck(this.gameDeck);
 		}
 
-		this.turn = 0;
 		this.playerInTurn = this.players[0];
 
 		this.gameId = gameId;
@@ -170,7 +169,7 @@ class Game {
 		this.gameDeck.cards.shift();
 
 		this.numberOfPlayers = playerNamesAndIds.length;
-		this.turnsSinceStart = 0;
+		this.turnsSinceMatchStart = 0;
 		this.pointsToLose = 100;
 		this.amountOfCardsLastPlayerPutInOpenCardDeck = 0;
 
@@ -198,6 +197,7 @@ class Game {
 			gameState.nameOfPlayerInTurn = this.playerInTurn.playerName;
 			gameState.match = this.match;
 			gameState.gameId = this.gameId;
+			gameState.turnsSinceMatchStart = this.turnsSinceMatchStart;
 			return gameState;
 		};
 	}
