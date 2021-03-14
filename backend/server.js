@@ -7,6 +7,9 @@ const classes = require("./classes");
 const morgan = require("morgan");
 
 const app = express();
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+
 const PORT = process.env.PORT || 3000;
 const PLAYER_TIMEOUT = 3 * 60 * 1000; // 3 minutes
 const TIMEOUT_CHECKING_TIME = 10 * 1000; // 10 seconds
@@ -247,7 +250,7 @@ const errorHandler = (error, request, response, next) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+http.listen(PORT, () => {
 	console.log(`Server started on port ${PORT}`);
 });
 
