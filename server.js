@@ -156,17 +156,19 @@ http.listen(PORT, () => {
 function convertPlayRequest(moveData) {
 	const playerId = moveData.playerId;
 	const callYaniv = moveData.callYaniv;
-	const cardsToDiscard = !moveData.cardsToDiscard 
-	? null 
-	: moveData.cardsToDiscard.map((cardLike) => new classes.Card(cardLike.suit, cardLike.rank, cardLike.isJoker));
+	const cardsToDiscard = !moveData.cardsToDiscard
+		? null
+		: moveData.cardsToDiscard.map(
+				(cardLike) => new classes.Card(cardLike.suit, cardLike.rank, cardLike.isJoker)
+		  );
 	const isCardToGetFromGameDeck = moveData.isCardToGetFromGameDeck;
-	const cardPickedFromSet = !moveData.cardPickedFromSet 
-	? null
-	: new classes.Card(
-		moveData.cardPickedFromSet.suit,
-		moveData.cardPickedFromSet.rank,
-		moveData.cardPickedFromSet.isJoker
-	);
+	const cardPickedFromSet = !moveData.cardPickedFromSet
+		? null
+		: new classes.Card(
+				moveData.cardPickedFromSet.suit,
+				moveData.cardPickedFromSet.rank,
+				moveData.cardPickedFromSet.isJoker
+		  );
 	const play = {
 		playerId,
 		callYaniv,
